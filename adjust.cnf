@@ -1,0 +1,19 @@
+[Render/Lights] Sun dist;500
+[Render/Lights] Sun size;100
+[Render/Lights] Sphere size;0.25
+[Render/Lights] Max shadow map bias;0.0001
+[Render/Lights] Min shadow map bias;5e-05
+[Render/Lights] Directional light shadow distance;100
+[Render/Lights] Shadow map far plane;1000
+[Render/Lights] Shadow map near plane;0.1
+[World] Sun rotation speed;0.05
+[Camera] Roll speed;1
+[Camera] Zoom speed;0.1
+[Camera] Movement speed modifier;2
+[Camera] Movement speed;5
+[Camera] Mouse sensitivity;0.005
+[Physics] Debug;false
+[Physics] Gravity;1
+[ImGui] Scale;1
+[Render/Planes] Far;1000
+[Render/Planes] Near;0.01

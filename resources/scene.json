@@ -1,0 +1,119 @@
+[
+	{
+		"TransformComponent": {},
+		"CameraComponent": {
+			"frustrum": { "position": { "x": -7, "y": 2, "z": -11 } },
+			"yaw": 0.755,
+			"pitch": -0.075
+		}
+	},
+
+	{
+		"DirLightComponent": {
+			"ambientStrength": 0.05,
+			"diffuseStrength": 0.9,
+			"specularStrength": 0.05,
+			"direction": { "x": 1, "y": -1, "z": 1 }
+		},
+		"GodRaysComponent": {},
+		"SkyBoxComponent": {
+			"left": "resources/skybox/left.jpg",
+			"right": "resources/skybox/right.jpg",
+			"top": "resources/skybox/top.jpg",
+			"bottom": "resources/skybox/bottom.jpg",
+			"front": "resources/skybox/front.jpg",
+			"back": "resources/skybox/back.jpg"
+		}
+	},
+	{
+		"PointLightComponent": {
+			"diffuseStrength": 1,
+			"specularStrength": 5
+		},
+		"TransformComponent": { "boundingBox": { "position": { "x": 0, "y": 15, "z": 0 } } },
+		"GodRaysComponent": {}
+	},
+
+	{
+		"GraphicsComponent": { "appearance": "resources/models/scene_house6.vox" },
+		"TransformComponent": {},
+		"PhysicsComponent": { "mass": 0 }
+	},
+	{
+		"GraphicsComponent": { "appearance": "resources/models/scene_riot.vox" },
+		"TransformComponent": { "boundingBox": { "position": { "x": 12.2, "y": 0.1, "z": -4 } } },
+		"PhysicsComponent": { "mass": 0 }
+	},
+
+
+	{
+		"GraphicsComponent": { "appearance": "resources/models/veh_truck4.vox" },
+		"TransformComponent": {
+			"boundingBox": { "position": { "x": 6, "y": 0.25, "z": -5.5 } },
+			"yaw": 1
+		},
+		"PhysicsComponent": {}
+	},
+	{
+		"GraphicsComponent": { "appearance": "resources/models/chr_cat.vox" },
+		"TransformComponent": { "boundingBox": { "position": { "y": 0.15, "z": -5 } } },
+		"PhysicsComponent": {}
+	},
+
+	{
+		"GraphicsComponent": { "appearance": "resources/models/Monster_1/Monster_1.dae" },
+		"TransformComponent": { "boundingBox": { "position": { "x": -2, "y": 0.15, "z": -5 } } },
+		"PhysicsComponent": {},
+		"AnimationComponent": {}
+	},
+	{
+		"GraphicsComponent": { "appearance": "resources/models/Guard/boblampclean.md5mesh" },
+		"TransformComponent": { "boundingBox": { "position": { "x": -2.4, "y": 0.25, "z": -2 } } },
+		"PhysicsComponent": {},
+		"AnimationComponent": {}
+	},
+	{
+		"GraphicsComponent": { "appearance": "resources/models/Mannequin_figure/free3Dmodel.dae" },
+		"TransformComponent": { "boundingBox": { "position": { "x": -4, "y": 0.15, "z": -5.5 } } },
+		"PhysicsComponent": { "kinematic": true },
+		"AnimationComponent": {
+			"currentAnim": 1
+		}
+	},
+
+	{
+		"GraphicsComponent": { "appearance": "resources/models/Mannequin_figure/free3Dmodel.dae" },
+		"TransformComponent": {
+			 "boundingBox": { "position": { "x": -5, "y": 0.15, "z": -5.5 } },
+			 "yaw": 1
+		},
+		"PhysicsComponent": { "kinematic": true },
+		"AnimationComponent": {
+			"currentAnim": 10
+		}
+	},
+
+	{
+		"GraphicsComponent": { "appearance": "resources/sprites/poop.png" },
+		"SpriteComponent3D": {},
+		"TransformComponent": { "boundingBox": {
+			"size": { "x": 1, "y": 1, "z": 0 },
+			"position": { "x": -5, "y": 1, "z": -5 }
+		} }
+	},
+
+	{
+		"TextComponent3D": {
+			"font": "resources/fonts/arial.ttf",
+			"text": "Hi, I'm debug text!",
+			"fontSize": 1000
+		},
+		"TransformComponent": {
+			"boundingBox": {
+				"size": { "x": 1, "y": 1, "z": 1 },
+				"position": { "x": -5, "y": 2, "z": -5 }
+			}
+		},
+		"DebugGraphicsComponent": {}
+	}
+]

@@ -1,0 +1,34 @@
+[
+    {
+        "TransformComponent": {},
+        "CameraComponent": {},
+        "DirLightComponent": {}
+    },
+    {
+        "GraphicsComponent": { "appearance": "resources/sprites/koala.png" },
+        "SpriteComponent2D": {},
+        "TransformComponent": {
+            "boundingBox": {
+                "position": { "x": 0.5, "y": 0.5 },
+                "size": { "x": 0.28125, "y": 0.5 }
+            }
+        },
+        "LuaComponent": { "scripts": [ "scripts/loading/rotate.lua" ] }
+    },
+
+	{
+		"TextComponent2D": {
+			"font": "resources/fonts/arial.ttf",
+			"text": "Loading...",
+            "fontSize": 1000,
+            "alignment": "Left"
+		},
+		"TransformComponent": {
+			"boundingBox": {
+				"position": { "x": 0.40, "y": 0.85 },
+				"size": { "y": 0.2 }
+            }
+		},
+        "LuaComponent": { "scripts": [ "scripts/loading/text.lua" ] }
+    }
+]

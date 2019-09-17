@@ -1,0 +1,13 @@
+{
+    "ModelComponent": {
+        "file": "resources/models/Guard/boblampclean.md5mesh",
+        "boundingBox": {
+            "size": {
+                "x": 0.05,
+                "y": 0.05,
+                "z": 0.05
+            }
+        },
+        "yaw": 3.14
+    }
+}

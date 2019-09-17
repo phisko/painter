@@ -1,0 +1,189 @@
+{
+    "ModelComponent": {
+        "file": "resources/models/Mannequin_figure/free3Dmodel.dae",
+        "boundingBox": {
+            "size": {
+                "x": 0.3,
+                "y": 0.3,
+                "z": 0.3
+            }
+        },
+        "yaw": 3.14
+    },
+    "AnimFilesComponent": {
+        "files": [
+            "resources/models/Mannequin_figure/animations/idle.dae",
+            "resources/models/Mannequin_figure/animations/jump.dae",
+            "resources/models/Mannequin_figure/animations/left_strafe.dae",
+            "resources/models/Mannequin_figure/animations/right_strafe.dae",
+            "resources/models/Mannequin_figure/animations/left_strafe_walking.dae",
+            "resources/models/Mannequin_figure/animations/right_strafe_walking.dae",
+            "resources/models/Mannequin_figure/animations/left_turn_90.dae",
+            "resources/models/Mannequin_figure/animations/right_turn_90.dae",
+            "resources/models/Mannequin_figure/animations/standard_run.dae",
+            "resources/models/Mannequin_figure/animations/walking.dae"
+        ]
+    },
+    "ModelColliderComponent": {
+        "referenceBone": "hips",
+        "colliders": [
+            {
+                "shape": "Sphere",
+                "boneName": "head",
+                "boundingBox": {
+                    "position": {
+                        "y": 0.075,
+                        "z": 0.03
+                    },
+                    "size": {
+                        "x": 0.2,
+                        "y": 0.2,
+                        "z": 0.2
+                    }
+                }
+            },
+            {
+                "shape": "Box",
+                "boneName": "chest",
+                "boundingBox": {
+                    "position": {
+                        "y": 0.06,
+                        "z": 0.05
+                    },
+                    "size": {
+                        "x": 0.25,
+                        "y": 0.2,
+                        "z": 0.2
+                    }
+                }
+            },
+            {
+                "shape": "Box",
+                "boneName": "hips",
+                "boundingBox": {
+                    "position": {
+                        "y": 0.05,
+                        "z": 0.02
+                    },
+                    "size": {
+                        "x": 0.25,
+                        "y": 0.2,
+                        "z": 0.2
+                    }
+                }
+            },
+            {
+                "shape": "Capsule",
+                "boneName": "forearm.L",
+                "boundingBox": {
+                    "position": {
+                        "y": 0.15
+                    },
+                    "size": {
+                        "x": 0.1,
+                        "y": 0.3,
+                        "z": 0.1
+                    }
+                }
+            },
+            {
+                "shape": "Capsule",
+                "boneName": "upper_arm.L",
+                "boundingBox": {
+                    "position": {
+                        "y": 0.15
+                    },
+                    "size": {
+                        "x": 0.1,
+                        "y": 0.3,
+                        "z": 0.1
+                    }
+                }
+            },
+            {
+                "shape": "Capsule",
+                "boneName": "forearm.R",
+                "boundingBox": {
+                    "position": {
+                        "y": 0.15
+                    },
+                    "size": {
+                        "x": 0.1,
+                        "y": 0.3,
+                        "z": 0.1
+                    }
+                }
+            },
+            {
+                "shape": "Capsule",
+                "boneName": "upper_arm.R",
+                "boundingBox": {
+                    "position": {
+                        "y": 0.15
+                    },
+                    "size": {
+                        "x": 0.1,
+                        "y": 0.3,
+                        "z": 0.1
+                    }
+                }
+            },
+            {
+                "shape": "Capsule",
+                "boneName": "thigh.L",
+                "boundingBox": {
+                    "position": {
+                        "y": 0.3
+                    },
+                    "size": {
+                        "x": 0.15,
+                        "y": 0.3,
+                        "z": 0.15
+                    }
+                }
+            },
+            {
+                "shape": "Capsule",
+                "boneName": "shin.L",
+                "boundingBox": {
+                    "position": {
+                        "y": 0.3
+                    },
+                    "size": {
+                        "x": 0.1,
+                        "y": 0.4,
+                        "z": 0.1
+                    }
+                }
+            },
+            {
+                "shape": "Capsule",
+                "boneName": "thigh.R",
+                "boundingBox": {
+                    "position": {
+                        "y": 0.3
+                    },
+                    "size": {
+                        "x": 0.15,
+                        "y": 0.3,
+                        "z": 0.15
+                    }
+                }
+            },
+            {
+                "shape": "Capsule",
+                "boneName": "shin.R",
+                "boundingBox": {
+                    "position": {
+                        "y": 0.3
+                    },
+                    "size": {
+                        "x": 0.1,
+                        "y": 0.4,
+                        "z": 0.1
+                    }
+                }
+            }
+        ]
+    }
+}

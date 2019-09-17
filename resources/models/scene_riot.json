@@ -1,0 +1,12 @@
+{
+    "ModelComponent": {
+        "file": "resources/models/scene_riot.vox",
+        "boundingBox": {
+            "size": {
+                "x": 0.1,
+                "y": 0.1,
+                "z": 0.1
+            }
+        }
+    }
+}
