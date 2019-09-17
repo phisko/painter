@@ -2,6 +2,7 @@ local lua = self:getLuaComponent()
 if not lua.meta then
     lua.meta = {}
 
+    math.randomseed(os.time())
     local id = self.id -- used in lambda
     self:attachOnClickComponent().onClick = function()
         local color = getEntity(id):getGraphicsComponent().color
