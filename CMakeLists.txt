@@ -52,6 +52,7 @@ target_include_directories(api INTERFACE common)
 set(exe_name painter)
 
 file(GLOB exeFiles src/*.cpp src/*.hpp
+	src/types/*.cpp src/types/*.hpp
         src/components/*.cpp src/components/*.hpp
         src/gameobjects/*.cpp src/gameobjects/*.hpp
         src/systems/*.cpp src/systems/*.hpp)

@@ -16,12 +16,12 @@
 #include "systems/bullet/BulletSystem.hpp"
 
 #include "components/ImGuiComponent.hpp"
-
-#include "packets/GBuffer.hpp"
 #include "imgui.h"
 
-#include "registerTypes.h"
+#include "packets/GBuffer.hpp"
 #include "packets/Terminate.hpp"
+
+#include "types/registerTypes.hpp"
 
 auto TimeControls(kengine::EntityManager & em) {
 	static bool display = true;
