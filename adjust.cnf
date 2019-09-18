@@ -1,3 +1,4 @@
+[ImGui] Scale;1
 [Render/Lights] Sun dist;500
 [Render/Lights] Sun size;100
 [Render/Lights] Sphere size;0.25
@@ -6,7 +7,13 @@
 [Render/Lights] Directional light shadow distance;100
 [Render/Lights] Shadow map far plane;1000
 [Render/Lights] Shadow map near plane;0.1
+[Render/Planes] Far;1000
+[Render/Planes] Near;0.01
 [World] Sun rotation speed;0.05
+[Highlight/Hovered] Intensity;1
+[Highlight/Hovered] Color;4294967295
+[Highlight/Selected] Intensity;1
+[Highlight/Selected] Color;4290051840
 [Camera] Roll speed;1
 [Camera] Zoom speed;0.1
 [Camera] Movement speed modifier;2
@@ -14,6 +21,3 @@
 [Camera] Mouse sensitivity;0.005
 [Physics] Debug;false
 [Physics] Gravity;1
-[ImGui] Scale;1
-[Render/Planes] Far;1000
-[Render/Planes] Near;0.01

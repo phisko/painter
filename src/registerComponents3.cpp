@@ -7,6 +7,8 @@
 #include "components/SkyBoxComponent.hpp"
 #include "components/SpriteComponent.hpp"
 
+#include "components/UIComponent.hpp"
+
 void registerComponents3(kengine::EntityManager & em) {
 	registerComponents<
 		kengine::SelectedComponent,
@@ -22,6 +24,7 @@ void registerComponents3(kengine::EntityManager & em) {
 		kengine::TransformComponent3f,
 		kengine::SkyBoxComponent,
 		kengine::SpriteComponent2D,
-		kengine::SpriteComponent3D
+		kengine::SpriteComponent3D,
+		UIComponent
 	>(em);
 }
