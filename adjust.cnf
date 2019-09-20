@@ -16,8 +16,8 @@
 [Highlight/Selected] Color;4290051840
 [Camera] Roll speed;1
 [Camera] Zoom speed;0.1
-[Camera] Movement speed modifier;2
-[Camera] Movement speed;5
+[Camera] Movement speed modifier;1.1
+[Camera] Movement speed;10
 [Camera] Mouse sensitivity;0.005
 [Physics] Debug;false
 [Physics] Gravity;1
