@@ -108,4 +108,6 @@ int main(int, char **av) {
 		em.loadSystems("plugins");
 	}
 	em.send(packets::Terminate{});
+
+	return 0;
 }
