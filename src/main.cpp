@@ -21,8 +21,6 @@
 #include "packets/GBuffer.hpp"
 #include "packets/Terminate.hpp"
 
-#include "types/registerTypes.hpp"
-
 auto TimeControls(kengine::EntityManager & em) {
 	static bool display = true;
 	em.send(kengine::packets::AddImGuiTool{ .name = "Time controller", .enabled = display });
@@ -98,6 +96,7 @@ int main(int, char **av) {
 		kengine::ImGuiEntitySelectorSystem
 	>("plugins");
 
+	extern void registerTypes(kengine::EntityManager &);
 	registerTypes(em);
 
 	addMenus(em);

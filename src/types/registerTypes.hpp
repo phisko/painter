@@ -35,5 +35,3 @@ static void registerComponents(kengine::EntityManager & em) {
 	kengine::registerComponentMatchers<Comps...>(em);
 	kengine::registerComponentJSONLoaders<Comps...>(em);
 }
-
-void registerTypes(kengine::EntityManager & em); 
