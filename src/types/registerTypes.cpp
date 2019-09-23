@@ -1,7 +1,5 @@
 #include "registerTypes.hpp"
 
-using RegisterFunc = void(*)(kengine::EntityManager &);
-
 #define REGISTER_FUNC_DECL(COMP) void register##COMP##Component(kengine::EntityManager & em);
 
 REGISTER_FUNC_DECL(Adjustable);
@@ -33,6 +31,7 @@ REGISTER_FUNC_DECL(UI);
 
 #define REGISTER_FUNC_NAME(COMP) register##COMP##Component
 
+using RegisterFunc = void(*)(kengine::EntityManager &);
 static const RegisterFunc funcs[] = {
 	REGISTER_FUNC_NAME(Adjustable),
 	REGISTER_FUNC_NAME(Animation),
