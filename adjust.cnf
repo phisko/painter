@@ -14,7 +14,6 @@
 [Highlight/Hovered] Color;4294967295
 [Highlight/Selected] Intensity;1
 [Highlight/Selected] Color;4290051840
-[Camera] Roll speed;1
 [Camera] Zoom speed;0.1
 [Camera] Movement speed modifier;1.1
 [Camera] Movement speed;10
