@@ -24,8 +24,6 @@ enum Inputs {
 	RIGHT,
 	UP,
 	DOWN,
-	ROLL_LEFT,
-	ROLL_RIGHT,
 	SPEED_UP,
 	SPEED_DOWN,
 };
@@ -47,9 +45,6 @@ static void initKeys() {
 	keys[UP].code = 'R';
 	keys[DOWN].code = 'F';
 
-	keys[ROLL_LEFT].code = 'Q';
-	keys[ROLL_LEFT].code = 'E';
-
 	keys[SPEED_UP].code = GLFW_KEY_LEFT_SHIFT;
 	keys[SPEED_DOWN].code = GLFW_KEY_LEFT_CONTROL;
 }
@@ -58,7 +53,6 @@ CameraSystem::CameraSystem(kengine::EntityManager & em) : System(em), _em(em) {
 	onLoad("");
 }
 
-static auto ROLL_SPEED = 1.f;
 static auto MOUSE_SENSITIVITY = .005f;
 static auto MOVEMENT_SPEED = 10.f;
 static auto MOVEMENT_SPEED_MODIFIER = 2.f;
@@ -71,7 +65,6 @@ void CameraSystem::onLoad(const char *) noexcept {
 	_em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Camera] Movement speed", &MOVEMENT_SPEED); };
 	_em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Camera] Movement speed modifier", &MOVEMENT_SPEED_MODIFIER); };
 	_em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Camera] Zoom speed", &ZOOM_SPEED); };
-	_em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Camera] Roll speed", &ROLL_SPEED); };
 }
 
 static putils::Vector3f front;
@@ -176,14 +169,8 @@ void CameraSystem::execute() {
 		if (keys[DOWN].pressed)
 			pos -= up * velocity;
 
-		if (keys[ROLL_LEFT].pressed)
-			comp.roll += ROLL_SPEED * deltaTime;
-		if (keys[ROLL_RIGHT].pressed)
-			comp.roll -= ROLL_SPEED * deltaTime;
-
 		if (keys[SPEED_DOWN].pressed)
 			MOVEMENT_SPEED /= MOVEMENT_SPEED_MODIFIER;
-
 		if (keys[SPEED_UP].pressed)
 			MOVEMENT_SPEED *= MOVEMENT_SPEED_MODIFIER;
 	}
