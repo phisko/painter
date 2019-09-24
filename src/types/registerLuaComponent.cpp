@@ -3,7 +3,8 @@
 
 void registerLuaComponent(kengine::EntityManager & em) {
 	registerComponents<
-		kengine::LuaComponent
+		kengine::LuaComponent,
+		kengine::LuaTableComponent
 	>(em);
 
 	registerTypes<

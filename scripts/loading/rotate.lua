@@ -1,6 +1,5 @@
-local lua = self:getLuaComponent()
-if not lua.meta then
-    lua.meta = {}
+if not self:hasLuaTableComponent() then
+    self:attachLuaTableComponent()
 
     math.randomseed(os.time())
     local id = self.id -- used in lambda
