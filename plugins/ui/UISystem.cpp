@@ -31,7 +31,7 @@ void UISystem::execute() {
 		const auto & pos = transform.boundingBox.position;
 		const auto & camPos = cam->frustrum.position;
 
-		transform.yaw = pos.getYawTo(camPos) + PI * 1.5f;
+		transform.yaw = pos.getYawTo(camPos) + KENGINE_PI * 1.5f;
 		transform.pitch = pos.getPitchTo(camPos);
 	}
 }

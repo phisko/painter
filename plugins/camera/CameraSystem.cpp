@@ -104,18 +104,18 @@ static void processMouseMovement(float xpos, float ypos, kengine::CameraComponen
 	cam.yaw += xoffset;
 	cam.pitch += yoffset;
 
-	cam.pitch = std::min(cam.pitch, PI / 2.f - 0.001f);
-	cam.pitch = std::max(cam.pitch, -PI / 2.f - 0.001f);
+	cam.pitch = std::min(cam.pitch, KENGINE_PI / 2.f - 0.001f);
+	cam.pitch = std::max(cam.pitch, -KENGINE_PI / 2.f - 0.001f);
 
 	updateVectors(cam);
 }
 
 void processMouseScroll(float yoffset, kengine::CameraComponent3f & cam) {
 	auto & zoom = cam.frustrum.size.y;
-	if (zoom >= .001f && zoom <= PI * .9f)
+	if (zoom >= .001f && zoom <= KENGINE_PI * .9f)
 		zoom -= yoffset * ZOOM_SPEED;
 	zoom = std::max(zoom, .001f);
-	zoom = std::min(zoom, PI * .9f);
+	zoom = std::min(zoom, KENGINE_PI * .9f);
 }
 
 static void addCameraController(kengine::Entity & e, kengine::EntityManager & em) {

@@ -100,7 +100,7 @@ static void loadingThread(kengine::EntityManager & em) {
 	loadScene("resources/scene.json", em);
 }
 
-enum class LoadingState {
+enum LoadingState {
 	NotStarted,
 	InProgress,
 	LoadingDone,

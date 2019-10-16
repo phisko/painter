@@ -22,8 +22,8 @@ void RotateSunSystem::execute() {
 	for (auto & [e, light] : _em.getEntities<kengine::DirLightComponent>()) {
 		static float angle = 0.f;
 		angle += time.getDeltaTime().count() * SUN_ROTATION;
-		if (angle > PI * 2.f)
-			angle -= PI * 2.f;
+		if (angle > KENGINE_PI * 2.f)
+			angle -= KENGINE_PI * 2.f;
 		light.direction = { std::cos(angle), -1.f, std::sin(angle) };
 	}	
 }

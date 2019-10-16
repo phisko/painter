@@ -1,6 +1,6 @@
 [
     {
-        "TransformComponent": {},
+        "TransformComponent": { "boundingBox": { "position": { "z": 1 } } },
         "CameraComponent": {},
         "DirLightComponent": {}
     },
