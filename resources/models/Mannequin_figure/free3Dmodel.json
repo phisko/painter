@@ -3,9 +3,9 @@
         "file": "resources/models/Mannequin_figure/free3Dmodel.dae",
         "boundingBox": {
             "size": {
-                "x": 0.3,
-                "y": 0.3,
-                "z": 0.3
+                "x": 30,
+                "y": 30,
+                "z": 30
             }
         },
         "yaw": 3.14

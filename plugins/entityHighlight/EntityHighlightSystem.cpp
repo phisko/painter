@@ -8,6 +8,7 @@
 #include "components/HighlightComponent.hpp"
 #include "components/SelectedComponent.hpp"
 #include "components/SpriteComponent.hpp"
+#include "components/NameComponent.hpp"
 
 #include "packets/EntityInPixel.hpp"
 
@@ -42,11 +43,12 @@ void EntityHighlightSystem::onLoad(const char *) noexcept {
 			click((unsigned int)x, (unsigned int)y);
 		};
 
-		input.onMouseMove = [this](float x, float y) {
+		input.onMouseMove = [this](float x, float y, float xrel, float yrel) {
 			hover((unsigned int)x, (unsigned int)y);
 		};
 
 		e += input;
+		e += kengine::NameComponent{ "Highlight controller" };
 	};
 }
 

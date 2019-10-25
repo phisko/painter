@@ -112,11 +112,11 @@ static std::atomic<LoadingState> loadingState = LoadingState::NotStarted;
 static void setupLoading(kengine::EntityManager & em) {
 	loadTemporaryScene("resources/loadingScene.json", em);
 
-	g_loadingThread = new std::thread([&] {
-		putils::set_thread_name(L"Loading thread");
+	// g_loadingThread = new std::thread([&] {
+	// 	putils::set_thread_name(L"Loading thread");
 		loadingThread(em);
 		loadingState = LoadingState::LoadingDone;
-	});
+	// });
 }
 
 void LoadingSystem::execute() {
@@ -136,9 +136,9 @@ void LoadingSystem::execute() {
 			g_toRemove.clear();
 
 			loadingState = LoadingState::Complete;
-			g_loadingThread->join();
-			delete g_loadingThread;
-			g_loadingThread = nullptr;
+			// g_loadingThread->join();
+			// delete g_loadingThread;
+			// g_loadingThread = nullptr;
 			break;
 		}
 		default: break;

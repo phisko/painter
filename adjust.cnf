@@ -1,15 +1,7 @@
-[ImGui] Scale;1
-[Render/Lights] Sun dist;500
-[Render/Lights] Sun size;100
-[Render/Lights] Sphere size;0.25
-[Render/Lights] Max shadow map bias;0.0001
-[Render/Lights] Min shadow map bias;5e-05
-[Render/Lights] Directional light shadow distance;100
-[Render/Lights] Shadow map far plane;1000
-[Render/Lights] Shadow map near plane;0.1
-[Render/Planes] Far;1000
-[Render/Planes] Near;0.01
-[World] Sun rotation speed;0.05
+[Ogre] Shadow texture size;1024
+[Ogre] Shadow type;18
+[Ogre/Camera] Near plane;0
+[World] Sun rotation speed;0.5
 [Highlight/Hovered] Intensity;1
 [Highlight/Hovered] Color;4294967295
 [Highlight/Selected] Intensity;1
@@ -18,5 +10,3 @@
 [Camera] Movement speed modifier;1.1
 [Camera] Movement speed;10
 [Camera] Mouse sensitivity;0.005
-[Physics] Debug;false
-[Physics] Gravity;1
