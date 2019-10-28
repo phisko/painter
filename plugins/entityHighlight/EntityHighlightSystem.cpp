@@ -42,7 +42,7 @@ void EntityHighlightSystem::onLoad(const char *) noexcept {
 			click((unsigned int)x, (unsigned int)y);
 		};
 
-		input.onMouseMove = [this](float x, float y) {
+		input.onMouseMove = [this](float x, float y, float xrel, float yrel) {
 			hover((unsigned int)x, (unsigned int)y);
 		};
 

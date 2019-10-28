@@ -22,15 +22,16 @@
 #include "packets/Terminate.hpp"
 
 auto TimeControls(kengine::EntityManager & em) {
-	static bool display = true;
-	em.send(kengine::packets::AddImGuiTool{ .name = "Time controller", .enabled = display });
-
 	return [&em](kengine::Entity & e) {
-		e += kengine::ImGuiComponent([&em] {
-			if (!display)
+		auto & tool = e.attach<kengine::ImGuiToolComponent>();
+		tool.name = "Time controller";
+		tool.enabled = false;
+
+		e += kengine::ImGuiComponent([&] {
+			if (!tool.enabled)
 				return;
 
-			if (ImGui::Begin("Time controls", &display)) {
+			if (ImGui::Begin("Time controls", &tool.enabled)) {
 				float speed = em.getSpeed();
 				ImGui::InputFloat("Speed", &speed);
 				em.setSpeed(speed);
