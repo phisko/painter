@@ -9,6 +9,8 @@
 #include "components/TransformComponent.hpp"
 #include "components/LightComponent.hpp"
 
+#include "packets/CaptureMouse.hpp"
+
 #include "imgui.h"
 #include "GLFW/glfw3.h"
 #include "magic_enum.hpp"
@@ -91,7 +93,7 @@ static void processMouseMovement(float xrel, float yrel, kengine::CameraComponen
 	const float yoffset = yrel * MOUSE_SENSITIVITY;
 
 	cam.yaw += xoffset;
-	cam.pitch += yoffset;
+	cam.pitch -= yoffset;
 
 	cam.pitch = std::min(cam.pitch, KENGINE_PI / 2.f - 0.001f);
 	cam.pitch = std::max(cam.pitch, -KENGINE_PI / 2.f - 0.001f);
@@ -121,9 +123,11 @@ static void addCameraController(kengine::Entity & e, kengine::EntityManager & em
 		if (MOUSE_CAPTURED)
 			processMouseScroll(delta, em.getEntity(id).get<kengine::CameraComponent3f>());
 	};
-	input.onKey = [](int key, bool pressed) {
-		if (pressed && key == GLFW_KEY_ENTER)
+	input.onKey = [&em](int key, bool pressed) {
+		if (pressed && key == GLFW_KEY_ENTER) {
 			MOUSE_CAPTURED = !MOUSE_CAPTURED;
+			em.send(kengine::packets::CaptureMouse{ MOUSE_CAPTURED });
+		}
 
 		for (auto & k : keys)
 			if (k.code == key)
