@@ -6,6 +6,7 @@
 #include "systems/OnClickSystem.hpp"
 #include "systems/PhysicsSystem.hpp"
 #include "systems/ImGuiAdjustableSystem.hpp"
+#include "systems/ImGuiToolSystem.hpp"
 #include "systems/ImGuiEntityEditorSystem.hpp"
 #include "systems/ImGuiEntitySelectorSystem.hpp"
 #include "systems/polyvox/PolyVoxSystem.hpp"
@@ -93,6 +94,7 @@ int main(int, char **av) {
 		kengine::BulletSystem,
 
 		kengine::ImGuiAdjustableSystem,
+		kengine::ImGuiToolSystem,
 		kengine::ImGuiEntityEditorSystem,
 		kengine::ImGuiEntitySelectorSystem
 	>("plugins");
