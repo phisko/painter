@@ -29,7 +29,7 @@ void UISystem::execute() {
 
 	for (auto & [e, transform, ui] : _em.getEntities<kengine::TransformComponent3f, UIComponent>()) {
 		const auto & pos = transform.boundingBox.position;
-		const auto & camPos = cam->frustrum.position;
+		const auto & camPos = cam->frustum.position;
 
 		transform.yaw = pos.getYawTo(camPos) + KENGINE_PI * 1.5f;
 		transform.pitch = pos.getPitchTo(camPos);

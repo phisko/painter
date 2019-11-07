@@ -2,7 +2,7 @@
 	{
 		"TransformComponent": {},
 		"CameraComponent": {
-			"frustrum": { "position": { "x": -7, "y": 2, "z": -11 } },
+			"frustum": { "position": { "x": -7, "y": 2, "z": -11 } },
 			"yaw": 0.755,
 			"pitch": -0.075
 		}

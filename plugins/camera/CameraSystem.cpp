@@ -102,7 +102,7 @@ static void processMouseMovement(float xrel, float yrel, kengine::CameraComponen
 }
 
 void processMouseScroll(float yoffset, kengine::CameraComponent3f & cam) {
-	auto & zoom = cam.frustrum.size.y;
+	auto & zoom = cam.frustum.size.y;
 	if (zoom >= .001f && zoom <= KENGINE_PI * .9f)
 		zoom -= yoffset * ZOOM_SPEED;
 	zoom = std::max(zoom, .001f);
@@ -147,7 +147,7 @@ void CameraSystem::execute() {
 		const auto deltaTime = time.getDeltaTime().count();
 		const auto velocity = MOVEMENT_SPEED * deltaTime;
 
-		auto & pos = comp.frustrum.position;
+		auto & pos = comp.frustum.position;
 
 		if (keys[FORWARD].pressed)
 			pos += front * velocity;
