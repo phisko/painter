@@ -6,6 +6,8 @@ if(WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj /std:c++17 /DNOMINMAX")
 endif()
 
+add_compile_definitions(KENGINE_CSM_COUNT=5)
+
 set(libdir "${PROJECT_SOURCE_DIR}/lib")
 set(bindir "${PROJECT_SOURCE_DIR}/bin")
 
