@@ -75,9 +75,9 @@ static putils::Vector3f up;
 
 static void updateVectors(const kengine::CameraComponent3f & cam) {
 	front = {
-		std::cos(cam.yaw) * std::cos(cam.pitch),
+		std::sin(cam.yaw) * std::cos(cam.pitch),
 		std::sin(cam.pitch),
-		std::sin(cam.yaw) * std::cos(cam.pitch)
+		std::cos(cam.yaw) * std::cos(cam.pitch)
 	};
 	front.normalize();
 
@@ -92,7 +92,7 @@ static void processMouseMovement(float xrel, float yrel, kengine::CameraComponen
 	const float xoffset = xrel * MOUSE_SENSITIVITY;
 	const float yoffset = yrel * MOUSE_SENSITIVITY;
 
-	cam.yaw += xoffset;
+	cam.yaw -= xoffset;
 	cam.pitch -= yoffset;
 
 	cam.pitch = std::min(cam.pitch, KENGINE_PI / 2.f - 0.001f);
