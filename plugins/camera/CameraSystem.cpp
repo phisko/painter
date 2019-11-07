@@ -88,9 +88,9 @@ static void updateVectors(const kengine::CameraComponent3f & cam) {
 	up.normalize();
 }
 
-static void processMouseMovement(float xrel, float yrel, kengine::CameraComponent3f & cam) {
-	const float xoffset = xrel * MOUSE_SENSITIVITY;
-	const float yoffset = yrel * MOUSE_SENSITIVITY;
+static void processMouseMovement(const putils::Point2f & movement, kengine::CameraComponent3f & cam) {
+	const float xoffset = movement.x * MOUSE_SENSITIVITY;
+	const float yoffset = movement.y * MOUSE_SENSITIVITY;
 
 	cam.yaw -= xoffset;
 	cam.pitch -= yoffset;
@@ -115,11 +115,11 @@ static void addCameraController(kengine::Entity & e, kengine::EntityManager & em
 	const auto id = e.id;
 	kengine::InputComponent input;
 
-	input.onMouseMove = [id, &em](float x, float y, float xrel, float yrel) {
+	input.onMouseMove = [id, &em](const putils::Point2f & coords, const putils::Point2f & rel) {
 		if (MOUSE_CAPTURED)
-			processMouseMovement(xrel, yrel, em.getEntity(id).get<kengine::CameraComponent3f>());
+			processMouseMovement(rel, em.getEntity(id).get<kengine::CameraComponent3f>());
 	};
-	input.onMouseWheel = [id, &em](float delta, float x, float y) {
+	input.onMouseWheel = [id, &em](float delta, const putils::Point2f & coords) {
 		if (MOUSE_CAPTURED)
 			processMouseScroll(delta, em.getEntity(id).get<kengine::CameraComponent3f>());
 	};

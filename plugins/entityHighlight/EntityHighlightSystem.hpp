@@ -1,6 +1,7 @@
 #pragma once
 
 #include "System.hpp"
+#include "Point.hpp"
 
 class EntityHighlightSystem : public kengine::System<EntityHighlightSystem> {
 public:
@@ -10,8 +11,8 @@ public:
 	void onLoad(const char *) noexcept override;
 
 private:
-	void click(unsigned int x, unsigned int y) noexcept;
-	void hover(unsigned int x, unsigned int y) noexcept;
+	void click(const putils::Point2f & coords) noexcept;
+	void hover(const putils::Point2f & coords) noexcept;
 
 private:
 	kengine::EntityManager & _em;

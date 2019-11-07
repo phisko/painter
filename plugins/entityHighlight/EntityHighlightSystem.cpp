@@ -36,23 +36,23 @@ void EntityHighlightSystem::onLoad(const char *) noexcept {
 	_em += [this](kengine::Entity & e) {
 		kengine::InputComponent input;
 
-		input.onMouseButton = [this](int button, float x, float y, bool pressed) {
+		input.onMouseButton = [this](int button, const putils::Point2f & coords, bool pressed) {
 			if (!pressed)
 				return;
-			click((unsigned int)x, (unsigned int)y);
+			click(coords);
 		};
 
-		input.onMouseMove = [this](float x, float y, float xrel, float yrel) {
-			hover((unsigned int)x, (unsigned int)y);
+		input.onMouseMove = [this](const putils::Point2f & coords, const putils::Point2f & rel) {
+			hover(coords);
 		};
 
 		e += input;
 	};
 }
 
-void EntityHighlightSystem::click(unsigned int x, unsigned int y) noexcept {
+void EntityHighlightSystem::click(const putils::Point2f & coords) noexcept {
 	kengine::Entity::ID id = kengine::Entity::INVALID_ID;
-	send(kengine::packets::GetEntityInPixel{ { x, y }, id });
+	send(kengine::packets::GetEntityInPixel{ coords, id });
 
 	if (id == kengine::Entity::INVALID_ID)
 		return;
@@ -66,11 +66,11 @@ void EntityHighlightSystem::click(unsigned int x, unsigned int y) noexcept {
 	}
 }
 
-void EntityHighlightSystem::hover(unsigned int x, unsigned int y) noexcept {
+void EntityHighlightSystem::hover(const putils::Point2f & coords) noexcept {
 	static kengine::Entity::ID previous = kengine::Entity::INVALID_ID;
 
 	kengine::Entity::ID hovered = kengine::Entity::INVALID_ID;
-	send(kengine::packets::GetEntityInPixel{ { x, y }, hovered });
+	send(kengine::packets::GetEntityInPixel{ coords, hovered });
 
 	if (hovered == previous)
 		return;
