@@ -9,15 +9,15 @@ struct Pixel {
 	unsigned char b = 0;
 	unsigned char a = 255;
 
-	pmeta_get_class_name(Pixel);
-	pmeta_get_attributes(
-		pmeta_reflectible_attribute(&Pixel::r),
-		pmeta_reflectible_attribute(&Pixel::g),
-		pmeta_reflectible_attribute(&Pixel::b),
-		pmeta_reflectible_attribute(&Pixel::a)
+	putils_reflection_class_name(Pixel);
+	putils_reflection_attributes(
+		putils_reflection_attribute(&Pixel::r),
+		putils_reflection_attribute(&Pixel::g),
+		putils_reflection_attribute(&Pixel::b),
+		putils_reflection_attribute(&Pixel::a)
 	);
-	pmeta_get_methods();
-	pmeta_get_parents();
+	putils_reflection_methods();
+	putils_reflection_parents();
 };
 
 static bool operator==(const Pixel & lhs, const Pixel & rhs) {

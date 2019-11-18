@@ -7,5 +7,5 @@ struct VoxelComponent {
 	putils::Point3i pos;
 	Pixel color;
 
-	pmeta_get_class_name(VoxelComponent);
+	putils_reflection_class_name(VoxelComponent);
 };

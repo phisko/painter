@@ -1,5 +1,5 @@
 #pragma once
 
 struct UIComponent {
-	pmeta_get_class_name(UIComponent);
+	putils_reflection_class_name(UIComponent);
 };
