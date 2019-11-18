@@ -11,10 +11,6 @@ EXPORT kengine::ISystem * getSystem(kengine::EntityManager & em) {
 static auto SUN_ROTATION = .1f;
 
 RotateSunSystem::RotateSunSystem(kengine::EntityManager & em) : System(em), _em(em) {
-	onLoad("");
-}
-
-void RotateSunSystem::onLoad(const char *) noexcept {
 	_em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[World] Sun rotation speed", &SUN_ROTATION); };
 }
 

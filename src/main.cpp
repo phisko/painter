@@ -17,6 +17,7 @@
 #include "systems/bullet/BulletSystem.hpp"
 
 #include "components/ImGuiComponent.hpp"
+#include "components/WindowComponent.hpp"
 #include "imgui.h"
 
 #include "packets/GBuffer.hpp"
@@ -51,24 +52,6 @@ auto TimeControls(kengine::EntityManager & em) {
 }
 
 static void addMenus(kengine::EntityManager & em) {
-	em += [&em](kengine::Entity & e) {
-		e += kengine::ImGuiComponent([&em] {
-			if (ImGui::BeginMainMenuBar()) {
-
-				if (ImGui::BeginMenu("Save")) {
-
-					if (ImGui::MenuItem("Save"))
-						em.save();
-					if (ImGui::MenuItem("Load"))
-						em.runAfterSystem([&em] { em.load(); });
-
-					ImGui::EndMenu();
-				}
-
-			ImGui::EndMainMenuBar(); }
-		});
-	};
-
 	em += TimeControls(em);
 }
 
@@ -80,6 +63,12 @@ int main(int, char **av) {
 #endif
 
 	kengine::EntityManager em(std::thread::hardware_concurrency());
+
+	em += [&](kengine::Entity & e) {
+		e += kengine::WindowComponent{
+			"Painter"
+		};
+	};
 
 	em.loadSystems<
 		kengine::LuaSystem, kengine::PySystem,
@@ -103,12 +92,9 @@ int main(int, char **av) {
 	registerTypes(em);
 
 	addMenus(em);
-	em.onLoad([&em](const char *) { addMenus(em); });
 
-	while (em.running) {
+	while (em.running)
 		em.execute();
-		em.loadSystems("plugins");
-	}
 	em.send(packets::Terminate{});
 
 	return 0;

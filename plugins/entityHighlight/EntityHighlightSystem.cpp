@@ -17,17 +17,13 @@ EXPORT kengine::ISystem * getSystem(kengine::EntityManager & em) {
 	return new EntityHighlightSystem(em);
 }
 
-EntityHighlightSystem::EntityHighlightSystem(kengine::EntityManager & em) : System(em), _em(em) {
-	onLoad("");
-}
-
 static putils::NormalizedColor SELECTED_COLOR;
 static float SELECTED_INTENSITY = 2.f;
 
 static putils::NormalizedColor HOVERED_COLOR;
 static float HOVERED_INTENSITY = 1.f;
 
-void EntityHighlightSystem::onLoad(const char *) noexcept {
+EntityHighlightSystem::EntityHighlightSystem(kengine::EntityManager & em) : System(em), _em(em) {
 	_em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Highlight/Selected] Color", &SELECTED_COLOR); };
 	_em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Highlight/Selected] Intensity", &SELECTED_INTENSITY); };
 	_em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Highlight/Hovered] Color", &HOVERED_COLOR); };
@@ -36,23 +32,23 @@ void EntityHighlightSystem::onLoad(const char *) noexcept {
 	_em += [this](kengine::Entity & e) {
 		kengine::InputComponent input;
 
-		input.onMouseButton = [this](int button, const putils::Point2f & coords, bool pressed) {
+		input.onMouseButton = [this](kengine::Entity::ID window, int button, const putils::Point2f & coords, bool pressed) {
 			if (!pressed)
 				return;
-			click(coords);
+			click(window, coords);
 		};
 
-		input.onMouseMove = [this](const putils::Point2f & coords, const putils::Point2f & rel) {
-			hover(coords);
+		input.onMouseMove = [this](kengine::Entity::ID window, const putils::Point2f & coords, const putils::Point2f & rel) {
+			hover(window, coords);
 		};
 
 		e += input;
 	};
 }
 
-void EntityHighlightSystem::click(const putils::Point2f & coords) noexcept {
+void EntityHighlightSystem::click(kengine::Entity::ID window, const putils::Point2f & coords) noexcept {
 	kengine::Entity::ID id = kengine::Entity::INVALID_ID;
-	send(kengine::packets::GetEntityInPixel{ coords, id });
+	send(kengine::packets::GetEntityInPixel{ window, coords, id });
 
 	if (id == kengine::Entity::INVALID_ID)
 		return;
@@ -66,11 +62,11 @@ void EntityHighlightSystem::click(const putils::Point2f & coords) noexcept {
 	}
 }
 
-void EntityHighlightSystem::hover(const putils::Point2f & coords) noexcept {
+void EntityHighlightSystem::hover(kengine::Entity::ID window, const putils::Point2f & coords) noexcept {
 	static kengine::Entity::ID previous = kengine::Entity::INVALID_ID;
 
 	kengine::Entity::ID hovered = kengine::Entity::INVALID_ID;
-	send(kengine::packets::GetEntityInPixel{ coords, hovered });
+	send(kengine::packets::GetEntityInPixel{ window, coords, hovered });
 
 	if (hovered == previous)
 		return;

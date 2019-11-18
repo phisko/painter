@@ -16,7 +16,6 @@ EXPORT kengine::ISystem * getSystem(kengine::EntityManager & em) {
 }
 
 LoadingSystem::LoadingSystem(kengine::EntityManager & em) : System(em), _em(em) {
-	onLoad("");
 }
 
 void LoadingSystem::handle(packets::Terminate) {

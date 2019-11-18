@@ -13,10 +13,6 @@ EXPORT kengine::ISystem * getSystem(kengine::EntityManager & em) {
 }
 
 UISystem::UISystem(kengine::EntityManager & em) : System(em), _em(em) {
-	onLoad("");
-}
-
-void UISystem::onLoad(const char *) noexcept {
 }
 
 void UISystem::execute() {
