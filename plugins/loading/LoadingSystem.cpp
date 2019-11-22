@@ -18,7 +18,7 @@ EXPORT kengine::ISystem * getSystem(kengine::EntityManager & em) {
 LoadingSystem::LoadingSystem(kengine::EntityManager & em) : System(em), _em(em) {
 }
 
-void LoadingSystem::handle(packets::Terminate) {
+void LoadingSystem::handle(kengine::packets::Terminate) {
 	if (g_loadingThread == nullptr)
 		return;
 	g_loadingThread->join();

@@ -4,12 +4,12 @@
 
 #include "packets/Terminate.hpp"
 
-class LoadingSystem : public kengine::System<LoadingSystem, packets::Terminate> {
+class LoadingSystem : public kengine::System<LoadingSystem, kengine::packets::Terminate> {
 public:
 	LoadingSystem(kengine::EntityManager & em);
 
 	void execute() override;
-	void handle(packets::Terminate);
+	void handle(kengine::packets::Terminate);
 
 private:
 	kengine::EntityManager & _em;

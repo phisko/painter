@@ -1,5 +1,6 @@
 #include "go_to_bin_dir.hpp"
 
+#include "systems/InputSystem.hpp"
 #include "systems/LuaSystem.hpp"
 #include "systems/PySystem.hpp"
 #include "systems/BehaviorSystem.hpp"
@@ -71,7 +72,9 @@ int main(int, char **av) {
 	};
 
 	em.loadSystems<
+		kengine::InputSystem,
 		kengine::LuaSystem, kengine::PySystem,
+
 		kengine::BehaviorSystem,
 		kengine::OnClickSystem,
 
@@ -95,7 +98,6 @@ int main(int, char **av) {
 
 	while (em.running)
 		em.execute();
-	em.send(packets::Terminate{});
 
 	return 0;
 }
