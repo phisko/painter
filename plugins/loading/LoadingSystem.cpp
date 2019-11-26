@@ -33,13 +33,10 @@ static void loadEntity(kengine::Entity & e, const putils::json & json, kengine::
 		g_toEnable.push_back(e.id);
 	}
 
-	for (const auto comp : em.getComponentFunctionMaps()) {
+	for (const auto & [_, loader] : em.getEntities<kengine::functions::LoadFromJSON>()) {
 		if (!em.running)
 			return;
-
-		const auto loader = comp->getFunction<kengine::functions::LoadFromJSON>();
-		if (loader != nullptr)
-			loader(json, e);
+		loader(json, e);
 	}
 }
 
@@ -51,8 +48,10 @@ static void loadModels(const std::filesystem::path & dir, kengine::EntityManager
 		for (const auto & file : models) {
 			if (!em.running)
 				return;
-			std::ifstream f(file.c_str());
-			em += [&](kengine::Entity & e) { loadEntity(e, putils::json::parse(f), em, true); };
+			em += [&](kengine::Entity & e) {
+				std::ifstream f(file.c_str());
+				loadEntity(e, putils::json::parse(f), em, true);
+			};
 		}
 		models.clear();
 	};
