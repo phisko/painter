@@ -1,7 +1,10 @@
 {
 		"ModelComponent": {
 			"file": "resources/models/chr_cat.vox",
-			"boundingBox": { "size": { "x": 0.1, "y": 0.1, "z": 0.1 }}
+			"boundingBox": {
+                 "position": { "x": -0.05, "z": -0.1 },
+                 "size": { "x": 0.1, "y": 0.1, "z": 0.1 }
+            }
 		},
         "ModelColliderComponent": {
             "colliders": [
