@@ -91,11 +91,11 @@ void EntityHighlightSystem::hover(kengine::Entity::ID window, const putils::Poin
 }
 
 void EntityHighlightSystem::execute() {
-	for (auto &[e, highlight] : _em.getEntities<kengine::HighlightComponent>())
-		if (!e.has<kengine::SelectedComponent>() && !e.has<HoveredComponent>())
-			e.detach<kengine::HighlightComponent>();
+	using kengine::no;
 
-	for (auto &[e, selected] : _em.getEntities<kengine::SelectedComponent>())
-		if (!e.has<kengine::HighlightComponent>())
-			e += kengine::HighlightComponent{ .color = SELECTED_COLOR, .intensity = SELECTED_INTENSITY };
+	for (auto &[e, highlight, noSelected, noHovered] : _em.getEntities<kengine::HighlightComponent, no<kengine::SelectedComponent>, no<HoveredComponent>>())
+		e.detach<kengine::HighlightComponent>();
+
+	for (auto &[e, selected, notHighlighted] : _em.getEntities<kengine::SelectedComponent, no<kengine::HighlightComponent>>())
+		e += kengine::HighlightComponent{ .color = SELECTED_COLOR, .intensity = SELECTED_INTENSITY };
 }
