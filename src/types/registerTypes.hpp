@@ -10,6 +10,7 @@
 #include "helpers/RegisterComponentEditor.hpp"
 #include "helpers/RegisterComponentMatcher.hpp"
 #include "helpers/RegisterComponentJSONLoader.hpp"
+#include "helpers/RegisterComponentEntityIterators.hpp"
 
 #include "components/LuaComponent.hpp"
 #include "Point.hpp"
@@ -34,4 +35,5 @@ static void registerComponents(kengine::EntityManager & em) {
 	kengine::registerComponentEditors<Comps...>(em);
 	kengine::registerComponentMatchers<Comps...>(em);
 	kengine::registerComponentJSONLoaders<Comps...>(em);
+	kengine::registerComponentEntityIterators<Comps...>(em);
 }
