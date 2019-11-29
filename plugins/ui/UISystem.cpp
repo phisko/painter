@@ -29,7 +29,8 @@ void UISystem::execute() {
 		const auto & pos = transform.boundingBox.position;
 		const auto & camPos = cam->frustum.position;
 
-		transform.yaw = pos.getYawTo(camPos) + putils::pi * 1.5f;
-		transform.pitch = pos.getPitchTo(camPos);
+		const auto dir = putils::normalized(pos - camPos);
+		transform.yaw = putils::getYawFromNormalizedDirection(dir);
+		transform.pitch = putils::getPitchFromNormalizedDirection(dir);
 	}
 }

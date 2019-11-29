@@ -4,7 +4,8 @@
 			"boundingBox": {
                  "position": { "x": -0.05, "z": -0.1 },
                  "size": { "x": 0.1, "y": 0.1, "z": 0.1 }
-            }
+            },
+            "yaw": 3.14
 		},
         "ModelColliderComponent": {
             "colliders": [
