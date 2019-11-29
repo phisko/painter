@@ -76,7 +76,6 @@ static void debug(kengine::EntityManager & em, kengine::Entity & e, const putils
 			kengine::Entity::ID id = kengine::Entity::INVALID_ID;
 		};
 
-		// DEBUG
 		if (!e.has<DebugEntityComponent>()) {
 			auto & comp = e.attach<DebugEntityComponent>();
 			em += [&](kengine::Entity & e) {
@@ -86,7 +85,6 @@ static void debug(kengine::EntityManager & em, kengine::Entity & e, const putils
 			};
 			e += kengine::DebugGraphicsComponent(kengine::DebugGraphicsComponent::Sphere, { {}, { .1f, .1f, .1f } });
 		}
-		// /DEBUG
 
 		auto & debug = em.getEntity(e.get<DebugEntityComponent>().id).attach<kengine::DebugGraphicsComponent>();
 		debug.offset.position = pos;
