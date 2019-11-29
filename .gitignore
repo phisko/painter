@@ -38,3 +38,4 @@ lib/
 *.exe
 *.out
 *.app
+.vscode/settings.json
