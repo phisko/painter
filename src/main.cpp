@@ -5,21 +5,24 @@
 #include "systems/PySystem.hpp"
 #include "systems/BehaviorSystem.hpp"
 #include "systems/OnClickSystem.hpp"
-#include "systems/PhysicsSystem.hpp"
+
 #include "systems/ImGuiAdjustableSystem.hpp"
 #include "systems/ImGuiToolSystem.hpp"
 #include "systems/ImGuiEntityEditorSystem.hpp"
 #include "systems/ImGuiEntitySelectorSystem.hpp"
+#include "imgui.h"
+
 #include "systems/polyvox/PolyVoxSystem.hpp"
 #include "systems/polyvox/MagicaVoxelSystem.hpp"
 #include "systems/assimp/AssimpSystem.hpp"
 #include "systems/opengl/OpenGLSystem.hpp"
 #include "systems/opengl_sprites/OpenGLSpritesSystem.hpp"
+
 #include "systems/bullet/BulletSystem.hpp"
+#include "systems/KinematicSystem.hpp"
 
 #include "components/ImGuiComponent.hpp"
 #include "components/WindowComponent.hpp"
-#include "imgui.h"
 
 #include "packets/GBuffer.hpp"
 #include "packets/Terminate.hpp"
@@ -84,6 +87,7 @@ int main(int, char **av) {
 		kengine::AssImpSystem,
 
 		kengine::BulletSystem,
+		kengine::KinematicSystem,
 
 		kengine::ImGuiAdjustableSystem,
 		kengine::ImGuiToolSystem,

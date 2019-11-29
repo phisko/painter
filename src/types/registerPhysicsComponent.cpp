@@ -3,6 +3,7 @@
 
 void registerPhysicsComponent(kengine::EntityManager & em) {
 	registerComponents<
-		kengine::PhysicsComponent
+		kengine::PhysicsComponent,
+		kengine::KinematicComponent
 	>(em);
 }
