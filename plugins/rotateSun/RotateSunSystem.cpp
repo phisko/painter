@@ -1,8 +1,11 @@
 #include "RotateSunSystem.hpp"
 #include "EntityManager.hpp"
 #include "Export.hpp"
+
 #include "components/AdjustableComponent.hpp"
 #include "components/LightComponent.hpp"
+
+#include "angle.hpp"
 
 EXPORT kengine::ISystem * getSystem(kengine::EntityManager & em) {
 	return new RotateSunSystem(em);
@@ -18,8 +21,8 @@ void RotateSunSystem::execute() {
 	for (auto & [e, light] : _em.getEntities<kengine::DirLightComponent>()) {
 		static float angle = 0.f;
 		angle += time.getDeltaTime().count() * SUN_ROTATION;
-		if (angle > KENGINE_PI * 2.f)
-			angle -= KENGINE_PI * 2.f;
+		if (angle > putils::pi * 2.f)
+			angle -= putils::pi * 2.f;
 		light.direction = { std::cos(angle), -1.f, std::sin(angle) };
 	}	
 }

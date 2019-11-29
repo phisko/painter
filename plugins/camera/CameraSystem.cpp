@@ -16,6 +16,7 @@
 #include "imgui.h"
 #include "GLFW/glfw3.h"
 #include "magic_enum.hpp"
+#include "angle.hpp"
 
 EXPORT kengine::ISystem * getSystem(kengine::EntityManager & em) {
 	return new CameraSystem(em);
@@ -89,8 +90,8 @@ static void processMouseMovement(const putils::Point2f & movement, kengine::Enti
 	cam.yaw -= xoffset;
 	cam.pitch -= yoffset;
 
-	cam.pitch = std::min(cam.pitch, KENGINE_PI / 2.f - 0.001f);
-	cam.pitch = std::max(cam.pitch, -KENGINE_PI / 2.f - 0.001f);
+	cam.pitch = std::min(cam.pitch, putils::pi / 2.f - 0.001f);
+	cam.pitch = std::max(cam.pitch, -putils::pi / 2.f - 0.001f);
 
 	updateVectors(cam);
 }
@@ -100,10 +101,10 @@ void processMouseScroll(float yoffset, kengine::EntityManager & em) {
 	auto & cam = e.get<kengine::CameraComponent3f>();
 
 	auto & zoom = cam.frustum.size.y;
-	if (zoom >= .001f && zoom <= KENGINE_PI * .9f)
+	if (zoom >= .001f && zoom <= putils::pi * .9f)
 		zoom -= yoffset * ZOOM_SPEED;
 	zoom = std::max(zoom, .001f);
-	zoom = std::min(zoom, KENGINE_PI * .9f);
+	zoom = std::min(zoom, putils::pi * .9f);
 }
 
 static auto CameraController(kengine::EntityManager & em) {

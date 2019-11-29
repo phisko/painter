@@ -8,6 +8,8 @@
 #include "components/SpriteComponent.hpp"
 #include "components/UIComponent.hpp"
 
+#include "angle.hpp"
+
 EXPORT kengine::ISystem * getSystem(kengine::EntityManager & em) {
 	return new UISystem(em);
 }
@@ -27,7 +29,7 @@ void UISystem::execute() {
 		const auto & pos = transform.boundingBox.position;
 		const auto & camPos = cam->frustum.position;
 
-		transform.yaw = pos.getYawTo(camPos) + KENGINE_PI * 1.5f;
+		transform.yaw = pos.getYawTo(camPos) + putils::pi * 1.5f;
 		transform.pitch = pos.getPitchTo(camPos);
 	}
 }
