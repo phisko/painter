@@ -1,5 +1,5 @@
 #include "registerTypes.hpp"
-#include "components/ModelColliderComponent.hpp"
+#include "data/ModelColliderComponent.hpp"
 
 void registerModelColliderComponent(kengine::EntityManager & em) {
 	registerComponents<

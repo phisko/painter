@@ -1,5 +1,5 @@
 #include "registerTypes.hpp"
-#include "components/InputComponent.hpp"
+#include "data/InputComponent.hpp"
 
 void registerInputComponent(kengine::EntityManager & em) {
 	registerComponents<

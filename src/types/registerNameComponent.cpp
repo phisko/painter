@@ -1,5 +1,5 @@
 #include "registerTypes.hpp"
-#include "components/NameComponent.hpp"
+#include "data/NameComponent.hpp"
 
 void registerNameComponent(kengine::EntityManager & em) {
 	registerComponents<

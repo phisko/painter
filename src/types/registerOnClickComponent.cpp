@@ -1,5 +1,5 @@
 #include "registerTypes.hpp"
-#include "components/OnClickComponent.hpp"
+#include "data/OnClickComponent.hpp"
 
 void registerOnClickComponent(kengine::EntityManager & em) {
 	registerComponents<

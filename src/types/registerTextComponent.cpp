@@ -1,5 +1,5 @@
 #include "registerTypes.hpp"
-#include "components/TextComponent.hpp"
+#include "data/TextComponent.hpp"
 
 void registerTextComponent(kengine::EntityManager & em) {
 	registerComponents<

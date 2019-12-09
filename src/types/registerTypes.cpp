@@ -4,10 +4,10 @@
 
 REGISTER_FUNC_DECL(Adjustable);
 REGISTER_FUNC_DECL(Animation);
-REGISTER_FUNC_DECL(Behavior);
 REGISTER_FUNC_DECL(Camera);
 REGISTER_FUNC_DECL(CharacterMovement);
 REGISTER_FUNC_DECL(DebugGraphics);
+REGISTER_FUNC_DECL(Execute);
 REGISTER_FUNC_DECL(GodRays);
 REGISTER_FUNC_DECL(Graphics);
 REGISTER_FUNC_DECL(Highlight);
@@ -36,10 +36,10 @@ using RegisterFunc = void(*)(kengine::EntityManager &);
 static const RegisterFunc funcs[] = {
 	REGISTER_FUNC_NAME(Adjustable),
 	REGISTER_FUNC_NAME(Animation),
-	REGISTER_FUNC_NAME(Behavior),
 	REGISTER_FUNC_NAME(Camera),
 	REGISTER_FUNC_NAME(CharacterMovement),
 	REGISTER_FUNC_NAME(DebugGraphics),
+	REGISTER_FUNC_NAME(Execute),
 	REGISTER_FUNC_NAME(GodRays),
 	REGISTER_FUNC_NAME(Graphics),
 	REGISTER_FUNC_NAME(Highlight),

@@ -1,5 +1,5 @@
 #include "registerTypes.hpp"
-#include "components/GraphicsComponent.hpp"
+#include "data/GraphicsComponent.hpp"
 
 void registerGraphicsComponent(kengine::EntityManager & em) {
 	registerComponents<

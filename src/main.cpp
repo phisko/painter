@@ -1,16 +1,17 @@
 #include "go_to_bin_dir.hpp"
+#include "PluginManager.hpp"
+
+#include "helpers/MainLoop.hpp"
 
 #include "systems/InputSystem.hpp"
 #include "systems/LuaSystem.hpp"
 #include "systems/PySystem.hpp"
-#include "systems/BehaviorSystem.hpp"
 #include "systems/OnClickSystem.hpp"
 
 #include "systems/ImGuiAdjustableSystem.hpp"
 #include "systems/ImGuiToolSystem.hpp"
 #include "systems/ImGuiEntityEditorSystem.hpp"
 #include "systems/ImGuiEntitySelectorSystem.hpp"
-#include "imgui.h"
 
 #include "systems/polyvox/PolyVoxSystem.hpp"
 #include "systems/polyvox/MagicaVoxelSystem.hpp"
@@ -21,43 +22,7 @@
 #include "systems/bullet/BulletSystem.hpp"
 #include "systems/KinematicSystem.hpp"
 
-#include "components/ImGuiComponent.hpp"
-#include "components/WindowComponent.hpp"
-
-#include "packets/GBuffer.hpp"
-#include "packets/Terminate.hpp"
-
-auto TimeControls(kengine::EntityManager & em) {
-	return [&em](kengine::Entity & e) {
-		auto & tool = e.attach<kengine::ImGuiToolComponent>();
-		tool.name = "Time controller";
-		tool.enabled = false;
-
-		e += kengine::ImGuiComponent([&] {
-			if (!tool.enabled)
-				return;
-
-			if (ImGui::Begin("Time controls", &tool.enabled)) {
-				float speed = em.getSpeed();
-				ImGui::InputFloat("Speed", &speed);
-				em.setSpeed(speed);
-
-				ImGui::Columns(2);
-				if (ImGui::Button("Pause"))
-					em.pause();
-				ImGui::NextColumn();
-				if (ImGui::Button("Resume"))
-					em.resume();
-				ImGui::Columns();
-
-			} ImGui::End();
-		});
-	};
-}
-
-static void addMenus(kengine::EntityManager & em) {
-	em += TimeControls(em);
-}
+#include "data/WindowComponent.hpp"
 
 int main(int, char **av) {
 	putils::goToBinDir(av[0]);
@@ -74,34 +39,33 @@ int main(int, char **av) {
 		};
 	};
 
-	em.loadSystems<
-		kengine::InputSystem,
-		kengine::LuaSystem, kengine::PySystem,
+	em += kengine::InputSystem(em);
+	em += kengine::LuaSystem(em);
+	em += kengine::PySystem(em);
+	
+	em += kengine::OnClickSystem(em);
 
-		kengine::BehaviorSystem,
-		kengine::OnClickSystem,
+	em += kengine::OpenGLSystem(em);
+	em += kengine::OpenGLSpritesSystem(em);
+	em += kengine::PolyVoxSystem(em);
+	em += kengine::MagicaVoxelSystem(em);
+	em += kengine::AssImpSystem(em);
 
-		kengine::OpenGLSystem,
-		kengine::OpenGLSpritesSystem,
-		kengine::PolyVoxSystem, kengine::MagicaVoxelSystem,
-		kengine::AssImpSystem,
+	em += kengine::BulletSystem(em);
+	em += kengine::KinematicSystem(em);
 
-		kengine::BulletSystem,
-		kengine::KinematicSystem,
+	em += kengine::ImGuiAdjustableSystem(em);
+	em += kengine::ImGuiToolSystem(em);
+	em += kengine::ImGuiEntityEditorSystem(em);
+	em += kengine::ImGuiEntitySelectorSystem(em);
 
-		kengine::ImGuiAdjustableSystem,
-		kengine::ImGuiToolSystem,
-		kengine::ImGuiEntityEditorSystem,
-		kengine::ImGuiEntitySelectorSystem
-	>("plugins");
+	putils::PluginManager pm;
+	pm.rescanDirectory("plugins", "loadKenginePlugin", em);
 
 	extern void registerTypes(kengine::EntityManager &);
 	registerTypes(em);
 
-	addMenus(em);
-
-	while (em.running)
-		em.execute();
+	kengine::MainLoop::run(em);
 
 	return 0;
 }

@@ -1,5 +1,5 @@
 #include "registerTypes.hpp"
-#include "components/GodRaysComponent.hpp"
+#include "data/GodRaysComponent.hpp"
 
 void registerGodRaysComponent(kengine::EntityManager & em) {
 	registerComponents<

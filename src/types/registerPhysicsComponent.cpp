@@ -1,5 +1,5 @@
 #include "registerTypes.hpp"
-#include "components/PhysicsComponent.hpp"
+#include "data/PhysicsComponent.hpp"
 
 void registerPhysicsComponent(kengine::EntityManager & em) {
 	registerComponents<

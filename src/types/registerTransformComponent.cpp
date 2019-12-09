@@ -1,5 +1,5 @@
 #include "registerTypes.hpp"
-#include "components/TransformComponent.hpp"
+#include "data/TransformComponent.hpp"
 
 void registerTransformComponent(kengine::EntityManager & em) {
 	registerComponents<

@@ -1,5 +1,5 @@
 #include "registerTypes.hpp"
-#include "components/DebugGraphicsComponent.hpp"
+#include "data/DebugGraphicsComponent.hpp"
 
 void registerDebugGraphicsComponent(kengine::EntityManager & em) {
 	registerComponents<

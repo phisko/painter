@@ -1,5 +1,5 @@
 #include "registerTypes.hpp"
-#include "components/AnimationComponent.hpp"
+#include "data/AnimationComponent.hpp"
 
 void registerAnimationComponent(kengine::EntityManager & em) {
 	registerComponents<

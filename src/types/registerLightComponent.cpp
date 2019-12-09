@@ -1,5 +1,5 @@
 #include "registerTypes.hpp"
-#include "components/LightComponent.hpp"
+#include "data/LightComponent.hpp"
 
 void registerLightComponent(kengine::EntityManager & em) {
 	registerComponents<

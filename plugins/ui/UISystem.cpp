@@ -1,31 +1,39 @@
-#include "UISystem.hpp"
-
 #include "EntityManager.hpp"
 #include "Export.hpp"
 
-#include "components/TransformComponent.hpp"
-#include "components/CameraComponent.hpp"
-#include "components/SpriteComponent.hpp"
-#include "components/UIComponent.hpp"
+#include "data/TransformComponent.hpp"
+#include "data/CameraComponent.hpp"
+#include "data/SpriteComponent.hpp"
+#include "data/UIComponent.hpp"
+
+#include "functions/Execute.hpp"
+
+#include "helpers/PluginHelper.hpp"
 
 #include "angle.hpp"
 
-EXPORT kengine::ISystem * getSystem(kengine::EntityManager & em) {
-	return new UISystem(em);
+static kengine::EntityManager * g_em;
+
+static void execute(float deltaTime);
+EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
+	kengine::PluginHelper::initPlugin(em);
+
+	g_em = &em;
+
+	em += [](kengine::Entity & e) {
+		e += kengine::functions::Execute{ execute };
+	};
 }
 
-UISystem::UISystem(kengine::EntityManager & em) : System(em), _em(em) {
-}
-
-void UISystem::execute() {
+static void execute(float deltaTime) {
 	const kengine::CameraComponent3f * cam = nullptr;
-	for (const auto & [e, comp] : _em.getEntities<kengine::CameraComponent3f>())
+	for (const auto & [e, comp] : g_em->getEntities<kengine::CameraComponent3f>())
 		cam = &comp;
 
 	if (cam == nullptr)
 		return;
 
-	for (auto & [e, transform, ui] : _em.getEntities<kengine::TransformComponent3f, UIComponent>()) {
+	for (auto & [e, transform, ui] : g_em->getEntities<kengine::TransformComponent3f, UIComponent>()) {
 		const auto & pos = transform.boundingBox.position;
 		const auto & camPos = cam->frustum.position;
 

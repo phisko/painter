@@ -1,5 +1,5 @@
 #include "registerTypes.hpp"
-#include "components/UIComponent.hpp"
+#include "data/UIComponent.hpp"
 
 void registerUIComponent(kengine::EntityManager & em) {
 	registerComponents<

@@ -1,43 +1,108 @@
 #include <filesystem>
 #include <thread>
 
-#include "LoadingSystem.hpp"
-
 #include "EntityManager.hpp"
 #include "Export.hpp"
 
-#include "functions/LoadFromJSON.hpp"
+#include "functions/Execute.hpp"
+#include "functions/OnTerminate.hpp"
+
+#include "meta/LoadFromJSON.hpp"
 #include "json.hpp"
+
+#include "helpers/PluginHelper.hpp"
+
+static kengine::EntityManager * g_em;
 
 static std::thread * g_loadingThread = nullptr;
 
-EXPORT kengine::ISystem * getSystem(kengine::EntityManager & em) {
-	return new LoadingSystem(em);
+static void execute(float deltaTime);
+static void onTerminate();
+EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
+	kengine::PluginHelper::initPlugin(em);
+
+	g_em = &em;
+
+	em += [](kengine::Entity & e) {
+		e += kengine::functions::Execute{ execute };
+		e += kengine::functions::OnTerminate{ onTerminate };
+	};
 }
 
-LoadingSystem::LoadingSystem(kengine::EntityManager & em) : System(em), _em(em) {
-}
-
-void LoadingSystem::handle(kengine::packets::Terminate) {
+static void onTerminate() {
 	if (g_loadingThread == nullptr)
 		return;
 	g_loadingThread->join();
 	delete g_loadingThread;
 }
 
+enum LoadingState {
+	NotStarted,
+	InProgress,
+	LoadingDone,
+	Complete
+};
+static std::atomic<LoadingState> loadingState = LoadingState::NotStarted;
+
 static std::vector<kengine::Entity::ID> g_toEnable;
+static std::vector<kengine::Entity::ID> g_toRemove;
 
-static void loadEntity(kengine::Entity & e, const putils::json & json, kengine::EntityManager & em, bool active) {
-	if (!active) {
-		em.setEntityActive(e, false);
-		g_toEnable.push_back(e.id);
-	}
+static void setupLoading(kengine::EntityManager & em);
+static void execute(float deltaTime) {
+	switch (loadingState) {
+		case LoadingState::NotStarted: {
+			loadingState = LoadingState::InProgress;
+			setupLoading(*g_em);
+			break;
+		}
+		case LoadingState::LoadingDone: {
+			for (const auto id : g_toEnable)
+				g_em->setEntityActive(id, true);
+			g_toEnable.clear();
 
-	for (const auto & [_, loader] : em.getEntities<kengine::functions::LoadFromJSON>()) {
-		if (!em.running)
-			return;
-		loader(json, e);
+			for (const auto id : g_toRemove)
+				g_em->removeEntity(id);
+			g_toRemove.clear();
+
+			loadingState = LoadingState::Complete;
+			g_loadingThread->join();
+			delete g_loadingThread;
+			g_loadingThread = nullptr;
+			break;
+		}
+		default: break;
 	}
+}
+
+static void loadTemporaryScene(const char * file, kengine::EntityManager & em);
+static void loadingThread(kengine::EntityManager & em);
+static void setupLoading(kengine::EntityManager & em) {
+	loadTemporaryScene("resources/loadingScene.json", em);
+
+	g_loadingThread = new std::thread([&] {
+		putils::set_thread_name(L"Loading thread");
+		loadingThread(em);
+		loadingState = LoadingState::LoadingDone;
+	});
+}
+
+static void loadEntity(kengine::Entity & e, const putils::json & json, kengine::EntityManager & em, bool active);
+static void loadTemporaryScene(const char * file, kengine::EntityManager & em) {
+	std::ifstream f(file);
+	static const putils::json fileJSON = putils::json::parse(f);
+
+	for (const auto & json : fileJSON)
+		em += [&](kengine::Entity & e) {
+			g_toRemove.push_back(e.id);
+			loadEntity(e, json, em, true);
+		};
+}
+
+static void loadModels(const std::filesystem::path & dir, kengine::EntityManager & em);
+static void loadScene(const char * file, kengine::EntityManager & em);
+static void loadingThread(kengine::EntityManager & em) {
+	loadModels("resources/models", em);
+	loadScene("resources/scene.json", em);
 }
 
 static void loadModels(const std::filesystem::path & dir, kengine::EntityManager & em) {
@@ -81,64 +146,15 @@ static void loadScene(const char * file, kengine::EntityManager & em) {
 	}
 }
 
-static std::vector<kengine::Entity::ID> g_toRemove;
-static void loadTemporaryScene(const char * file, kengine::EntityManager & em) {
-	std::ifstream f(file);
-	static const putils::json fileJSON = putils::json::parse(f);
+static void loadEntity(kengine::Entity & e, const putils::json & json, kengine::EntityManager & em, bool active) {
+	if (!active) {
+		em.setEntityActive(e, false);
+		g_toEnable.push_back(e.id);
+	}
 
-	for (const auto & json : fileJSON)
-		em += [&](kengine::Entity & e) {
-			g_toRemove.push_back(e.id);
-			loadEntity(e, json, em, true);
-		};
-}
-
-static void loadingThread(kengine::EntityManager & em) {
-	loadModels("resources/models", em);
-	loadScene("resources/scene.json", em);
-}
-
-enum LoadingState {
-	NotStarted,
-	InProgress,
-	LoadingDone,
-	Complete
-};
-
-static std::atomic<LoadingState> loadingState = LoadingState::NotStarted;
-
-static void setupLoading(kengine::EntityManager & em) {
-	loadTemporaryScene("resources/loadingScene.json", em);
-
-	g_loadingThread = new std::thread([&] {
-		putils::set_thread_name(L"Loading thread");
-		loadingThread(em);
-		loadingState = LoadingState::LoadingDone;
-	});
-}
-
-void LoadingSystem::execute() {
-	switch (loadingState) {
-		case LoadingState::NotStarted: {
-			loadingState = LoadingState::InProgress;
-			setupLoading(_em);
-			break;
-		}
-		case LoadingState::LoadingDone: {
-			for (const auto id : g_toEnable)
-				_em.setEntityActive(id, true);
-			g_toEnable.clear();
-
-			for (const auto id : g_toRemove)
-				_em.removeEntity(id);
-			g_toRemove.clear();
-
-			loadingState = LoadingState::Complete;
-			g_loadingThread->join();
-			delete g_loadingThread;
-			g_loadingThread = nullptr;
-			break;
-		}
-		default: break;
+	for (const auto & [_, loader] : em.getEntities<kengine::meta::LoadFromJSON>()) {
+		if (!em.running)
+			return;
+		loader(json, e);
 	}
 }

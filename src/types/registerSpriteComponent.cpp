@@ -1,5 +1,5 @@
 #include "registerTypes.hpp"
-#include "components/SpriteComponent.hpp"
+#include "data/SpriteComponent.hpp"
 
 void registerSpriteComponent(kengine::EntityManager & em) {
 	registerComponents<

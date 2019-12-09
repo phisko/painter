@@ -12,8 +12,8 @@ if not self:hasLuaTableComponent() then
 end
 
 local transform = self:getTransformComponent()
-transform.roll = transform.roll + getDeltaTime()
+transform.roll = transform.roll + deltaTime
 transform.roll = math.fmod(transform.roll, 2 * math.pi)
 
-transform.yaw = transform.yaw + getDeltaTime()
+transform.yaw = transform.yaw + deltaTime
 transform.yaw = math.fmod(transform.yaw, 2 * math.pi)

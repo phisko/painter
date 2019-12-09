@@ -1,21 +1,20 @@
-#include "EntityHighlightSystem.hpp"
-
 #include "EntityManager.hpp"
 #include "Export.hpp"
 
-#include "components/AdjustableComponent.hpp"
-#include "components/InputComponent.hpp"
-#include "components/HighlightComponent.hpp"
-#include "components/SelectedComponent.hpp"
-#include "components/SpriteComponent.hpp"
+#include "data/AdjustableComponent.hpp"
+#include "data/InputComponent.hpp"
+#include "data/HighlightComponent.hpp"
+#include "data/SelectedComponent.hpp"
+#include "data/SpriteComponent.hpp"
 
-#include "packets/EntityInPixel.hpp"
+#include "functions/Execute.hpp"
+#include "functions/GetEntityInPixel.hpp"
+
+#include "helpers/PluginHelper.hpp"
 
 struct HoveredComponent {};
 
-EXPORT kengine::ISystem * getSystem(kengine::EntityManager & em) {
-	return new EntityHighlightSystem(em);
-}
+static kengine::EntityManager * g_em;
 
 static putils::NormalizedColor SELECTED_COLOR;
 static float SELECTED_INTENSITY = 2.f;
@@ -23,22 +22,31 @@ static float SELECTED_INTENSITY = 2.f;
 static putils::NormalizedColor HOVERED_COLOR;
 static float HOVERED_INTENSITY = 1.f;
 
-EntityHighlightSystem::EntityHighlightSystem(kengine::EntityManager & em) : System(em), _em(em) {
-	_em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Highlight/Selected] Color", &SELECTED_COLOR); };
-	_em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Highlight/Selected] Intensity", &SELECTED_INTENSITY); };
-	_em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Highlight/Hovered] Color", &HOVERED_COLOR); };
-	_em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Highlight/Hovered] Intensity", &HOVERED_INTENSITY); };
+static void execute(float deltaTime);
+static void click(kengine::Entity::ID window, const putils::Point2f & coords);
+static void hover(kengine::Entity::ID window, const putils::Point2f & coords);
+EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
+	kengine::PluginHelper::initPlugin(em);
 
-	_em += [this](kengine::Entity & e) {
+	g_em = &em;
+
+	em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Highlight/Selected] Color", &SELECTED_COLOR); };
+	em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Highlight/Selected] Intensity", &SELECTED_INTENSITY); };
+	em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Highlight/Hovered] Color", &HOVERED_COLOR); };
+	em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Highlight/Hovered] Intensity", &HOVERED_INTENSITY); };
+
+	em += [](kengine::Entity & e) {
+		e += kengine::functions::Execute{ execute };
+
 		kengine::InputComponent input;
 
-		input.onMouseButton = [this](kengine::Entity::ID window, int button, const putils::Point2f & coords, bool pressed) {
+		input.onMouseButton = [](kengine::Entity::ID window, int button, const putils::Point2f & coords, bool pressed) {
 			if (!pressed)
 				return;
 			click(window, coords);
 		};
 
-		input.onMouseMove = [this](kengine::Entity::ID window, const putils::Point2f & coords, const putils::Point2f & rel) {
+		input.onMouseMove = [](kengine::Entity::ID window, const putils::Point2f & coords, const putils::Point2f & rel) {
 			hover(window, coords);
 		};
 
@@ -46,14 +54,28 @@ EntityHighlightSystem::EntityHighlightSystem(kengine::EntityManager & em) : Syst
 	};
 }
 
-void EntityHighlightSystem::click(kengine::Entity::ID window, const putils::Point2f & coords) noexcept {
+static void execute(float deltaTime) {
+	using kengine::no;
+
+	for (auto &[e, highlight, noSelected, noHovered] : g_em->getEntities<kengine::HighlightComponent, no<kengine::SelectedComponent>, no<HoveredComponent>>())
+		e.detach<kengine::HighlightComponent>();
+
+	for (auto &[e, selected, notHighlighted] : g_em->getEntities<kengine::SelectedComponent, no<kengine::HighlightComponent>>())
+		e += kengine::HighlightComponent{ .color = SELECTED_COLOR, .intensity = SELECTED_INTENSITY };
+}
+
+static void click(kengine::Entity::ID window, const putils::Point2f & coords) {
 	kengine::Entity::ID id = kengine::Entity::INVALID_ID;
-	send(kengine::packets::GetEntityInPixel{ window, coords, id });
+	for (const auto & [e, func] : g_em->getEntities<kengine::functions::GetEntityInPixel>()) {
+		id = func(window, coords);
+		if (id != kengine::Entity::INVALID_ID)
+			break;
+	}
 
 	if (id == kengine::Entity::INVALID_ID)
 		return;
 
-	auto & e = _em.getEntity(id);
+	auto & e = g_em->getEntity(id);
 	if (e.has<kengine::SelectedComponent>())
 		e.detach<kengine::SelectedComponent>();
 	else {
@@ -62,17 +84,21 @@ void EntityHighlightSystem::click(kengine::Entity::ID window, const putils::Poin
 	}
 }
 
-void EntityHighlightSystem::hover(kengine::Entity::ID window, const putils::Point2f & coords) noexcept {
+static void hover(kengine::Entity::ID window, const putils::Point2f & coords) {
 	static kengine::Entity::ID previous = kengine::Entity::INVALID_ID;
 
 	kengine::Entity::ID hovered = kengine::Entity::INVALID_ID;
-	send(kengine::packets::GetEntityInPixel{ window, coords, hovered });
+	for (const auto & [e, func] : g_em->getEntities<kengine::functions::GetEntityInPixel>()) {
+		hovered = func(window, coords);
+		if (hovered != kengine::Entity::INVALID_ID)
+			break;
+	}
 
 	if (hovered == previous)
 		return;
 
 	if (previous != kengine::Entity::INVALID_ID) {
-		auto & e = _em.getEntity(previous);
+		auto & e = g_em->getEntity(previous);
 		if (e.has<HoveredComponent>())
 			e.detach<HoveredComponent>();
 
@@ -80,7 +106,7 @@ void EntityHighlightSystem::hover(kengine::Entity::ID window, const putils::Poin
 	}
 
 	if (hovered != kengine::Entity::INVALID_ID) {
-		auto & e = _em.getEntity(hovered);
+		auto & e = g_em->getEntity(hovered);
 		if (!e.has<kengine::SelectedComponent>()) {
 			e += HoveredComponent{};
 			e += kengine::HighlightComponent{ .color = HOVERED_COLOR,.intensity = HOVERED_INTENSITY };
@@ -88,14 +114,4 @@ void EntityHighlightSystem::hover(kengine::Entity::ID window, const putils::Poin
 
 		previous = hovered;
 	}
-}
-
-void EntityHighlightSystem::execute() {
-	using kengine::no;
-
-	for (auto &[e, highlight, noSelected, noHovered] : _em.getEntities<kengine::HighlightComponent, no<kengine::SelectedComponent>, no<HoveredComponent>>())
-		e.detach<kengine::HighlightComponent>();
-
-	for (auto &[e, selected, notHighlighted] : _em.getEntities<kengine::SelectedComponent, no<kengine::HighlightComponent>>())
-		e += kengine::HighlightComponent{ .color = SELECTED_COLOR, .intensity = SELECTED_INTENSITY };
 }

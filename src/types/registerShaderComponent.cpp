@@ -1,5 +1,5 @@
 #include "registerTypes.hpp"
-#include "components/ShaderComponent.hpp"
+#include "data/ShaderComponent.hpp"
 
 void registerShaderComponent(kengine::EntityManager & em) {
 	registerComponents<

@@ -1,5 +1,5 @@
 #include "registerTypes.hpp"
-#include "components/SelectedComponent.hpp"
+#include "data/SelectedComponent.hpp"
 
 void registerSelectedComponent(kengine::EntityManager & em) {
 	registerComponents<

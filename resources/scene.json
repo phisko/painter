@@ -104,7 +104,8 @@
 		"NameComponent": { "name": "Mannequin" },
 		"GraphicsComponent": { "appearance": "resources/models/Mannequin_figure/free3Dmodel.dae" },
 		"TransformComponent": { "boundingBox": { "position": { "x": -4, "y": 0.15, "z": -5.5 } } },
-		"PhysicsComponent": { "kinematic": true },
+		"KinematicComponent": {},
+		"PhysicsComponent": {},
 		"AnimationComponent": {
 			"currentAnim": 1
 		}
@@ -117,7 +118,8 @@
 			 "boundingBox": { "position": { "x": -5, "y": 0.15, "z": -5.5 } },
 			 "yaw": 1
 		},
-		"PhysicsComponent": { "kinematic": true },
+		"KinematicComponent": {},
+		"PhysicsComponent": {},
 		"AnimationComponent": {
 			"currentAnim": 10
 		}

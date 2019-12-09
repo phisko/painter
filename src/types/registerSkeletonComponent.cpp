@@ -1,5 +1,5 @@
 #include "registerTypes.hpp"
-#include "components/ModelSkeletonComponent.hpp"
+#include "data/ModelSkeletonComponent.hpp"
 
 void registerSkeletonComponent(kengine::EntityManager & em) {
 	registerComponents<
