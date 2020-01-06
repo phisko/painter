@@ -5,7 +5,7 @@
 
 void registerCameraComponent(kengine::EntityManager & em) {
 	registerComponents<
-		kengine::CameraComponent3f,
+		kengine::CameraComponent,
 		kengine::ViewportComponent,
 		kengine::WindowComponent
 	>(em);

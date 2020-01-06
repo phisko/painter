@@ -49,7 +49,7 @@ add_subdirectory(kengine)
 
 ## API
 add_library(api INTERFACE)
-target_include_directories(api INTERFACE .)
+target_include_directories(api INTERFACE common)
 
 ## Executable
 

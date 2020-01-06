@@ -23,6 +23,8 @@
 #include "systems/KinematicSystem.hpp"
 
 #include "data/WindowComponent.hpp"
+#include "data/LuaComponent.hpp"
+#include "data/PyComponent.hpp"
 
 int main(int, char **av) {
 	putils::goToBinDir(av[0]);
@@ -36,6 +38,14 @@ int main(int, char **av) {
 	em += [&](kengine::Entity & e) {
 		e += kengine::WindowComponent{
 			"Painter"
+		};
+		e += kengine::LuaComponent{
+			{ "scripts/test.lua" }
+		};
+	};
+	em += [&](kengine::Entity & e) {
+		e += kengine::PyComponent{
+			{ "scripts/test.py" }
 		};
 	};
 

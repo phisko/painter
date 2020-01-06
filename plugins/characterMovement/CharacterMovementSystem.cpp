@@ -3,9 +3,10 @@
 #include "helpers/PluginHelper.hpp"
 
 #include "data/AdjustableComponent.hpp"
-#include "data/TransformComponent.hpp"
-#include "data/PhysicsComponent.hpp"
 #include "data/CharacterMovementComponent.hpp"
+#include "data/KinematicComponent.hpp"
+#include "data/PhysicsComponent.hpp"
+#include "data/TransformComponent.hpp"
 
 #include "functions/Execute.hpp"
 
@@ -39,32 +40,41 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 
 static void debug(kengine::Entity & e, const putils::Point3f & pos, const putils::Point3f & target);
 static void execute(float deltaTime) {
-	for (auto & [e, transform, physics, movement] : g_em->getEntities<kengine::TransformComponent3f, kengine::PhysicsComponent, CharacterMovementComponent>()) {
+	for (auto & [e, transform, physics, movement] : g_em->getEntities<kengine::TransformComponent, kengine::PhysicsComponent, CharacterMovementComponent>()) {
 		e += kengine::KinematicComponent{};
 
 		const auto & pos = transform.boundingBox.position;
 		const auto posToDest = movement.destination - pos;
 
-		if (posToDest.getLength() > movement.targetDistance) {
-			physics.movement = movement.destination - pos;
-			physics.movement.normalize();
-		}
-		else {
-			physics.movement = { 0.f, 0.f, 0.f };
-		}
-
-		const auto direction = putils::normalized(movement.destination - pos);
-		const auto yawTo = putils::getYawFromNormalizedDirection(direction);
-		const auto yawDelta = putils::constrainAngle(putils::constrainAngle(yawTo) - transform.yaw);
-		physics.yaw = TURN_SPEED * putils::sign(yawDelta);
-
-		const auto pitchTo = putils::getPitchFromNormalizedDirection(direction);
-		const auto pitchDelta = putils::constrainAngle(putils::constrainAngle(pitchTo) - transform.pitch);
-		physics.pitch = TURN_SPEED * putils::sign(pitchDelta);
-
 #ifndef KENGINE_NDEBUG
 		debug(e, pos, movement.destination);
 #endif
+
+		if (posToDest.getLength() <= movement.targetDistance) {
+			physics.movement = { 0.f, 0.f, 0.f };
+			physics.yaw = 0.f;
+			physics.pitch = 0.f;
+			continue;
+		}
+
+		physics.movement = movement.destination - pos;
+		physics.movement.normalize();
+
+		const auto direction = putils::normalized(movement.destination - pos);
+
+		const auto yawTo = putils::getYawFromNormalizedDirection(direction);
+		const auto yawDelta = putils::constrainAngle(putils::constrainAngle(yawTo) - transform.yaw);
+		if (std::abs(yawDelta) > FACING_STRICTNESS)
+			physics.yaw = TURN_SPEED * putils::sign(yawDelta);
+		else
+			physics.yaw = 0.f;
+
+		const auto pitchTo = putils::getPitchFromNormalizedDirection(direction);
+		const auto pitchDelta = putils::constrainAngle(putils::constrainAngle(pitchTo) - transform.pitch);
+		if (std::abs(pitchDelta) > FACING_STRICTNESS)
+			physics.pitch = TURN_SPEED * putils::sign(pitchDelta);
+		else
+			physics.pitch = 0.f;
 	}
 }
 
@@ -79,7 +89,7 @@ static void debug(kengine::Entity & e, const putils::Point3f & pos, const putils
 		*g_em += [&](kengine::Entity & e) {
 			comp.id = e.id;
 			e += kengine::DebugGraphicsComponent(kengine::DebugGraphicsComponent::Line);
-			e += kengine::TransformComponent3f{};
+			e += kengine::TransformComponent{};
 		};
 		e += kengine::DebugGraphicsComponent(kengine::DebugGraphicsComponent::Sphere, { {}, { .1f, .1f, .1f } });
 	}

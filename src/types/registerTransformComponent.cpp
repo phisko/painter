@@ -3,6 +3,6 @@
 
 void registerTransformComponent(kengine::EntityManager & em) {
 	registerComponents<
-		kengine::TransformComponent3f
+		kengine::TransformComponent
 	>(em);
 }

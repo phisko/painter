@@ -1,6 +1,10 @@
-#import pk
+def callback(deltaTime):
+    print("PYTE")
 
 comp = pk.self.getPyComponent()
+
+behavior = pk.self.attachExecute()
+behavior.func = callback
 
 for i in range(0, comp.scripts.size()):
     s = comp.scripts.get(i)

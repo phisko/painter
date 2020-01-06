@@ -51,14 +51,14 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 
 static kengine::Entity::ID g_capturedCamera = kengine::Entity::INVALID_ID;
 
-static void updateVectors(const kengine::CameraComponent3f & cam);
+static void updateVectors(const kengine::CameraComponent & cam);
 static void processKeys(putils::Point3f & pos, float deltaTime);
 static void execute(float deltaTime) {
 	if (g_capturedCamera == kengine::Entity::INVALID_ID)
 		return;
 
 	auto & e = g_em->getEntity(g_capturedCamera);
-	auto & comp = e.get<kengine::CameraComponent3f>();
+	auto & comp = e.get<kengine::CameraComponent>();
 	static bool first = true;
 	if (first) {
 		updateVectors(comp);
@@ -128,7 +128,7 @@ static void processKeys(putils::Point3f & pos, float deltaTime) {
 		MOVEMENT_SPEED *= MOVEMENT_SPEED_MODIFIER;
 }
 
-static void updateVectors(const kengine::CameraComponent3f & cam) {
+static void updateVectors(const kengine::CameraComponent & cam) {
 	front = {
 		std::sin(cam.yaw) * std::cos(cam.pitch),
 		std::sin(cam.pitch),
@@ -186,7 +186,7 @@ static void processMouseMovement(const putils::Point2f & movement, kengine::Enti
 	const float yoffset = movement.y * MOUSE_SENSITIVITY;
 
 	auto & e = em.getEntity(g_capturedCamera);
-	auto & cam = e.get<kengine::CameraComponent3f>();
+	auto & cam = e.get<kengine::CameraComponent>();
 
 	cam.yaw -= xoffset;
 	cam.pitch -= yoffset;
@@ -199,7 +199,7 @@ static void processMouseMovement(const putils::Point2f & movement, kengine::Enti
 
 static void processMouseScroll(float yoffset, kengine::EntityManager & em) {
 	auto & e = em.getEntity(g_capturedCamera);
-	auto & cam = e.get<kengine::CameraComponent3f>();
+	auto & cam = e.get<kengine::CameraComponent>();
 
 	auto & zoom = cam.frustum.size.y;
 	if (zoom >= .001f && zoom <= putils::pi * .9f)

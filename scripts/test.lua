@@ -1,7 +1,7 @@
 if not __init_done__ then
 	__init_done__ = true
-	local behavior = self:attachBehaviorComponent()
-	behavior.func = function()
+	local behavior = self:attachExecute()
+	behavior.func = function(deltaTime)
 		print("PUTE")
 	end
 end

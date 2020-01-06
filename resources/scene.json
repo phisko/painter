@@ -83,7 +83,10 @@
 		"NameComponent": { "name": "Cat" },
 		"GraphicsComponent": { "appearance": "resources/models/chr_cat.vox" },
 		"TransformComponent": { "boundingBox": { "position": { "y": 0.15, "z": -5 } } },
-		"PhysicsComponent": {}
+		"PhysicsComponent": {},
+		"CharacterMovementComponent": {
+			"destination": { "z": -5 }
+		}
 	},
 
 	{

@@ -26,14 +26,14 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 }
 
 static void execute(float deltaTime) {
-	const kengine::CameraComponent3f * cam = nullptr;
-	for (const auto & [e, comp] : g_em->getEntities<kengine::CameraComponent3f>())
+	const kengine::CameraComponent * cam = nullptr;
+	for (const auto & [e, comp] : g_em->getEntities<kengine::CameraComponent>())
 		cam = &comp;
 
 	if (cam == nullptr)
 		return;
 
-	for (auto & [e, transform, ui] : g_em->getEntities<kengine::TransformComponent3f, UIComponent>()) {
+	for (auto & [e, transform, ui] : g_em->getEntities<kengine::TransformComponent, UIComponent>()) {
 		const auto & pos = transform.boundingBox.position;
 		const auto & camPos = cam->frustum.position;
 
