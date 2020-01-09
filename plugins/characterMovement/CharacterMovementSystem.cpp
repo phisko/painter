@@ -24,7 +24,9 @@ static kengine::EntityManager * g_em;
 static float FACING_STRICTNESS = 0.05f;
 static float TURN_SPEED = putils::pi;
 
+// declarations
 static void execute(float deltaTime);
+//
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 	kengine::PluginHelper::initPlugin(em);
 
@@ -42,7 +44,9 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 	};
 }
 
+// declarations
 static void debug(kengine::Entity & e, const putils::Point3f & pos, const putils::Point3f & target);
+//
 static void execute(float deltaTime) {
 	for (auto & [e, transform, physics, movement] : g_em->getEntities<kengine::TransformComponent, kengine::PhysicsComponent, CharacterMovementComponent>()) {
 		e += kengine::KinematicComponent{};

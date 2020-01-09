@@ -22,9 +22,11 @@ static float SELECTED_INTENSITY = 2.f;
 static putils::NormalizedColor HOVERED_COLOR;
 static float HOVERED_INTENSITY = 1.f;
 
+// declarations
 static void execute(float deltaTime);
 static void click(kengine::Entity::ID window, const putils::Point2f & coords);
 static void hover(kengine::Entity::ID window, const putils::Point2f & coords);
+//
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 	kengine::PluginHelper::initPlugin(em);
 

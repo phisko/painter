@@ -22,7 +22,9 @@ static kengine::EntityManager * g_em;
 static float WOBBLE_SPEED = 1.f;
 static float MAX_ROLL = 1.f;
 
+// declarations
 static void execute(float deltaTime);
+//
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 	kengine::PluginHelper::initPlugin(em);
 

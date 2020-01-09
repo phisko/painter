@@ -28,9 +28,11 @@ static auto ZOOM_SPEED = .1f;
 
 static kengine::EntityManager * g_em;
 
+// declarations
 static void initKeys();
-static kengine::EntityCreatorFunctor<64> CameraController(kengine::EntityManager & em);
 static void execute(float deltaTime);
+static kengine::InputComponent CameraController(kengine::EntityManager & em);
+//
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 	kengine::PluginHelper::initPlugin(em);
 
@@ -38,9 +40,9 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 
 	initKeys();
 
-	em += CameraController(em);
-	em += [](kengine::Entity & e) {
+	em += [&](kengine::Entity & e) {
 		e += kengine::functions::Execute{ execute };
+		e += CameraController(em);
 
 		e += kengine::AdjustableComponent{
 			"Camera", {
@@ -55,8 +57,10 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 
 static kengine::Entity::ID g_capturedCamera = kengine::Entity::INVALID_ID;
 
+// declarations
 static void updateVectors(const kengine::CameraComponent & cam);
 static void processKeys(putils::Point3f & pos, float deltaTime);
+//
 static void execute(float deltaTime) {
 	if (g_capturedCamera == kengine::Entity::INVALID_ID)
 		return;
@@ -147,45 +151,37 @@ static void updateVectors(const kengine::CameraComponent & cam) {
 	up.normalize();
 }
 
-static void processMouseMovement(const putils::Point2f & movement, kengine::EntityManager & em);
-static void processMouseScroll(float yoffset, kengine::EntityManager & em);
-static kengine::EntityCreatorFunctor<64> CameraController(kengine::EntityManager & em) {
-	return [&](kengine::Entity & e) {
-		static putils::Point2f lastMousePos;
+// declarations
+static void processMouseMovement(kengine::EntityManager & em, const putils::Point2f & movement);
+static void processMouseScroll(kengine::EntityManager & em, float yoffset);
+static void toggleMouseCapture(kengine::EntityManager & em, kengine::Entity::ID window, const putils::Point2f & lastMousePos);
+//
+static kengine::InputComponent CameraController(kengine::EntityManager & em) {
+	static putils::Point2f lastMousePos;
 
-		kengine::InputComponent input;
-		input.onMouseMove = [&](kengine::Entity::ID window, const putils::Point2f & coords, const putils::Point2f & rel) {
-			lastMousePos = coords;
-			if (g_capturedCamera != kengine::Entity::INVALID_ID)
-				processMouseMovement(rel, em);
-		};
-		input.onScroll = [&](kengine::Entity::ID window, float deltaX, float deltaY, const putils::Point2f & coords) {
-			if (g_capturedCamera != kengine::Entity::INVALID_ID)
-				processMouseScroll(deltaY, em);
-		};
-		input.onKey = [&em](kengine::Entity::ID window, int key, bool pressed) {
-			if (pressed && key == GLFW_KEY_ENTER) {
-				if (g_capturedCamera != kengine::Entity::INVALID_ID)
-					g_capturedCamera = kengine::Entity::INVALID_ID;
-				else {
-					const auto info = kengine::CameraHelper::getViewportForPixel(em, window, lastMousePos);
-					g_capturedCamera = info.camera;
-				}
-
-				for (const auto & [e, func] : em.getEntities<kengine::functions::OnMouseCaptured>())
-					func(window, g_capturedCamera != kengine::Entity::INVALID_ID);
-			}
-
-			for (auto & k : keys)
-				if (k.code == key)
-					k.pressed = pressed;
-		};
-
-		e += input;
+	kengine::InputComponent input;
+	input.onMouseMove = [&](kengine::Entity::ID window, const putils::Point2f & coords, const putils::Point2f & rel) {
+		lastMousePos = coords;
+		if (g_capturedCamera != kengine::Entity::INVALID_ID)
+			processMouseMovement(em, rel);
 	};
+	input.onScroll = [&](kengine::Entity::ID window, float deltaX, float deltaY, const putils::Point2f & coords) {
+		if (g_capturedCamera != kengine::Entity::INVALID_ID)
+			processMouseScroll(em, deltaY);
+	};
+	input.onKey = [&em](kengine::Entity::ID window, int key, bool pressed) {
+		if (pressed && key == GLFW_KEY_ENTER)
+			toggleMouseCapture(em, window, lastMousePos);
+
+		for (auto & k : keys)
+			if (k.code == key)
+				k.pressed = pressed;
+	};
+
+	return input;
 }
 
-static void processMouseMovement(const putils::Point2f & movement, kengine::EntityManager & em) {
+static void processMouseMovement(kengine::EntityManager & em, const putils::Point2f & movement) {
 	const float xoffset = movement.x * MOUSE_SENSITIVITY;
 	const float yoffset = movement.y * MOUSE_SENSITIVITY;
 
@@ -201,7 +197,7 @@ static void processMouseMovement(const putils::Point2f & movement, kengine::Enti
 	updateVectors(cam);
 }
 
-static void processMouseScroll(float yoffset, kengine::EntityManager & em) {
+static void processMouseScroll(kengine::EntityManager & em, float yoffset) {
 	auto & e = em.getEntity(g_capturedCamera);
 	auto & cam = e.get<kengine::CameraComponent>();
 
@@ -210,4 +206,16 @@ static void processMouseScroll(float yoffset, kengine::EntityManager & em) {
 		zoom -= yoffset * ZOOM_SPEED;
 	zoom = std::max(zoom, .001f);
 	zoom = std::min(zoom, putils::pi * .9f);
+}
+
+static void toggleMouseCapture(kengine::EntityManager & em, kengine::Entity::ID window, const putils::Point2f & lastMousePos) {
+	if (g_capturedCamera != kengine::Entity::INVALID_ID)
+		g_capturedCamera = kengine::Entity::INVALID_ID;
+	else {
+		const auto info = kengine::CameraHelper::getViewportForPixel(em, window, lastMousePos);
+		g_capturedCamera = info.camera;
+	}
+
+	for (const auto & [e, func] : em.getEntities<kengine::functions::OnMouseCaptured>())
+		func(window, g_capturedCamera != kengine::Entity::INVALID_ID);
 }

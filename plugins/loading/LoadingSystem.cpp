@@ -16,8 +16,10 @@ static kengine::EntityManager * g_em;
 
 static std::thread * g_loadingThread = nullptr;
 
+// declarations
 static void execute(float deltaTime);
 static void onTerminate();
+//
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 	kengine::PluginHelper::initPlugin(em);
 
@@ -47,7 +49,9 @@ static std::atomic<LoadingState> loadingState = LoadingState::NotStarted;
 static std::vector<kengine::Entity::ID> g_toEnable;
 static std::vector<kengine::Entity::ID> g_toRemove;
 
+// declarations
 static void setupLoading(kengine::EntityManager & em);
+//
 static void execute(float deltaTime) {
 	switch (loadingState) {
 		case LoadingState::NotStarted: {
@@ -74,8 +78,10 @@ static void execute(float deltaTime) {
 	}
 }
 
+// declarations
 static void loadTemporaryScene(const char * file, kengine::EntityManager & em);
 static void loadingThread(kengine::EntityManager & em);
+//
 static void setupLoading(kengine::EntityManager & em) {
 	loadTemporaryScene("resources/loadingScene.json", em);
 
@@ -86,7 +92,9 @@ static void setupLoading(kengine::EntityManager & em) {
 	});
 }
 
+// declarations
 static void loadEntity(kengine::Entity & e, const putils::json & json, kengine::EntityManager & em, bool active);
+//
 static void loadTemporaryScene(const char * file, kengine::EntityManager & em) {
 	std::ifstream f(file);
 	static const putils::json fileJSON = putils::json::parse(f);
@@ -98,8 +106,10 @@ static void loadTemporaryScene(const char * file, kengine::EntityManager & em) {
 		};
 }
 
+// declarations
 static void loadModels(const std::filesystem::path & dir, kengine::EntityManager & em);
 static void loadScene(const char * file, kengine::EntityManager & em);
+//
 static void loadingThread(kengine::EntityManager & em) {
 	loadModels("resources/models", em);
 	loadScene("resources/scene.json", em);
