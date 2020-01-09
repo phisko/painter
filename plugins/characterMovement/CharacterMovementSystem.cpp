@@ -30,11 +30,15 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 
 	g_em = &em;
 
-	em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Character/Movement] Facing strictness", &FACING_STRICTNESS); };
-	em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Character/Movement] Turn speed", &TURN_SPEED); };
-
 	em += [](kengine::Entity & e) {
 		e += kengine::functions::Execute{ execute };
+
+		e += kengine::AdjustableComponent{
+			"Character/Movement", {
+				{ "Facing strictness", &FACING_STRICTNESS },
+				{ "Turn speed", &TURN_SPEED }
+			}
+		};
 	};
 }
 

@@ -20,10 +20,14 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 
 	g_em = &em;
 
-	em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[World] Sun rotation speed", &SUN_ROTATION); };
-
 	em += [](kengine::Entity & e) {
 		e += kengine::functions::Execute{ execute };
+
+		e += kengine::AdjustableComponent{
+			"World", {
+				{ "Sun rotation speed", &SUN_ROTATION }
+			}
+		};
 	};
 }
 

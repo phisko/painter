@@ -38,14 +38,18 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 
 	initKeys();
 
-	em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Camera] Mouse sensitivity", &MOUSE_SENSITIVITY); };
-	em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Camera] Movement speed", &MOVEMENT_SPEED); };
-	em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Camera] Movement speed modifier", &MOVEMENT_SPEED_MODIFIER); };
-	em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Camera] Zoom speed", &ZOOM_SPEED); };
 	em += CameraController(em);
-
 	em += [](kengine::Entity & e) {
 		e += kengine::functions::Execute{ execute };
+
+		e += kengine::AdjustableComponent{
+			"Camera", {
+				{ "Mouse sensitivity", &MOUSE_SENSITIVITY },
+				{ "Movement speed", & MOVEMENT_SPEED },
+				{ "Movement speed modifier", & MOVEMENT_SPEED_MODIFIER },
+				{ "Zoom speed", &ZOOM_SPEED }
+			}
+		};
 	};
 }
 

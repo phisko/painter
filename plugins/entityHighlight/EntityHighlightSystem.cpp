@@ -30,22 +30,24 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 
 	g_em = &em;
 
-	em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Highlight/Selected] Color", &SELECTED_COLOR); };
-	em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Highlight/Selected] Intensity", &SELECTED_INTENSITY); };
-	em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Highlight/Hovered] Color", &HOVERED_COLOR); };
-	em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Highlight/Hovered] Intensity", &HOVERED_INTENSITY); };
-
 	em += [](kengine::Entity & e) {
 		e += kengine::functions::Execute{ execute };
 
-		kengine::InputComponent input;
+		e += kengine::AdjustableComponent{
+			"Highlight", {
+				{ "Selected color", &SELECTED_COLOR },
+				{ "Selected intensity", &SELECTED_INTENSITY },
+				{ "Hovered color", &HOVERED_COLOR },
+				{ "Hovered intensity", &HOVERED_INTENSITY }
+			}
+		};
 
+		kengine::InputComponent input;
 		input.onMouseButton = [](kengine::Entity::ID window, int button, const putils::Point2f & coords, bool pressed) {
 			if (!pressed)
 				return;
 			click(window, coords);
 		};
-
 		input.onMouseMove = [](kengine::Entity::ID window, const putils::Point2f & coords, const putils::Point2f & rel) {
 			hover(window, coords);
 		};

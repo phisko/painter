@@ -30,11 +30,15 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 
 	g_em = &em;
 
-	em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Character/Wobble] Speed", &WOBBLE_SPEED); };
-	em += [](kengine::Entity & e) { e += kengine::AdjustableComponent("[Character/Wobble] Max roll", &MAX_ROLL); };
-
 	em += [](kengine::Entity & e) {
 		e += kengine::functions::Execute{ execute };
+
+		e += kengine::AdjustableComponent{
+			"Character/Wobble", {
+				{ "Speed", &WOBBLE_SPEED },
+				{ "Max roll", &MAX_ROLL }
+			}
+		};
 	};
 }
 

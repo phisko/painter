@@ -16,7 +16,7 @@ function copyTo() {
     fi
 
     rm -rf $DEST/$SOURCE && cp -r $SOURCE $DEST
-    ln adjust.cnf $DEST
+    ln adjust.ini $DEST
 }
 
 copyTo bin
