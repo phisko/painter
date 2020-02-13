@@ -5,8 +5,4 @@ void registerModelColliderComponent(kengine::EntityManager & em) {
 	registerComponents<
 		kengine::ModelColliderComponent
 	>(em);
-
-	registerTypes<
-		kengine::ModelColliderComponent::Collider
-	>(em);
 }

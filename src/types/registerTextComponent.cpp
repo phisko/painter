@@ -6,8 +6,4 @@ void registerTextComponent(kengine::EntityManager & em) {
 		kengine::TextComponent2D,
 		kengine::TextComponent3D
 	>(em);
-
-	registerTypes<
-		kengine::TextComponent::string
-	>(em);
 }

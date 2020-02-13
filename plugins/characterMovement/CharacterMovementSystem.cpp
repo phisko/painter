@@ -96,14 +96,20 @@ static void debug(kengine::Entity & e, const putils::Point3f & pos, const putils
 		auto & comp = e.attach<DebugEntityComponent>();
 		*g_em += [&](kengine::Entity & e) {
 			comp.id = e.id;
-			e += kengine::DebugGraphicsComponent(kengine::DebugGraphicsComponent::Line);
 			e += kengine::TransformComponent{};
+			auto & debug = e.attach<kengine::DebugGraphicsComponent>();
+			debug.elements.clear();
+			debug.elements.emplace_back(kengine::DebugGraphicsComponent::Line{});
 		};
-		e += kengine::DebugGraphicsComponent(kengine::DebugGraphicsComponent::Sphere, { {}, { .1f, .1f, .1f } });
+		auto & debug = e.attach<kengine::DebugGraphicsComponent>();
+		debug.elements.clear();
+		debug.elements.emplace_back(kengine::DebugGraphicsComponent::Sphere{ .1f });
 	}
 
 	auto & debug = g_em->getEntity(e.get<DebugEntityComponent>().id).attach<kengine::DebugGraphicsComponent>();
-	debug.offset.position = pos;
-	debug.lineEnd = target;
+	auto & element = debug.elements.back();
+	element.pos = pos;
+	element.referenceSpace = kengine::DebugGraphicsComponent::ReferenceSpace::Object;
+	std::get<kengine::DebugGraphicsComponent::Line>(element.data).end = target;
 }
 #endif

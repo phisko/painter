@@ -7,8 +7,4 @@ void registerLuaComponent(kengine::EntityManager & em) {
 		kengine::LuaComponent,
 		kengine::LuaTableComponent
 	>(em);
-
-	registerTypes<
-		kengine::LuaComponent::script, kengine::LuaComponent::script_vector
-	>(em);
 }
