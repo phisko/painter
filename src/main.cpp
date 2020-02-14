@@ -2,6 +2,7 @@
 #include "PluginManager.hpp"
 
 #include "helpers/MainLoop.hpp"
+#include "helpers/ImGuiLuaHelper.hpp"
 
 #include "systems/InputSystem.hpp"
 #include "systems/LuaSystem.hpp"
@@ -74,6 +75,8 @@ int main(int, char **av) {
 
 	extern void registerTypes(kengine::EntityManager &);
 	registerTypes(em);
+
+	kengine::ImGuiLuaHelper::initBindings(em);
 
 	kengine::MainLoop::run(em);
 
