@@ -1,12 +1,15 @@
 [
     {
-        "ViewportComponent": { "boundingBox": { "position": { "z": 1 } } },
+        "ViewportComponent": {
+             "boundingBox": { "position": { "z": 1 } },
+             "coordinateType": "ScreenPercentage"
+        },
         "CameraComponent": {},
         "DirLightComponent": {}
     },
     {
         "GraphicsComponent": { "appearance": "resources/sprites/koala.png" },
-        "SpriteComponent2D": {},
+        "SpriteComponent2D": { "coordinateType": "ScreenPercentage" },
         "TransformComponent": {
             "boundingBox": {
                 "position": { "x": 0.5, "y": 0.5 },
@@ -21,7 +24,8 @@
 			"font": "resources/fonts/arial.ttf",
 			"text": "Loading...",
             "fontSize": 1000,
-            "alignment": "Left"
+            "alignment": "Left",
+            "coordinateType": "ScreenPercentage"
 		},
 		"TransformComponent": {
 			"boundingBox": {
