@@ -156,15 +156,20 @@ static void loadScene(const char * file, kengine::EntityManager & em) {
 	}
 }
 
+#include "data/NameComponent.hpp"
 static void loadEntity(kengine::Entity & e, const putils::json & json, kengine::EntityManager & em, bool active) {
 	if (!active) {
 		em.setEntityActive(e, false);
 		g_toEnable.push_back(e.id);
 	}
 
-	for (const auto & [_, loader] : em.getEntities<kengine::meta::LoadFromJSON>()) {
+	for (const auto & [_, loader, name] : em.getEntities<kengine::meta::LoadFromJSON, kengine::NameComponent>()) {
 		if (!em.running)
 			return;
+#ifndef KENGINE_NDEBUG
+		if (json.find(name.name.c_str()) == json.end()) // not necessary, only for debug
+			continue; 
+#endif
 		loader(json, e);
 	}
 }
