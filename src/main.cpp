@@ -13,6 +13,7 @@
 #include "systems/ImGuiToolSystem.hpp"
 #include "systems/ImGuiEntityEditorSystem.hpp"
 #include "systems/ImGuiEntitySelectorSystem.hpp"
+#include "systems/ImGuiPromptSystem.hpp"
 
 #include "systems/polyvox/PolyVoxSystem.hpp"
 #include "systems/polyvox/MagicaVoxelSystem.hpp"
@@ -69,6 +70,7 @@ int main(int, char **av) {
 	em += kengine::ImGuiToolSystem(em);
 	em += kengine::ImGuiEntityEditorSystem(em);
 	em += kengine::ImGuiEntitySelectorSystem(em);
+	em += kengine::ImGuiPromptSystem(em);
 
 	putils::PluginManager pm;
 	pm.rescanDirectory("plugins", "loadKenginePlugin", em);
