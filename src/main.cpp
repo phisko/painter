@@ -41,14 +41,6 @@ int main(int, char **av) {
 		e += kengine::WindowComponent{
 			"Painter"
 		};
-		e += kengine::LuaComponent{
-			{ "scripts/test.lua" }
-		};
-	};
-	em += [&](kengine::Entity & e) {
-		e += kengine::PyComponent{
-			{ "scripts/test.py" }
-		};
 	};
 
 	em += kengine::InputSystem(em);
