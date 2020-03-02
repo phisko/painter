@@ -8,7 +8,7 @@ endif()
 
 add_compile_definitions(
     KENGINE_COMPONENT_COUNT=128
-    KENGINE_CSM_COUNT=5
+    KENGINE_MAX_CSM_COUNT=10
 )
 
 set(libdir "${PROJECT_SOURCE_DIR}/lib")
