@@ -4,6 +4,7 @@
 
 REGISTER_FUNC_DECL(Adjustable);
 REGISTER_FUNC_DECL(Animation);
+REGISTER_FUNC_DECL(AppearsInViewport);
 REGISTER_FUNC_DECL(Camera);
 REGISTER_FUNC_DECL(CharacterMovement);
 REGISTER_FUNC_DECL(DebugGraphics);
@@ -27,6 +28,7 @@ REGISTER_FUNC_DECL(Skeleton);
 REGISTER_FUNC_DECL(SkyBox);
 REGISTER_FUNC_DECL(Sprite);
 REGISTER_FUNC_DECL(Text);
+REGISTER_FUNC_DECL(TimeModulator);
 REGISTER_FUNC_DECL(Transform);
 REGISTER_FUNC_DECL(UI);
 
@@ -36,6 +38,7 @@ using RegisterFunc = void(*)(kengine::EntityManager &);
 static const RegisterFunc funcs[] = {
 	REGISTER_FUNC_NAME(Adjustable),
 	REGISTER_FUNC_NAME(Animation),
+	REGISTER_FUNC_NAME(AppearsInViewport),
 	REGISTER_FUNC_NAME(Camera),
 	REGISTER_FUNC_NAME(CharacterMovement),
 	REGISTER_FUNC_NAME(DebugGraphics),
@@ -59,6 +62,7 @@ static const RegisterFunc funcs[] = {
 	REGISTER_FUNC_NAME(SkyBox),
 	REGISTER_FUNC_NAME(Sprite),
 	REGISTER_FUNC_NAME(Text),
+	REGISTER_FUNC_NAME(TimeModulator),
 	REGISTER_FUNC_NAME(Transform),
 	REGISTER_FUNC_NAME(UI),
 };
