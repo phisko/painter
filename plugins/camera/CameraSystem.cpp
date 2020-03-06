@@ -191,8 +191,9 @@ static void processMouseMovement(kengine::EntityManager & em, const putils::Poin
 	cam.yaw -= xoffset;
 	cam.pitch -= yoffset;
 
-	cam.pitch = std::min(cam.pitch, putils::pi / 2.f - 0.001f);
-	cam.pitch = std::max(cam.pitch, -putils::pi / 2.f - 0.001f);
+	const auto pitchLimit = putils::pi / 2.f - .001f;
+	cam.pitch = std::min(cam.pitch, pitchLimit);
+	cam.pitch = std::max(cam.pitch, -pitchLimit);
 
 	updateVectors(cam);
 }
