@@ -31,7 +31,7 @@
 int main(int, char **av) {
 	putils::goToBinDir(av[0]);
 
-#if defined(_WIN32) && defined(NDEBUG)
+#if defined(_WIN32) && defined(KENGINE_NDEBUG)
 	ShowWindow(GetConsoleWindow(), SW_HIDE);
 #endif
 
