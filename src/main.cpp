@@ -72,7 +72,7 @@ int main(int, char **av) {
 
 	kengine::ImGuiLuaHelper::initBindings(em);
 
-	kengine::MainLoop::run(em);
+	kengine::MainLoop::TimeModulated::run(em);
 
 	return 0;
 }
