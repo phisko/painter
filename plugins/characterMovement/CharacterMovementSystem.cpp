@@ -98,11 +98,9 @@ static void debug(kengine::Entity & e, const putils::Point3f & pos, const putils
 			comp.id = e.id;
 			e += kengine::TransformComponent{};
 			auto & debug = e.attach<kengine::DebugGraphicsComponent>();
-			debug.elements.clear();
 			debug.elements.emplace_back(kengine::DebugGraphicsComponent::Line{});
 		};
 		auto & debug = e.attach<kengine::DebugGraphicsComponent>();
-		debug.elements.clear();
 		debug.elements.emplace_back(kengine::DebugGraphicsComponent::Sphere{ .1f });
 	}
 
