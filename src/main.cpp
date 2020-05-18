@@ -20,6 +20,7 @@
 #include "systems/assimp/AssimpSystem.hpp"
 #include "systems/opengl/OpenGLSystem.hpp"
 #include "systems/opengl_sprites/OpenGLSpritesSystem.hpp"
+#include "systems/recast/RecastSystem.hpp"
 
 #include "systems/bullet/BulletSystem.hpp"
 #include "systems/KinematicSystem.hpp"
@@ -57,6 +58,7 @@ int main(int, char **av) {
 
 	em += kengine::BulletSystem(em);
 	em += kengine::KinematicSystem(em);
+	em += kengine::RecastSystem(em);
 
 	em += kengine::ImGuiAdjustableSystem(em);
 	em += kengine::ImGuiToolSystem(em);
