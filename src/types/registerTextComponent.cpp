@@ -1,8 +1,8 @@
-#include "registerTypes.hpp"
+#include "helpers/RegisterTypeHelper.hpp"
 #include "data/TextComponent.hpp"
 
 void registerTextComponent(kengine::EntityManager & em) {
-	registerComponents<
+	kengine::registerComponents<
 		kengine::TextComponent2D,
 		kengine::TextComponent3D
 	>(em);

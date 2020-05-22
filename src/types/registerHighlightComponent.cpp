@@ -1,8 +1,8 @@
-#include "registerTypes.hpp"
+#include "helpers/RegisterTypeHelper.hpp"
 #include "data/HighlightComponent.hpp"
 
 void registerHighlightComponent(kengine::EntityManager & em) {
-	registerComponents<
+	kengine::registerComponents<
 		kengine::HighlightComponent
 	>(em);
 }

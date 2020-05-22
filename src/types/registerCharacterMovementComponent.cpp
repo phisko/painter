@@ -1,8 +1,8 @@
-#include "registerTypes.hpp"
+#include "helpers/RegisterTypeHelper.hpp"
 #include "data/CharacterMovementComponent.hpp"
 
 void registerCharacterMovementComponent(kengine::EntityManager & em) {
-	registerComponents<
+	kengine::registerComponents<
 		CharacterMovementComponent
 	>(em);
 }

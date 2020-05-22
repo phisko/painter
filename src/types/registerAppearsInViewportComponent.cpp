@@ -1,8 +1,8 @@
-#include "registerTypes.hpp"
+#include "helpers/RegisterTypeHelper.hpp"
 #include "functions/AppearsInViewport.hpp"
 
 void registerAppearsInViewportComponent(kengine::EntityManager & em) {
-	registerComponents<
+	kengine::registerComponents<
 		kengine::functions::AppearsInViewport
 	>(em);
 }

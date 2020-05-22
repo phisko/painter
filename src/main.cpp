@@ -1,5 +1,8 @@
+#include <thread>
+
 #include "go_to_bin_dir.hpp"
 #include "PluginManager.hpp"
+#include "EntityManager.hpp"
 
 #include "helpers/MainLoop.hpp"
 #include "helpers/ImGuiLuaHelper.hpp"

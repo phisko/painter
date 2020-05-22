@@ -1,8 +1,8 @@
-#include "registerTypes.hpp"
+#include "helpers/RegisterTypeHelper.hpp"
 #include "data/SkyBoxComponent.hpp"
 
 void registerSkyBoxComponent(kengine::EntityManager & em) {
-	registerComponents<
+	kengine::registerComponents<
 		kengine::SkyBoxComponent
 	>(em);
 }

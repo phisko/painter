@@ -1,8 +1,8 @@
-#include "registerTypes.hpp"
+#include "helpers/RegisterTypeHelper.hpp"
 #include "data/ShaderComponent.hpp"
 
 void registerShaderComponent(kengine::EntityManager & em) {
-	registerComponents<
+	kengine::registerComponents<
 		kengine::GBufferShaderComponent,
 		kengine::LightingShaderComponent,
 		kengine::PostLightingShaderComponent,

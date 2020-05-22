@@ -1,4 +1,5 @@
-#include "registerTypes.hpp"
+#include "helpers/RegisterTypeHelper.hpp"
+#include "Point.hpp"
 
 #define REGISTER_FUNC_DECL(COMP) void register##COMP##Component(kengine::EntityManager & em);
 
@@ -68,7 +69,7 @@ static const RegisterFunc funcs[] = {
 };
 
 void registerTypes(kengine::EntityManager & em) {
-	registerTypes<
+	kengine::registerTypes<
 		putils::Rect3f, putils::Point3f,
 		putils::Color, putils::NormalizedColor
 	>(em);

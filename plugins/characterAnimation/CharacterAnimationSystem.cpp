@@ -9,7 +9,7 @@
 
 #include "functions/Execute.hpp"
 
-#include "registerTypes.hpp"
+#include "helpers/RegisterTypeHelper.hpp"
 #include "sign.hpp"
 
 struct WobbleComponent {
@@ -28,7 +28,7 @@ static void execute(float deltaTime);
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 	kengine::PluginHelper::initPlugin(em);
 
-	registerComponents<WobbleComponent>(em);
+	kengine::registerComponents<WobbleComponent>(em);
 
 	g_em = &em;
 

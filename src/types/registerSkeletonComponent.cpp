@@ -1,8 +1,8 @@
-#include "registerTypes.hpp"
+#include "helpers/RegisterTypeHelper.hpp"
 #include "data/ModelSkeletonComponent.hpp"
 
 void registerSkeletonComponent(kengine::EntityManager & em) {
-	registerComponents<
+	kengine::registerComponents<
 		// kengine::SkeletonComponent,
 		kengine::ModelSkeletonComponent
 	>(em);

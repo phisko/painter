@@ -1,12 +1,12 @@
-#include "registerTypes.hpp"
+#include "helpers/RegisterTypeHelper.hpp"
 #include "data/InputComponent.hpp"
 
 void registerInputComponent(kengine::EntityManager & em) {
-	registerComponents<
+	kengine::registerComponents<
 		kengine::InputComponent
 	>(em);
 
-	registerTypes<
+	kengine::registerTypes<
 		putils::Point2f
 	>(em);
 }
