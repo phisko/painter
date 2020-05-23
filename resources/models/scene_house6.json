@@ -9,6 +9,11 @@
             }
         }
     },
+    "NavMeshComponent": {
+        "characterHeight": 10,
+        "characterClimb": 7.5,
+        "characterRadius": 5
+    },
     "ModelColliderComponent": {
         "colliders": [
             {
