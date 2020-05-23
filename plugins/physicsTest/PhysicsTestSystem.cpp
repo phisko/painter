@@ -1,6 +1,6 @@
 #include "EntityManager.hpp"
 #include "Export.hpp"
-#include "helpers/PluginHelper.hpp"
+#include "helpers/pluginHelper.hpp"
 
 #include "data/AdjustableComponent.hpp"
 #include "data/CharacterMovementComponent.hpp"
@@ -33,7 +33,7 @@ static void execute(float deltaTime);
 static void onKey(kengine::Entity::ID window, int keycode, bool pressed);
 //
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
-	kengine::PluginHelper::initPlugin(em);
+	kengine::pluginHelper::initPlugin(em);
 
 	g_em = &em;
 

@@ -1,4 +1,4 @@
-#include "helpers/RegisterTypeHelper.hpp"
+#include "helpers/registerTypeHelper.hpp"
 #include "data/GodRaysComponent.hpp"
 
 void registerGodRaysComponent(kengine::EntityManager & em) {

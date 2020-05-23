@@ -10,7 +10,7 @@
 #include "functions/Execute.hpp"
 #include "functions/GetEntityInPixel.hpp"
 
-#include "helpers/PluginHelper.hpp"
+#include "helpers/pluginHelper.hpp"
 
 struct HoveredComponent {};
 
@@ -28,7 +28,7 @@ static void click(kengine::Entity::ID window, const putils::Point2f & coords);
 static void hover(kengine::Entity::ID window, const putils::Point2f & coords);
 //
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
-	kengine::PluginHelper::initPlugin(em);
+	kengine::pluginHelper::initPlugin(em);
 
 	g_em = &em;
 

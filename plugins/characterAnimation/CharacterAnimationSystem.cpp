@@ -1,5 +1,5 @@
 #include "EntityManager.hpp"
-#include "helpers/PluginHelper.hpp"
+#include "helpers/pluginHelper.hpp"
 #include "Export.hpp"
 
 #include "data/AdjustableComponent.hpp"
@@ -9,7 +9,7 @@
 
 #include "functions/Execute.hpp"
 
-#include "helpers/RegisterTypeHelper.hpp"
+#include "helpers/registerTypeHelper.hpp"
 #include "sign.hpp"
 
 struct WobbleComponent {
@@ -26,7 +26,7 @@ static float MAX_ROLL = 1.f;
 static void execute(float deltaTime);
 //
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
-	kengine::PluginHelper::initPlugin(em);
+	kengine::pluginHelper::initPlugin(em);
 
 	kengine::registerComponents<WobbleComponent>(em);
 

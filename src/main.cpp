@@ -4,8 +4,8 @@
 #include "PluginManager.hpp"
 #include "EntityManager.hpp"
 
-#include "helpers/MainLoop.hpp"
-#include "helpers/ImGuiLuaHelper.hpp"
+#include "helpers/mainLoop.hpp"
+#include "helpers/imguiLuaHelper.hpp"
 
 #include "systems/InputSystem.hpp"
 #include "systems/LuaSystem.hpp"
@@ -75,9 +75,9 @@ int main(int, char **av) {
 	extern void registerTypes(kengine::EntityManager &);
 	registerTypes(em);
 
-	kengine::ImGuiLuaHelper::initBindings(em);
+	kengine::imguiLuaHelper::initBindings(em);
 
-	kengine::MainLoop::TimeModulated::run(em);
+	kengine::mainLoop::timeModulated::run(em);
 
 	return 0;
 }

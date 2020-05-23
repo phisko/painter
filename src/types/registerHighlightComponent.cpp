@@ -1,4 +1,4 @@
-#include "helpers/RegisterTypeHelper.hpp"
+#include "helpers/registerTypeHelper.hpp"
 #include "data/HighlightComponent.hpp"
 
 void registerHighlightComponent(kengine::EntityManager & em) {

@@ -1,4 +1,4 @@
-#include "helpers/RegisterTypeHelper.hpp"
+#include "helpers/registerTypeHelper.hpp"
 #include "Point.hpp"
 
 #define REGISTER_FUNC_DECL(COMP) void register##COMP##Component(kengine::EntityManager & em);

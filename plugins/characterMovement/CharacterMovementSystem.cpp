@@ -1,6 +1,6 @@
 #include "EntityManager.hpp"
 #include "Export.hpp"
-#include "helpers/PluginHelper.hpp"
+#include "helpers/pluginHelper.hpp"
 
 #include "data/AdjustableComponent.hpp"
 #include "data/CharacterMovementComponent.hpp"
@@ -28,7 +28,7 @@ static float TURN_SPEED = putils::pi;
 static void execute(float deltaTime);
 //
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
-	kengine::PluginHelper::initPlugin(em);
+	kengine::pluginHelper::initPlugin(em);
 
 	g_em = &em;
 

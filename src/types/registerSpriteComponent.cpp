@@ -1,4 +1,4 @@
-#include "helpers/RegisterTypeHelper.hpp"
+#include "helpers/registerTypeHelper.hpp"
 #include "data/SpriteComponent.hpp"
 
 void registerSpriteComponent(kengine::EntityManager & em) {

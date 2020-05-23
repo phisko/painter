@@ -1,4 +1,4 @@
-#include "helpers/RegisterTypeHelper.hpp"
+#include "helpers/registerTypeHelper.hpp"
 #include "data/ShaderComponent.hpp"
 
 void registerShaderComponent(kengine::EntityManager & em) {

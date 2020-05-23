@@ -1,4 +1,4 @@
-#include "helpers/RegisterTypeHelper.hpp"
+#include "helpers/registerTypeHelper.hpp"
 #include "data/PyComponent.hpp"
 
 void registerPyComponent(kengine::EntityManager & em) {

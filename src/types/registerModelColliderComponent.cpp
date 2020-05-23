@@ -1,4 +1,4 @@
-#include "helpers/RegisterTypeHelper.hpp"
+#include "helpers/registerTypeHelper.hpp"
 #include "data/ModelColliderComponent.hpp"
 
 void registerModelColliderComponent(kengine::EntityManager & em) {

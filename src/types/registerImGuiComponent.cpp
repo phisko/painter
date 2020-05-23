@@ -1,4 +1,4 @@
-#include "helpers/RegisterTypeHelper.hpp"
+#include "helpers/registerTypeHelper.hpp"
 #include "data/ImGuiComponent.hpp"
 #include "data/ImGuiToolComponent.hpp"
 

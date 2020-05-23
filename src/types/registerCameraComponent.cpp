@@ -1,4 +1,4 @@
-#include "helpers/RegisterTypeHelper.hpp"
+#include "helpers/registerTypeHelper.hpp"
 #include "data/CameraComponent.hpp"
 #include "data/ViewportComponent.hpp"
 #include "data/WindowComponent.hpp"

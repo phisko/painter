@@ -1,4 +1,4 @@
-#include "helpers/RegisterTypeHelper.hpp"
+#include "helpers/registerTypeHelper.hpp"
 #include "data/NameComponent.hpp"
 
 void registerNameComponent(kengine::EntityManager & em) {

@@ -1,4 +1,4 @@
-#include "helpers/RegisterTypeHelper.hpp"
+#include "helpers/registerTypeHelper.hpp"
 #include "data/InputComponent.hpp"
 
 void registerInputComponent(kengine::EntityManager & em) {

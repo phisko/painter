@@ -8,7 +8,7 @@
 
 #include "angle.hpp"
 
-#include "helpers/PluginHelper.hpp"
+#include "helpers/pluginHelper.hpp"
 
 static kengine::EntityManager * g_em;
 
@@ -18,7 +18,7 @@ static auto SUN_ROTATION = .1f;
 static void execute(float deltaTime);
 //
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
-	kengine::PluginHelper::initPlugin(em);
+	kengine::pluginHelper::initPlugin(em);
 
 	g_em = &em;
 

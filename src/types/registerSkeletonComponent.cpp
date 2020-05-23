@@ -1,4 +1,4 @@
-#include "helpers/RegisterTypeHelper.hpp"
+#include "helpers/registerTypeHelper.hpp"
 #include "data/ModelSkeletonComponent.hpp"
 
 void registerSkeletonComponent(kengine::EntityManager & em) {

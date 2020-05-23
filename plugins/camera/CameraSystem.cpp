@@ -13,8 +13,8 @@
 #include "functions/Execute.hpp"
 
 #include "functions/OnMouseCaptured.hpp"
-#include "helpers/CameraHelper.hpp"
-#include "helpers/PluginHelper.hpp"
+#include "helpers/cameraHelper.hpp"
+#include "helpers/pluginHelper.hpp"
 
 #include "imgui.h"
 #include "GLFW/glfw3.h"
@@ -34,7 +34,7 @@ static void execute(float deltaTime);
 static kengine::InputComponent CameraController(kengine::EntityManager & em);
 //
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
-	kengine::PluginHelper::initPlugin(em);
+	kengine::pluginHelper::initPlugin(em);
 
 	g_em = &em;
 
@@ -213,7 +213,7 @@ static void toggleMouseCapture(kengine::EntityManager & em, kengine::Entity::ID 
 	if (g_capturedCamera != kengine::Entity::INVALID_ID)
 		g_capturedCamera = kengine::Entity::INVALID_ID;
 	else {
-		const auto info = kengine::CameraHelper::getViewportForPixel(em, window, lastMousePos);
+		const auto info = kengine::cameraHelper::getViewportForPixel(em, window, lastMousePos);
 		g_capturedCamera = info.camera;
 	}
 
