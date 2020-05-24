@@ -5,6 +5,7 @@
 #include "data/AdjustableComponent.hpp"
 #include "data/CharacterMovementComponent.hpp"
 #include "data/GraphicsComponent.hpp"
+#include "data/InstanceComponent.hpp"
 #include "data/ImGuiComponent.hpp"
 #include "data/InputComponent.hpp"
 #include "data/NoShadowComponent.hpp"
@@ -85,6 +86,7 @@ static kengine::EntityCreatorFunctor<64> Particle(kengine::Entity parent) {
 
 		particle += ParticleTimerComponent{};
 		particle += parent.get<kengine::GraphicsComponent>();
+		particle += parent.get<kengine::InstanceComponent>();
 		particle += kengine::NoShadowComponent{};
 
 		auto & particleTrans = particle.attach<kengine::TransformComponent>();
