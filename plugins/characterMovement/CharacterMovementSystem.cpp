@@ -10,6 +10,8 @@
 
 #include "functions/Execute.hpp"
 
+#include "helpers/instanceHelper.hpp"
+
 #ifndef KENGINE_NDEBUG
 #include "data/DebugGraphicsComponent.hpp"
 #include "data/ImGuiComponent.hpp"
@@ -45,14 +47,26 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 }
 
 // declarations
+static void addPathComponent(kengine::Entity & e);
 static void debug(kengine::Entity & e, const putils::Point3f & pos, const putils::Point3f & target);
 //
 static void execute(float deltaTime) {
 	for (auto & [e, transform, physics, movement] : g_em->getEntities<kengine::TransformComponent, kengine::PhysicsComponent, CharacterMovementComponent>()) {
 		e += kengine::KinematicComponent{};
 
+		if (!e.has<PathComponent>())
+			addPathComponent(e);
+		auto & path = e.get<PathComponent>();
+
+		const auto obj = g_em->getEntity(path.navMesh);
+		const auto & navMesh = kengine::instanceHelper::getModel<kengine::NavMeshComponent>(*g_em, obj);
+
 		const auto & pos = transform.boundingBox.position;
-		const auto posToDest = movement.destination - pos;
+		path.path = navMesh.getPath(obj, pos, movement.destination);
+		if (path.path.empty())
+			continue;
+
+		const auto posToDest = path.path[0] - pos;
 
 #ifndef KENGINE_NDEBUG
 		debug(e, pos, movement.destination);
@@ -83,6 +97,15 @@ static void execute(float deltaTime) {
 			physics.pitch = TURN_SPEED * putils::sign(pitchDelta);
 		else
 			physics.pitch = 0.f;
+	}
+}
+
+static void addPathComponent(kengine::Entity & e) {
+	auto & comp = e.attach<PathComponent>();
+	for (const auto & [obj, instance] : g_em->getEntities<kengine::InstanceComponent>()) {
+		if (!kengine::instanceHelper::modelHas<kengine::NavMeshComponent>(*g_em, instance))
+			continue;
+		comp.navMesh = obj.id;
 	}
 }
 
