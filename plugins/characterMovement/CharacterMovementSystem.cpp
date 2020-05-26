@@ -1,3 +1,5 @@
+#include <GLFW/glfw3.h>
+
 #include "EntityManager.hpp"
 #include "Export.hpp"
 #include "helpers/pluginHelper.hpp"
@@ -7,15 +9,15 @@
 #include "data/KinematicComponent.hpp"
 #include "data/PhysicsComponent.hpp"
 #include "data/TransformComponent.hpp"
+#include "data/InputComponent.hpp"
 
 #include "functions/Execute.hpp"
+#include "functions/GetPositionInPixel.hpp"
 
 #include "helpers/instanceHelper.hpp"
 
 #ifndef KENGINE_NDEBUG
 #include "data/DebugGraphicsComponent.hpp"
-#include "data/ImGuiComponent.hpp"
-#include "imgui.h"
 #endif
 
 #include "sign.hpp"
@@ -27,6 +29,7 @@ static float FACING_STRICTNESS = 0.05f;
 static float TURN_SPEED = putils::pi;
 
 // declarations
+static void click(kengine::Entity::ID window, int button, const putils::Point3f & screenCoordinates, bool pressed);
 static void execute(float deltaTime);
 //
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
@@ -43,7 +46,22 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 				{ "Turn speed", &TURN_SPEED }
 			}
 		};
+
+		e += kengine::InputComponent{
+			.onMouseButton = click 
+		};
 	};
+}
+
+static void click(kengine::Entity::ID window, int button, const putils::Point3f & screenCoordinates, bool pressed) {
+	if (!pressed || button != GLFW_MOUSE_BUTTON_RIGHT)
+		return;
+
+	for (const auto & [e, getPositionInPixel] : g_em->getEntities<kengine::functions::GetPositionInPixel>()) {
+		const auto pos = getPositionInPixel(window, screenCoordinates);
+		for (const auto & [e, movement] : g_em->getEntities<CharacterMovementComponent>())
+			movement.destination = pos;
+	}
 }
 
 // declarations
@@ -51,6 +69,13 @@ static void addPathComponent(kengine::Entity & e);
 static void debug(kengine::Entity & e, const kengine::NavMeshComponent::Path & path, const putils::Point3f & target);
 //
 static void execute(float deltaTime) {
+	static bool first = true;
+	if (first) {
+		for (const auto & [e, getPositionInPixel] : g_em->getEntities<kengine::functions::GetPositionInPixel>())
+			getPositionInPixel(kengine::Entity::INVALID_ID, { 0, 0 });
+		first = false;
+	}
+
 	for (auto & [e, transform, physics, movement] : g_em->getEntities<kengine::TransformComponent, kengine::PhysicsComponent, CharacterMovementComponent>()) {
 		e += kengine::KinematicComponent{};
 

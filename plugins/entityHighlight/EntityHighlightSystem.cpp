@@ -1,3 +1,5 @@
+#include <GLFW/glfw3.h>
+
 #include "EntityManager.hpp"
 #include "Export.hpp"
 
@@ -46,7 +48,7 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 
 		kengine::InputComponent input;
 		input.onMouseButton = [](kengine::Entity::ID window, int button, const putils::Point2f & coords, bool pressed) {
-			if (!pressed)
+			if (!pressed || button != GLFW_MOUSE_BUTTON_LEFT)
 				return;
 			click(window, coords);
 		};
