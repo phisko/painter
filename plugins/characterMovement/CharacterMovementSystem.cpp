@@ -66,7 +66,7 @@ static void click(kengine::Entity::ID window, int button, const putils::Point3f 
 
 // declarations
 static void addPathComponent(kengine::Entity & e);
-static void debug(kengine::Entity & e, const kengine::NavMeshComponent::Path & path, const putils::Point3f & target);
+static putils::Point3f getNextStep(kengine::Entity & e, const putils::Point3f & pos, const CharacterMovementComponent & movement);
 //
 static void execute(float deltaTime) {
 	static bool first = true;
@@ -81,31 +81,9 @@ static void execute(float deltaTime) {
 
 		if (!e.has<PathComponent>())
 			addPathComponent(e);
-		auto & path = e.get<PathComponent>();
-
-		const auto obj = g_em->getEntity(path.navMesh);
-		const auto & navMesh = kengine::instanceHelper::getModel<kengine::NavMeshComponent>(*g_em, obj);
 
 		const auto & pos = transform.boundingBox.position;
-		path.path = navMesh.getPath(obj, pos, movement.destination);
-		if (path.path.empty()) // First step is current position
-			continue;
-
-#ifndef KENGINE_NDEBUG
-		debug(e, path.path, movement.destination);
-#endif
-
-		const auto nextStep = [&] {
-			for (size_t i = 0; i < path.path.size(); ++i) {
-				const auto posToStep = path.path[i] - pos;
-				if (posToStep.getLength() <= movement.targetDistance)
-					continue;
-				return i;
-			}
-			return (size_t)0;
-		}();
-
-		const auto posToDest = path.path[nextStep] - pos;
+		const auto posToDest = getNextStep(e, pos, movement) - pos;
 
 		if (posToDest.getLength() <= movement.targetDistance) {
 			physics.movement = { 0.f, 0.f, 0.f };
@@ -133,6 +111,30 @@ static void execute(float deltaTime) {
 	}
 }
 
+// declarations
+static void debug(kengine::Entity & e, const kengine::NavMeshComponent::Path & path);
+//
+static putils::Point3f getNextStep(kengine::Entity & e, const putils::Point3f & pos, const CharacterMovementComponent & movement) {
+	auto & path = e.get<PathComponent>();
+
+	const auto obj = g_em->getEntity(path.navMesh);
+	const auto & navMesh = kengine::instanceHelper::getModel<kengine::NavMeshComponent>(*g_em, obj);
+
+	path.path = navMesh.getPath(obj, pos, movement.destination);
+
+#ifndef KENGINE_NDEBUG
+	debug(e, path.path);
+#endif
+
+	for (size_t i = 0; i < path.path.size(); ++i) {
+		const auto posToStep = path.path[i] - pos;
+		if (posToStep.getLength() > movement.targetDistance)
+			return path.path[i];
+	}
+
+	return pos;
+}
+
 static void addPathComponent(kengine::Entity & e) {
 	auto & comp = e.attach<PathComponent>();
 	for (const auto & [obj, instance] : g_em->getEntities<kengine::InstanceComponent>()) {
@@ -143,7 +145,7 @@ static void addPathComponent(kengine::Entity & e) {
 }
 
 #ifndef KENGINE_NDEBUG
-static void debug(kengine::Entity & e, const kengine::NavMeshComponent::Path & path, const putils::Point3f & target) {
+static void debug(kengine::Entity & e, const kengine::NavMeshComponent::Path & path) {
 	auto & debug = e.attach<kengine::DebugGraphicsComponent>();
 	debug.elements.clear();
 

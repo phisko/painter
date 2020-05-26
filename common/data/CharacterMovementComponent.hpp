@@ -6,7 +6,7 @@
 
 struct CharacterMovementComponent {
 	putils::Point3f destination;
-	float targetDistance = 1.f;
+	float targetDistance = .1f;
 
 	putils_reflection_class_name(CharacterMovementComponent);
 	putils_reflection_attributes(
