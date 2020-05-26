@@ -48,7 +48,7 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 
 // declarations
 static void addPathComponent(kengine::Entity & e);
-static void debug(kengine::Entity & e, const putils::Point3f & pos, const putils::Point3f & target);
+static void debug(kengine::Entity & e, const kengine::NavMeshComponent::Path & path, const putils::Point3f & target);
 //
 static void execute(float deltaTime) {
 	for (auto & [e, transform, physics, movement] : g_em->getEntities<kengine::TransformComponent, kengine::PhysicsComponent, CharacterMovementComponent>()) {
@@ -63,14 +63,24 @@ static void execute(float deltaTime) {
 
 		const auto & pos = transform.boundingBox.position;
 		path.path = navMesh.getPath(obj, pos, movement.destination);
-		if (path.path.empty())
+		if (path.path.empty()) // First step is current position
 			continue;
 
-		const auto posToDest = path.path[0] - pos;
-
 #ifndef KENGINE_NDEBUG
-		debug(e, pos, movement.destination);
+		debug(e, path.path, movement.destination);
 #endif
+
+		const auto nextStep = [&] {
+			for (size_t i = 0; i < path.path.size(); ++i) {
+				const auto posToStep = path.path[i] - pos;
+				if (posToStep.getLength() <= movement.targetDistance)
+					continue;
+				return i;
+			}
+			return (size_t)0;
+		}();
+
+		const auto posToDest = path.path[nextStep] - pos;
 
 		if (posToDest.getLength() <= movement.targetDistance) {
 			physics.movement = { 0.f, 0.f, 0.f };
@@ -79,19 +89,17 @@ static void execute(float deltaTime) {
 			continue;
 		}
 
-		physics.movement = movement.destination - pos;
+		physics.movement = posToDest;
 		physics.movement.normalize();
 
-		const auto direction = putils::normalized(movement.destination - pos);
-
-		const auto yawTo = putils::getYawFromNormalizedDirection(direction);
+		const auto yawTo = putils::getYawFromNormalizedDirection(physics.movement);
 		const auto yawDelta = putils::constrainAngle(putils::constrainAngle(yawTo) - transform.yaw);
 		if (std::abs(yawDelta) > FACING_STRICTNESS)
 			physics.yaw = TURN_SPEED * putils::sign(yawDelta);
 		else
 			physics.yaw = 0.f;
 
-		const auto pitchTo = putils::getPitchFromNormalizedDirection(direction);
+		const auto pitchTo = putils::getPitchFromNormalizedDirection(physics.movement);
 		const auto pitchDelta = putils::constrainAngle(putils::constrainAngle(pitchTo) - transform.pitch);
 		if (std::abs(pitchDelta) > FACING_STRICTNESS)
 			physics.pitch = TURN_SPEED * putils::sign(pitchDelta);
@@ -110,27 +118,27 @@ static void addPathComponent(kengine::Entity & e) {
 }
 
 #ifndef KENGINE_NDEBUG
-static void debug(kengine::Entity & e, const putils::Point3f & pos, const putils::Point3f & target) {
-	struct DebugEntityComponent {
-		kengine::Entity::ID id = kengine::Entity::INVALID_ID;
-	};
+static void debug(kengine::Entity & e, const kengine::NavMeshComponent::Path & path, const putils::Point3f & target) {
+	auto & debug = e.attach<kengine::DebugGraphicsComponent>();
+	debug.elements.clear();
 
-	if (!e.has<DebugEntityComponent>()) {
-		auto & comp = e.attach<DebugEntityComponent>();
-		*g_em += [&](kengine::Entity & e) {
-			comp.id = e.id;
-			e += kengine::TransformComponent{};
-			auto & debug = e.attach<kengine::DebugGraphicsComponent>();
-			debug.elements.emplace_back(kengine::DebugGraphicsComponent::Line{});
-		};
-		auto & debug = e.attach<kengine::DebugGraphicsComponent>();
-		debug.elements.emplace_back(kengine::DebugGraphicsComponent::Sphere{ .1f });
+	bool first = true;
+	putils::Point3f lastPos;
+	for (auto pos : path) {
+		pos.y += 1.f;
+
+		auto & element = debug.elements.emplace_back(kengine::DebugGraphicsComponent::Sphere{ .1f });
+		element.pos = pos;
+		element.referenceSpace = kengine::DebugGraphicsComponent::ReferenceSpace::World;
+
+		if (!first) {
+			auto & element = debug.elements.emplace_back(kengine::DebugGraphicsComponent::Line{ lastPos });
+			element.pos = pos;
+			element.referenceSpace = kengine::DebugGraphicsComponent::ReferenceSpace::World;
+		}
+
+		first = false;
+		lastPos = pos;
 	}
-
-	auto & debug = g_em->getEntity(e.get<DebugEntityComponent>().id).attach<kengine::DebugGraphicsComponent>();
-	auto & element = debug.elements.back();
-	element.pos = pos;
-	element.referenceSpace = kengine::DebugGraphicsComponent::ReferenceSpace::Object;
-	std::get<kengine::DebugGraphicsComponent::Line>(element.data).end = target;
 }
 #endif
