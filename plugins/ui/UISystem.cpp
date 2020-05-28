@@ -14,9 +14,9 @@
 
 static kengine::EntityManager * g_em;
 
-// declarations
+#pragma region declarations
 static void execute(float deltaTime);
-//
+#pragma endregion
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 	kengine::pluginHelper::initPlugin(em);
 

@@ -5,11 +5,12 @@
 #include "helpers/pluginHelper.hpp"
 
 #include "data/AdjustableComponent.hpp"
-#include "data/CharacterMovementComponent.hpp"
 #include "data/KinematicComponent.hpp"
 #include "data/PhysicsComponent.hpp"
 #include "data/TransformComponent.hpp"
 #include "data/InputComponent.hpp"
+#include "data/PathfindingComponent.hpp"
+#include "data/NavMeshComponent.hpp"
 
 #include "functions/Execute.hpp"
 #include "functions/GetPositionInPixel.hpp"
@@ -28,10 +29,10 @@ static kengine::EntityManager * g_em;
 static float FACING_STRICTNESS = 0.05f;
 static float TURN_SPEED = putils::pi;
 
-// declarations
+#pragma region declarations
 static void click(kengine::Entity::ID window, int button, const putils::Point3f & screenCoordinates, bool pressed);
 static void execute(float deltaTime);
-//
+#pragma endregion
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 	kengine::pluginHelper::initPlugin(em);
 
@@ -59,41 +60,51 @@ static void click(kengine::Entity::ID window, int button, const putils::Point3f 
 
 	for (const auto & [e, getPositionInPixel] : g_em->getEntities<kengine::functions::GetPositionInPixel>()) {
 		const auto pos = getPositionInPixel(window, screenCoordinates);
-		for (const auto & [e, movement] : g_em->getEntities<CharacterMovementComponent>())
-			movement.destination = pos;
+		for (const auto & [e, pathfinding] : g_em->getEntities<kengine::PathfindingComponent>())
+			pathfinding.destination = pos;
 	}
 }
 
-// declarations
-static void addPathComponent(kengine::Entity & e);
-static putils::Point3f getNextStep(kengine::Entity & e, const putils::Point3f & pos, const CharacterMovementComponent & movement);
-//
+#pragma region execute
+#pragma region declarations
+static void initPositionGBuffer();
+static void setEnvironments();
+static void updateOrientations();
+#pragma endregion
 static void execute(float deltaTime) {
+	initPositionGBuffer();
+	setEnvironments();
+	updateOrientations();
+}
+
+static void initPositionGBuffer() {
 	static bool first = true;
 	if (first) {
 		for (const auto & [e, getPositionInPixel] : g_em->getEntities<kengine::functions::GetPositionInPixel>())
 			getPositionInPixel(kengine::Entity::INVALID_ID, { 0, 0 });
 		first = false;
 	}
+}
 
-	for (auto & [e, transform, physics, movement] : g_em->getEntities<kengine::TransformComponent, kengine::PhysicsComponent, CharacterMovementComponent>()) {
-		e += kengine::KinematicComponent{};
-
-		if (!e.has<PathComponent>())
-			addPathComponent(e);
-
-		const auto & pos = transform.boundingBox.position;
-		const auto posToDest = getNextStep(e, pos, movement) - pos;
-
-		if (posToDest.getLength() <= movement.targetDistance) {
-			physics.movement = { 0.f, 0.f, 0.f };
-			physics.yaw = 0.f;
-			physics.pitch = 0.f;
+static void setEnvironments() {
+	for (const auto & [e, pathfinding] : g_em->getEntities<kengine::PathfindingComponent>()) {
+		if (pathfinding.environment != kengine::Entity::INVALID_ID)
 			continue;
-		}
+		for (const auto & [e, instance] : g_em->getEntities<kengine::InstanceComponent>())
+			if (kengine::instanceHelper::modelHas<kengine::NavMeshComponent>(*g_em, instance)) {
+				pathfinding.environment = e.id;
+				break;
+			}
+	}
+}
 
-		physics.movement = posToDest;
-		physics.movement.normalize();
+#pragma region updateOrientations
+#pragma region declarations
+static void debug(kengine::Entity & e, const putils::Point3f & pos, const kengine::PathfindingComponent & pathfinding);
+#pragma endregion
+static void updateOrientations() {
+	for (auto & [e, transform, physics, pathfinding] : g_em->getEntities<kengine::TransformComponent, kengine::PhysicsComponent, kengine::PathfindingComponent>()) {
+		e += kengine::KinematicComponent{};
 
 		const auto yawTo = putils::getYawFromNormalizedDirection(physics.movement);
 		const auto yawDelta = putils::constrainAngle(putils::constrainAngle(yawTo) - transform.yaw);
@@ -108,44 +119,17 @@ static void execute(float deltaTime) {
 			physics.pitch = TURN_SPEED * putils::sign(pitchDelta);
 		else
 			physics.pitch = 0.f;
+
+		debug(e, transform.boundingBox.position, pathfinding);
 	}
 }
 
-// declarations
-static void debug(kengine::Entity & e, const kengine::NavMeshComponent::Path & path);
-//
-static putils::Point3f getNextStep(kengine::Entity & e, const putils::Point3f & pos, const CharacterMovementComponent & movement) {
-	auto & path = e.get<PathComponent>();
-
-	const auto obj = g_em->getEntity(path.navMesh);
+static void debug(kengine::Entity & e, const putils::Point3f & pos, const kengine::PathfindingComponent & pathfinding) {
+	const auto obj = g_em->getEntity(pathfinding.environment);
 	const auto & navMesh = kengine::instanceHelper::getModel<kengine::NavMeshComponent>(*g_em, obj);
 
-	path.path = navMesh.getPath(obj, pos, movement.destination);
+	const auto path = navMesh.getPath(obj, pos, pathfinding.destination);
 
-#ifndef KENGINE_NDEBUG
-	debug(e, path.path);
-#endif
-
-	for (size_t i = 0; i < path.path.size(); ++i) {
-		const auto posToStep = path.path[i] - pos;
-		if (posToStep.getLength() > movement.targetDistance)
-			return path.path[i];
-	}
-
-	return pos;
-}
-
-static void addPathComponent(kengine::Entity & e) {
-	auto & comp = e.attach<PathComponent>();
-	for (const auto & [obj, instance] : g_em->getEntities<kengine::InstanceComponent>()) {
-		if (!kengine::instanceHelper::modelHas<kengine::NavMeshComponent>(*g_em, instance))
-			continue;
-		comp.navMesh = obj.id;
-	}
-}
-
-#ifndef KENGINE_NDEBUG
-static void debug(kengine::Entity & e, const kengine::NavMeshComponent::Path & path) {
 	auto & debug = e.attach<kengine::DebugGraphicsComponent>();
 	debug.elements.clear();
 
@@ -168,4 +152,6 @@ static void debug(kengine::Entity & e, const kengine::NavMeshComponent::Path & p
 		lastPos = pos;
 	}
 }
-#endif
+#pragma endregion updateOrientations
+
+#pragma endregion execute

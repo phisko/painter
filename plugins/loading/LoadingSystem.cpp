@@ -4,6 +4,8 @@
 #include "EntityManager.hpp"
 #include "Export.hpp"
 
+#include "data/NameComponent.hpp"
+
 #include "functions/Execute.hpp"
 #include "functions/OnTerminate.hpp"
 
@@ -16,10 +18,10 @@ static kengine::EntityManager * g_em;
 
 static std::thread * g_loadingThread = nullptr;
 
-// declarations
+#pragma region declarations
 static void execute(float deltaTime);
 static void onTerminate();
-//
+#pragma endregion
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 	kengine::pluginHelper::initPlugin(em);
 
@@ -38,6 +40,7 @@ static void onTerminate() {
 	delete g_loadingThread;
 }
 
+#pragma region Globals
 enum LoadingState {
 	NotStarted,
 	InProgress,
@@ -48,10 +51,12 @@ static std::atomic<LoadingState> loadingState = LoadingState::NotStarted;
 
 static std::vector<kengine::Entity::ID> g_toEnable;
 static std::vector<kengine::Entity::ID> g_toRemove;
+#pragma endregion Globals
 
-// declarations
+#pragma region execute
+#pragma region declarations
 static void setupLoading(kengine::EntityManager & em);
-//
+#pragma endregion
 static void execute(float deltaTime) {
 	switch (loadingState) {
 		case LoadingState::NotStarted: {
@@ -78,10 +83,11 @@ static void execute(float deltaTime) {
 	}
 }
 
-// declarations
+#pragma region setupLoading
+#pragma region declarations
 static void loadTemporaryScene(const char * file, kengine::EntityManager & em);
 static void loadingThread(kengine::EntityManager & em);
-//
+#pragma endregion
 static void setupLoading(kengine::EntityManager & em) {
 	loadTemporaryScene("resources/loadingScene.json", em);
 
@@ -92,9 +98,10 @@ static void setupLoading(kengine::EntityManager & em) {
 	});
 }
 
-// declarations
+#pragma region loadTemporaryScene
+#pragma region declarations
 static void loadEntity(kengine::Entity & e, const putils::json & json, kengine::EntityManager & em, bool active);
-//
+#pragma endregion
 static void loadTemporaryScene(const char * file, kengine::EntityManager & em) {
 	std::ifstream f(file);
 	static const putils::json fileJSON = putils::json::parse(f);
@@ -106,10 +113,28 @@ static void loadTemporaryScene(const char * file, kengine::EntityManager & em) {
 		};
 }
 
-// declarations
+static void loadEntity(kengine::Entity & e, const putils::json & json, kengine::EntityManager & em, bool active) {
+	if (!active) {
+		em.setEntityActive(e, false);
+		g_toEnable.push_back(e.id);
+	}
+
+	for (const auto & [_, loader, name] : em.getEntities<kengine::meta::LoadFromJSON, kengine::NameComponent>()) {
+		if (!em.running)
+			return;
+		if (json.find(name.name.c_str()) == json.end()) // not necessary, only for debug
+			continue; 
+		loader(json, e);
+	}
+}
+
+#pragma endregion loadTemporaryScene
+
+#pragma region loadingThread
+#pragma region declarations
 static void loadModels(const std::filesystem::path & dir, kengine::EntityManager & em);
 static void loadScene(const char * file, kengine::EntityManager & em);
-//
+#pragma endregion
 static void loadingThread(kengine::EntityManager & em) {
 	loadModels("resources/models", em);
 	loadScene("resources/scene.json", em);
@@ -156,20 +181,7 @@ static void loadScene(const char * file, kengine::EntityManager & em) {
 	}
 }
 
-#include "data/NameComponent.hpp"
-static void loadEntity(kengine::Entity & e, const putils::json & json, kengine::EntityManager & em, bool active) {
-	if (!active) {
-		em.setEntityActive(e, false);
-		g_toEnable.push_back(e.id);
-	}
+#pragma endregion loadingThread
+#pragma endregion setupLoading
 
-	for (const auto & [_, loader, name] : em.getEntities<kengine::meta::LoadFromJSON, kengine::NameComponent>()) {
-		if (!em.running)
-			return;
-#ifndef KENGINE_NDEBUG
-		if (json.find(name.name.c_str()) == json.end()) // not necessary, only for debug
-			continue; 
-#endif
-		loader(json, e);
-	}
-}
+#pragma endregion execute

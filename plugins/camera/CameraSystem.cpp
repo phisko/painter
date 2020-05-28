@@ -21,18 +21,20 @@
 #include "magic_enum.hpp"
 #include "angle.hpp"
 
+#pragma region Adjustables
 static auto MOUSE_SENSITIVITY = .005f;
 static auto MOVEMENT_SPEED = 10.f;
 static auto MOVEMENT_SPEED_MODIFIER = 2.f;
 static auto ZOOM_SPEED = .1f;
+#pragma endregion Adjustables
 
 static kengine::EntityManager * g_em;
 
-// declarations
+#pragma region declarations
 static void initKeys();
 static void execute(float deltaTime);
 static kengine::InputComponent CameraController(kengine::EntityManager & em);
-//
+#pragma endregion
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 	kengine::pluginHelper::initPlugin(em);
 
@@ -55,29 +57,7 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 	};
 }
 
-static kengine::Entity::ID g_capturedCamera = kengine::Entity::INVALID_ID;
-
-// declarations
-static void updateVectors(const kengine::CameraComponent & cam);
-static void processKeys(putils::Point3f & pos, float deltaTime);
-//
-static void execute(float deltaTime) {
-	if (g_capturedCamera == kengine::Entity::INVALID_ID)
-		return;
-
-	auto & e = g_em->getEntity(g_capturedCamera);
-	auto & comp = e.get<kengine::CameraComponent>();
-	static bool first = true;
-	if (first) {
-		updateVectors(comp);
-		first = false;
-	}
-
-	auto & pos = comp.frustum.position;
-	processKeys(pos, deltaTime);
-}
-
-
+#pragma region initKeys
 enum Inputs {
 	FORWARD,
 	BACKWARD,
@@ -109,10 +89,35 @@ static void initKeys() {
 	keys[SPEED_UP].code = GLFW_KEY_LEFT_SHIFT;
 	keys[SPEED_DOWN].code = GLFW_KEY_LEFT_CONTROL;
 }
+#pragma endregion initKeys
 
+#pragma region Globals
+static kengine::Entity::ID g_capturedCamera = kengine::Entity::INVALID_ID;
 static putils::Vector3f front;
 static putils::Vector3f right;
 static putils::Vector3f up;
+#pragma endregion Globals
+
+#pragma region execute
+#pragma region declarations
+static void updateVectors(const kengine::CameraComponent & cam);
+static void processKeys(putils::Point3f & pos, float deltaTime);
+#pragma endregion
+static void execute(float deltaTime) {
+	if (g_capturedCamera == kengine::Entity::INVALID_ID)
+		return;
+
+	auto & e = g_em->getEntity(g_capturedCamera);
+	auto & comp = e.get<kengine::CameraComponent>();
+	static bool first = true;
+	if (first) {
+		updateVectors(comp);
+		first = false;
+	}
+
+	auto & pos = comp.frustum.position;
+	processKeys(pos, deltaTime);
+}
 
 static void processKeys(putils::Point3f & pos, float deltaTime) {
 	const auto velocity = MOVEMENT_SPEED * deltaTime;
@@ -150,12 +155,14 @@ static void updateVectors(const kengine::CameraComponent & cam) {
 	up = putils::cross(right, front);
 	up.normalize();
 }
+#pragma endregion execute
 
-// declarations
+#pragma region CameraController
+#pragma region declarations
 static void processMouseMovement(kengine::EntityManager & em, const putils::Point2f & movement);
 static void processMouseScroll(kengine::EntityManager & em, float yoffset);
 static void toggleMouseCapture(kengine::EntityManager & em, kengine::Entity::ID window, const putils::Point2f & lastMousePos);
-//
+#pragma endregion
 static kengine::InputComponent CameraController(kengine::EntityManager & em) {
 	static putils::Point2f lastMousePos;
 
@@ -220,3 +227,4 @@ static void toggleMouseCapture(kengine::EntityManager & em, kengine::Entity::ID 
 	for (const auto & [e, func] : em.getEntities<kengine::functions::OnMouseCaptured>())
 		func(window, g_capturedCamera != kengine::Entity::INVALID_ID);
 }
+#pragma endregion CameraController

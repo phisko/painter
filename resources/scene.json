@@ -86,7 +86,7 @@
 		"GraphicsComponent": { "appearance": "resources/models/chr_cat.vox" },
 		"TransformComponent": { "boundingBox": { "position": { "y": 0.15, "z": -5 } } },
 		"PhysicsComponent": {},
-		"CharacterMovementComponent": {
+		"PathfindingComponent": {
 			"destination": { "z": -5 }
 		}
 	},

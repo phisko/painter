@@ -3,7 +3,7 @@
 #include "helpers/pluginHelper.hpp"
 
 #include "data/AdjustableComponent.hpp"
-#include "data/CharacterMovementComponent.hpp"
+#include "data/PathfindingComponent.hpp"
 #include "data/GraphicsComponent.hpp"
 #include "data/InstanceComponent.hpp"
 #include "data/ImGuiComponent.hpp"
@@ -25,14 +25,17 @@ struct ParticleTimerComponent {
 	float lifeTime = 0.f;
 };
 
+#pragma region Adjustables
 static float PARTICLE_DURATION = 5.f;
 static int SPAWN_COUNT = 1;
+#pragma endregion Adjustables
+
 static size_t g_particleCount = 0;
 
-// declarations
+#pragma region declarations
 static void execute(float deltaTime);
 static void onKey(kengine::Entity::ID window, int keycode, bool pressed);
-//
+#pragma endregion
 EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 	kengine::pluginHelper::initPlugin(em);
 
@@ -69,13 +72,14 @@ static void execute(float deltaTime) {
 	}
 }
 
-// declarations
+#pragma region onKey
+#pragma region declarations
 static kengine::EntityCreatorFunctor<64> Particle(kengine::Entity parent);
-//
+#pragma endregion
 static void onKey(kengine::Entity::ID window, int keycode, bool pressed) {
 	if (!pressed || keycode != 'Y')
 		return;
-	for (auto &[e, physics] : g_em->getEntities<CharacterMovementComponent>())
+	for (auto &[e, physics] : g_em->getEntities<kengine::PathfindingComponent>())
 		for (int i = 0; i < SPAWN_COUNT; ++i)
 			*g_em += Particle(e);
 }
@@ -104,3 +108,4 @@ static kengine::EntityCreatorFunctor<64> Particle(kengine::Entity parent) {
 		particlePhys.movement = dir;
 	};
 }
+#pragma endregion onKey

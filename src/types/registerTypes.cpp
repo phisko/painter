@@ -7,7 +7,6 @@ REGISTER_FUNC_DECL(Adjustable);
 REGISTER_FUNC_DECL(Animation);
 REGISTER_FUNC_DECL(AppearsInViewport);
 REGISTER_FUNC_DECL(Camera);
-REGISTER_FUNC_DECL(CharacterMovement);
 REGISTER_FUNC_DECL(DebugGraphics);
 REGISTER_FUNC_DECL(Execute);
 REGISTER_FUNC_DECL(GodRays);
@@ -22,6 +21,7 @@ REGISTER_FUNC_DECL(ModelCollider);
 REGISTER_FUNC_DECL(Name);
 REGISTER_FUNC_DECL(NavMesh);
 REGISTER_FUNC_DECL(OnClick);
+REGISTER_FUNC_DECL(Pathfinding);
 REGISTER_FUNC_DECL(Physics);
 REGISTER_FUNC_DECL(Py);
 REGISTER_FUNC_DECL(Selected);
@@ -42,7 +42,6 @@ static const RegisterFunc funcs[] = {
 	REGISTER_FUNC_NAME(Animation),
 	REGISTER_FUNC_NAME(AppearsInViewport),
 	REGISTER_FUNC_NAME(Camera),
-	REGISTER_FUNC_NAME(CharacterMovement),
 	REGISTER_FUNC_NAME(DebugGraphics),
 	REGISTER_FUNC_NAME(Execute),
 	REGISTER_FUNC_NAME(GodRays),
@@ -57,6 +56,7 @@ static const RegisterFunc funcs[] = {
 	REGISTER_FUNC_NAME(Name),
 	REGISTER_FUNC_NAME(NavMesh),
 	REGISTER_FUNC_NAME(OnClick),
+	REGISTER_FUNC_NAME(Pathfinding),
 	REGISTER_FUNC_NAME(Physics),
 	REGISTER_FUNC_NAME(Py),
 	REGISTER_FUNC_NAME(Selected),
