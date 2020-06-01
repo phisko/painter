@@ -13,9 +13,7 @@
                     "shape": "Box",
                     "boundingBox": {
                         "position": {
-                            "x": -0.05,
-                            "y": 0.75,
-                            "z": -0.1
+                            "y": 0.75
                         },
                         "size": {
                             "x": 0.9,
