@@ -3,7 +3,7 @@
         "file": "resources/models/funnyman/funnyman.fbx",
         "yaw": 3.14
     },
-    "AnimFilesComponent": {
+    "ModelAnimationComponent": {
         "files": [
             "resources/models/funnyman/animations/dancing.fbx"
         ]

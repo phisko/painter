@@ -4,7 +4,6 @@
 void registerAnimationComponent(kengine::EntityManager & em) {
 	kengine::registerComponents<
 		kengine::AnimationComponent,
-		kengine::AnimFilesComponent,
-		kengine::AnimListComponent
+		kengine::ModelAnimationComponent
 	>(em);
 }
