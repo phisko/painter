@@ -1,7 +1,7 @@
 def callback(deltaTime):
     print("PYTE")
 
-comp = pk.self.getPyComponent()
+comp = pk.self.getPythonComponent()
 
 behavior = pk.self.attachExecute()
 behavior.func = callback

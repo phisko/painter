@@ -7,16 +7,16 @@
 #include "helpers/mainLoop.hpp"
 #include "helpers/imguiLuaHelper.hpp"
 
-#include "systems/InputSystem.hpp"
-#include "systems/LuaSystem.hpp"
-#include "systems/PySystem.hpp"
-#include "systems/OnClickSystem.hpp"
+#include "systems/input/InputSystem.hpp"
+#include "systems/lua/LuaSystem.hpp"
+#include "systems/python/PythonSystem.hpp"
+#include "systems/onclick/OnClickSystem.hpp"
 
-#include "systems/ImGuiAdjustableSystem.hpp"
-#include "systems/ImGuiToolSystem.hpp"
-#include "systems/ImGuiEntityEditorSystem.hpp"
-#include "systems/ImGuiEntitySelectorSystem.hpp"
-#include "systems/ImGuiPromptSystem.hpp"
+#include "systems/imgui_adjustable/ImGuiAdjustableSystem.hpp"
+#include "systems/imgui_tool/ImGuiToolSystem.hpp"
+#include "systems/imgui_entity_editor/ImGuiEntityEditorSystem.hpp"
+#include "systems/imgui_entity_selector/ImGuiEntitySelectorSystem.hpp"
+#include "systems/imgui_prompt/ImGuiPromptSystem.hpp"
 
 #include "systems/polyvox/PolyVoxSystem.hpp"
 #include "systems/polyvox/MagicaVoxelSystem.hpp"
@@ -26,11 +26,11 @@
 #include "systems/recast/RecastSystem.hpp"
 
 #include "systems/bullet/BulletSystem.hpp"
-#include "systems/KinematicSystem.hpp"
+#include "systems/kinematic/KinematicSystem.hpp"
 
 #include "data/WindowComponent.hpp"
 #include "data/LuaComponent.hpp"
-#include "data/PyComponent.hpp"
+#include "data/PythonComponent.hpp"
 
 int main(int, char **av) {
 	putils::goToBinDir(av[0]);
@@ -49,7 +49,7 @@ int main(int, char **av) {
 
 	em += kengine::InputSystem(em);
 	em += kengine::LuaSystem(em);
-	em += kengine::PySystem(em);
+	em += kengine::PythonSystem(em);
 	
 	em += kengine::OnClickSystem(em);
 
