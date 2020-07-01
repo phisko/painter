@@ -4,6 +4,7 @@ bin/
 lib/
 *.swp
 *.swo
+*.vox.bin
 
 # Prerequisites
 *.d

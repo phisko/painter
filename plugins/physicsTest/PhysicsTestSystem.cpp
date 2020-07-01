@@ -6,7 +6,6 @@
 #include "data/PathfindingComponent.hpp"
 #include "data/GraphicsComponent.hpp"
 #include "data/InstanceComponent.hpp"
-#include "data/ImGuiComponent.hpp"
 #include "data/InputComponent.hpp"
 #include "data/NoShadowComponent.hpp"
 #include "data/PhysicsComponent.hpp"
@@ -51,14 +50,7 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 			}
 		};
 
-		e += kengine::ImGuiComponent([] {
-			if (ImGui::Begin("Particles"))
-				ImGui::Text("Count: %zu", g_particleCount);
-			ImGui::End();
-		});
-
-		auto & input = e.attach<kengine::InputComponent>();
-		input.onKey = onKey;
+		e += kengine::InputComponent{ .onKey = onKey };
 	};
 }
 
@@ -70,6 +62,10 @@ static void execute(float deltaTime) {
 			--g_particleCount;
 		}
 	}
+
+	if (ImGui::Begin("Particles"))
+		ImGui::Text("Count: %zu", g_particleCount);
+	ImGui::End();
 }
 
 #pragma region onKey

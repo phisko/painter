@@ -41,6 +41,12 @@ int main(int, char **av) {
 
 	kengine::EntityManager em(std::thread::hardware_concurrency());
 
+	em += kengine::LuaSystem(em);
+	em += kengine::PythonSystem(em);
+
+	extern void registerTypes(kengine::EntityManager &);
+	registerTypes(em);
+
 	em += [&](kengine::Entity & e) {
 		e += kengine::WindowComponent{
 			"Painter"
@@ -48,9 +54,6 @@ int main(int, char **av) {
 	};
 
 	em += kengine::InputSystem(em);
-	em += kengine::LuaSystem(em);
-	em += kengine::PythonSystem(em);
-	
 	em += kengine::OnClickSystem(em);
 
 	em += kengine::OpenGLSystem(em);
@@ -71,9 +74,6 @@ int main(int, char **av) {
 
 	putils::PluginManager pm;
 	pm.rescanDirectory("plugins", "loadKenginePlugin", em);
-
-	extern void registerTypes(kengine::EntityManager &);
-	registerTypes(em);
 
 	kengine::imguiLuaHelper::initBindings(em);
 
