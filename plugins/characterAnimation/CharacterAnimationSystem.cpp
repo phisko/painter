@@ -14,9 +14,14 @@
 
 struct WobbleComponent {
 	float targetRoll = 0.f;
-	putils_reflection_class_name(WobbleComponent);
 };
 
+#define refltype WobbleComponent
+putils_reflection_info {
+	putils_reflection_class_name;
+};
+
+#undef refltype
 static kengine::EntityManager * g_em;
 
 static float WOBBLE_SPEED = 1.f;
