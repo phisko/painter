@@ -1,5 +1,6 @@
 #include <filesystem>
 #include <thread>
+#include <fstream>
 
 #include "EntityManager.hpp"
 #include "Export.hpp"

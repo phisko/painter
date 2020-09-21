@@ -24,6 +24,7 @@
 #include "systems/opengl/OpenGLSystem.hpp"
 #include "systems/opengl_sprites/OpenGLSpritesSystem.hpp"
 #include "systems/recast/RecastSystem.hpp"
+#include "systems/glfw/GLFWSystem.hpp"
 
 #include "systems/bullet/BulletSystem.hpp"
 #include "systems/kinematic/KinematicSystem.hpp"
@@ -56,6 +57,7 @@ int main(int, char **av) {
 	em += kengine::InputSystem(em);
 	em += kengine::OnClickSystem(em);
 
+	em += kengine::GLFWSystem(em);
 	em += kengine::OpenGLSystem(em);
 	em += kengine::OpenGLSpritesSystem(em);
 	em += kengine::PolyVoxSystem(em);

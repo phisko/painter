@@ -9,6 +9,7 @@ endif()
 add_compile_definitions(
     KENGINE_COMPONENT_COUNT=256
     KENGINE_MAX_CSM_COUNT=10
+	KENGINE_USE_SPINLOCK
 )
 
 set(libdir "${PROJECT_SOURCE_DIR}/lib")
