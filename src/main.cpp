@@ -57,8 +57,8 @@ int main(int, char **av) {
 	em += kengine::InputSystem(em);
 	em += kengine::OnClickSystem(em);
 
-	em += kengine::GLFWSystem(em);
 	em += kengine::OpenGLSystem(em);
+	em += kengine::GLFWSystem(em);
 	em += kengine::OpenGLSpritesSystem(em);
 	em += kengine::PolyVoxSystem(em);
 	em += kengine::MagicaVoxelSystem(em);
