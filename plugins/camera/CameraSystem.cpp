@@ -107,7 +107,7 @@ static void execute(float deltaTime) {
 	if (g_capturedCamera == kengine::Entity::INVALID_ID)
 		return;
 
-	auto & e = g_em->getEntity(g_capturedCamera);
+	auto e = g_em->getEntity(g_capturedCamera);
 	auto & comp = e.get<kengine::CameraComponent>();
 	static bool first = true;
 	if (first) {
@@ -192,7 +192,7 @@ static void processMouseMovement(kengine::EntityManager & em, const putils::Poin
 	const float xoffset = movement.x * MOUSE_SENSITIVITY;
 	const float yoffset = movement.y * MOUSE_SENSITIVITY;
 
-	auto & e = em.getEntity(g_capturedCamera);
+	auto e = em.getEntity(g_capturedCamera);
 	auto & cam = e.get<kengine::CameraComponent>();
 
 	cam.yaw -= xoffset;
@@ -206,7 +206,7 @@ static void processMouseMovement(kengine::EntityManager & em, const putils::Poin
 }
 
 static void processMouseScroll(kengine::EntityManager & em, float yoffset) {
-	auto & e = em.getEntity(g_capturedCamera);
+	auto e = em.getEntity(g_capturedCamera);
 	auto & cam = e.get<kengine::CameraComponent>();
 
 	auto & zoom = cam.frustum.size.y;

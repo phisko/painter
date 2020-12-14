@@ -63,10 +63,10 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 static void execute(float deltaTime) {
 	using kengine::no;
 
-	for (auto &[e, highlight, noSelected, noHovered] : g_em->getEntities<kengine::HighlightComponent, no<kengine::SelectedComponent>, no<HoveredComponent>>())
+	for (auto [e, highlight, noSelected, noHovered] : g_em->getEntities<kengine::HighlightComponent, no<kengine::SelectedComponent>, no<HoveredComponent>>())
 		e.detach<kengine::HighlightComponent>();
 
-	for (auto &[e, selected, notHighlighted] : g_em->getEntities<kengine::SelectedComponent, no<kengine::HighlightComponent>>())
+	for (auto [e, selected, notHighlighted] : g_em->getEntities<kengine::SelectedComponent, no<kengine::HighlightComponent>>())
 		e += kengine::HighlightComponent{ .color = SELECTED_COLOR, .intensity = SELECTED_INTENSITY };
 }
 
@@ -81,7 +81,7 @@ static void click(kengine::Entity::ID window, const putils::Point2f & coords) {
 	if (id == kengine::Entity::INVALID_ID)
 		return;
 
-	auto & e = g_em->getEntity(id);
+	auto e = g_em->getEntity(id);
 	if (e.has<kengine::SelectedComponent>())
 		e.detach<kengine::SelectedComponent>();
 	else {
@@ -104,7 +104,7 @@ static void hover(kengine::Entity::ID window, const putils::Point2f & coords) {
 		return;
 
 	if (previous != kengine::Entity::INVALID_ID) {
-		auto & e = g_em->getEntity(previous);
+		auto e = g_em->getEntity(previous);
 		if (e.has<HoveredComponent>())
 			e.detach<HoveredComponent>();
 
@@ -112,7 +112,7 @@ static void hover(kengine::Entity::ID window, const putils::Point2f & coords) {
 	}
 
 	if (hovered != kengine::Entity::INVALID_ID) {
-		auto & e = g_em->getEntity(hovered);
+		auto e = g_em->getEntity(hovered);
 		if (!e.has<kengine::SelectedComponent>()) {
 			e += HoveredComponent{};
 			e += kengine::HighlightComponent{ .color = HOVERED_COLOR,.intensity = HOVERED_INTENSITY };

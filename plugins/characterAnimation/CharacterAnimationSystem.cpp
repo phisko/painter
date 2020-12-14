@@ -52,7 +52,7 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 static void execute(float deltaTime) {
 	return;
 
-	for (auto & [e, transform, physics, kinematic] : g_em->getEntities<kengine::TransformComponent, kengine::PhysicsComponent, kengine::KinematicComponent>()) {
+	for (auto [e, transform, physics, kinematic] : g_em->getEntities<kengine::TransformComponent, kengine::PhysicsComponent, kengine::KinematicComponent>()) {
 		auto & wobble = e.attach<WobbleComponent>();
 
 		const auto moving = physics.movement.getLengthSquared() > 0.f;

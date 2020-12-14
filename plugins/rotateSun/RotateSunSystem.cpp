@@ -34,7 +34,7 @@ EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
 }
 
 static void execute(float deltaTime) {
-	for (auto & [e, light] : g_em->getEntities<kengine::DirLightComponent>()) {
+	for (auto [e, light] : g_em->getEntities<kengine::DirLightComponent>()) {
 		static float angle = 0.f;
 		angle += deltaTime * SUN_ROTATION;
 		if (angle > putils::pi * 2.f)

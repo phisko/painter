@@ -35,7 +35,7 @@ static void execute(float deltaTime) {
 	if (cam == nullptr)
 		return;
 
-	for (auto & [e, transform, ui] : g_em->getEntities<kengine::TransformComponent, UIComponent>()) {
+	for (auto [e, transform, ui] : g_em->getEntities<kengine::TransformComponent, UIComponent>()) {
 		const auto & pos = transform.boundingBox.position;
 		const auto & camPos = cam->frustum.position;
 

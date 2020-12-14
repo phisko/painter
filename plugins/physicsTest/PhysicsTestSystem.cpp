@@ -75,7 +75,7 @@ static kengine::EntityCreatorFunctor<64> Particle(kengine::Entity parent);
 static void onKey(kengine::Entity::ID window, int keycode, bool pressed) {
 	if (!pressed || keycode != 'Y')
 		return;
-	for (auto &[e, physics] : g_em->getEntities<kengine::PathfindingComponent>())
+	for (auto [e, physics] : g_em->getEntities<kengine::PathfindingComponent>())
 		for (int i = 0; i < SPAWN_COUNT; ++i)
 			*g_em += Particle(e);
 }

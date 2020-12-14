@@ -103,7 +103,7 @@ static void setEnvironments() {
 static void debug(kengine::Entity & e, const putils::Point3f & pos, const kengine::PathfindingComponent & pathfinding);
 #pragma endregion
 static void updateOrientations() {
-	for (auto & [e, transform, physics, pathfinding] : g_em->getEntities<kengine::TransformComponent, kengine::PhysicsComponent, kengine::PathfindingComponent>()) {
+	for (auto [e, transform, physics, pathfinding] : g_em->getEntities<kengine::TransformComponent, kengine::PhysicsComponent, kengine::PathfindingComponent>()) {
 		e += kengine::KinematicComponent{};
 
 		const auto yawTo = putils::getYawFromNormalizedDirection(physics.movement);
