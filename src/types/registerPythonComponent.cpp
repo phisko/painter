@@ -1,8 +1,8 @@
 #include "helpers/registerTypeHelper.hpp"
 #include "data/PythonComponent.hpp"
 
-void registerPythonComponent(kengine::EntityManager & em) {
+void registerPythonComponent() {
 	kengine::registerComponents<
 		kengine::PythonComponent
-	>(em);
+	>();
 }

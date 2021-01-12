@@ -1,8 +1,8 @@
 #include "helpers/registerTypeHelper.hpp"
 #include "data/ModelComponent.hpp"
 
-void registerModelComponent(kengine::EntityManager & em) {
+void registerModelComponent() {
 	kengine::registerComponents<
 		kengine::ModelComponent
-	>(em);
+	>();
 }

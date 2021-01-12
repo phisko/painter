@@ -1,4 +1,4 @@
-#include "EntityManager.hpp"
+#include "kengine.hpp"
 #include "Export.hpp"
 
 #include "data/AdjustableComponent.hpp"
@@ -10,35 +10,33 @@
 
 #include "helpers/pluginHelper.hpp"
 
-static kengine::EntityManager * g_em;
-
 static auto SUN_ROTATION = .1f;
 
-#pragma region declarations
-static void execute(float deltaTime);
-#pragma endregion
-EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
-	kengine::pluginHelper::initPlugin(em);
+EXPORT void loadKenginePlugin(void * state) noexcept {
+	struct impl {
+		static void init() noexcept {
+			kengine::entities += [](kengine::Entity & e) noexcept {
+				e += kengine::functions::Execute{ execute };
 
-	g_em = &em;
+				e += kengine::AdjustableComponent{
+					"World", {
+						{ "Sun rotation speed", &SUN_ROTATION }
+					}
+				};
+			};
+		}
 
-	em += [](kengine::Entity & e) {
-		e += kengine::functions::Execute{ execute };
-
-		e += kengine::AdjustableComponent{
-			"World", {
-				{ "Sun rotation speed", &SUN_ROTATION }
+		static void execute(float deltaTime) noexcept {
+			for (auto [e, light] : kengine::entities.with<kengine::DirLightComponent>()) {
+				static float angle = 0.f;
+				angle += deltaTime * SUN_ROTATION;
+				if (angle > putils::pi * 2.f)
+					angle -= putils::pi * 2.f;
+				light.direction = { std::cos(angle), -1.f, std::sin(angle) };
 			}
-		};
+		}
 	};
-}
 
-static void execute(float deltaTime) {
-	for (auto [e, light] : g_em->getEntities<kengine::DirLightComponent>()) {
-		static float angle = 0.f;
-		angle += deltaTime * SUN_ROTATION;
-		if (angle > putils::pi * 2.f)
-			angle -= putils::pi * 2.f;
-		light.direction = { std::cos(angle), -1.f, std::sin(angle) };
-	}	
+	kengine::pluginHelper::initPlugin(state);
+	impl::init();
 }

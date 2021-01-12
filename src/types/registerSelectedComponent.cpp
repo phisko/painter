@@ -1,8 +1,8 @@
 #include "helpers/registerTypeHelper.hpp"
 #include "data/SelectedComponent.hpp"
 
-void registerSelectedComponent(kengine::EntityManager & em) {
+void registerSelectedComponent() {
 	kengine::registerComponents<
 		kengine::SelectedComponent
-	>(em);
+	>();
 }

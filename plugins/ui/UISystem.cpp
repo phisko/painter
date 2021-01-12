@@ -1,4 +1,4 @@
-#include "EntityManager.hpp"
+#include "kengine.hpp"
 #include "Export.hpp"
 
 #include "data/TransformComponent.hpp"
@@ -12,35 +12,33 @@
 
 #include "angle.hpp"
 
-static kengine::EntityManager * g_em;
+EXPORT void loadKenginePlugin(void * state) noexcept {
+	struct impl {
+		static void init() noexcept {
+			kengine::entities += [](kengine::Entity & e) noexcept {
+				e += kengine::functions::Execute{ execute };
+			};
+		}
 
-#pragma region declarations
-static void execute(float deltaTime);
-#pragma endregion
-EXPORT void loadKenginePlugin(kengine::EntityManager & em) {
-	kengine::pluginHelper::initPlugin(em);
+		static void execute(float deltaTime) noexcept {
+			const kengine::CameraComponent * cam = nullptr;
+			for (const auto & [e, comp] : kengine::entities.with<kengine::CameraComponent>())
+				cam = &comp;
 
-	g_em = &em;
+			if (cam == nullptr)
+				return;
 
-	em += [](kengine::Entity & e) {
-		e += kengine::functions::Execute{ execute };
+			for (auto [e, transform, ui] : kengine::entities.with<kengine::TransformComponent, UIComponent>()) {
+				const auto & pos = transform.boundingBox.position;
+				const auto & camPos = cam->frustum.position;
+
+				const auto dir = putils::normalized(pos - camPos);
+				transform.yaw = putils::getYawFromNormalizedDirection(dir);
+				transform.pitch = putils::getPitchFromNormalizedDirection(dir);
+			}
+		}
 	};
-}
 
-static void execute(float deltaTime) {
-	const kengine::CameraComponent * cam = nullptr;
-	for (const auto & [e, comp] : g_em->getEntities<kengine::CameraComponent>())
-		cam = &comp;
-
-	if (cam == nullptr)
-		return;
-
-	for (auto [e, transform, ui] : g_em->getEntities<kengine::TransformComponent, UIComponent>()) {
-		const auto & pos = transform.boundingBox.position;
-		const auto & camPos = cam->frustum.position;
-
-		const auto dir = putils::normalized(pos - camPos);
-		transform.yaw = putils::getYawFromNormalizedDirection(dir);
-		transform.pitch = putils::getPitchFromNormalizedDirection(dir);
-	}
+	kengine::pluginHelper::initPlugin(state);
+	impl::init();
 }

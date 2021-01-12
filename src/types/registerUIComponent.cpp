@@ -1,8 +1,8 @@
 #include "helpers/registerTypeHelper.hpp"
 #include "data/UIComponent.hpp"
 
-void registerUIComponent(kengine::EntityManager & em) {
+void registerUIComponent() {
 	kengine::registerComponents<
 		UIComponent
-	>(em);
+	>();
 }

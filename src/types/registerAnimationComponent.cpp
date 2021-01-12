@@ -2,9 +2,9 @@
 #include "data/AnimationComponent.hpp"
 #include "data/ModelAnimationComponent.hpp"
 
-void registerAnimationComponent(kengine::EntityManager & em) {
+void registerAnimationComponent() {
 	kengine::registerComponents<
 		kengine::AnimationComponent,
 		kengine::ModelAnimationComponent
-	>(em);
+	>();
 }

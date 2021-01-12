@@ -2,9 +2,9 @@
 #include "data/PhysicsComponent.hpp"
 #include "data/KinematicComponent.hpp"
 
-void registerPhysicsComponent(kengine::EntityManager & em) {
+void registerPhysicsComponent() {
 	kengine::registerComponents<
 		kengine::PhysicsComponent,
 		kengine::KinematicComponent
-	>(em);
+	>();
 }

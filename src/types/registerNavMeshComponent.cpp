@@ -1,9 +1,9 @@
 #include "helpers/registerTypeHelper.hpp"
 #include "data/NavMeshComponent.hpp"
 
-void registerNavMeshComponent(kengine::EntityManager & em) {
+void registerNavMeshComponent() {
 	kengine::registerComponents<
 		kengine::NavMeshComponent,
 		kengine::RebuildNavMeshComponent
-	>(em);
+	>();
 }

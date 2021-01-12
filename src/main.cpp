@@ -2,7 +2,7 @@
 
 #include "go_to_bin_dir.hpp"
 #include "PluginManager.hpp"
-#include "EntityManager.hpp"
+#include "kengine.hpp"
 
 #include "helpers/mainLoop.hpp"
 #include "helpers/imguiLuaHelper.hpp"
@@ -40,46 +40,46 @@ int main(int, char **av) {
 	ShowWindow(GetConsoleWindow(), SW_HIDE);
 #endif
 
-	kengine::EntityManager em(std::thread::hardware_concurrency());
+	kengine::init(std::thread::hardware_concurrency());
 
-	em += kengine::LuaSystem(em);
-	em += kengine::PythonSystem(em);
+	kengine::entities += kengine::LuaSystem();
+	kengine::entities += kengine::PythonSystem();
 
-	extern void registerTypes(kengine::EntityManager &);
-	registerTypes(em);
+	extern void registerTypes();
+	registerTypes();
 
-	em += [&](kengine::Entity & e) {
+	kengine::entities += [&](kengine::Entity & e) {
 		e += kengine::WindowComponent{
 			"Painter"
 		};
 	};
 
-	em += kengine::InputSystem(em);
-	em += kengine::OnClickSystem(em);
+	kengine::entities += kengine::InputSystem();
+	kengine::entities += kengine::OnClickSystem();
 
-	em += kengine::OpenGLSystem(em);
-	em += kengine::GLFWSystem(em);
-	em += kengine::OpenGLSpritesSystem(em);
-	em += kengine::PolyVoxSystem(em);
-	em += kengine::MagicaVoxelSystem(em);
-	em += kengine::AssImpSystem(em);
+	kengine::entities += kengine::OpenGLSystem();
+	kengine::entities += kengine::GLFWSystem();
+	kengine::entities += kengine::OpenGLSpritesSystem();
+	kengine::entities += kengine::PolyVoxSystem();
+	kengine::entities += kengine::MagicaVoxelSystem();
+	kengine::entities += kengine::AssImpSystem();
 
-	em += kengine::BulletSystem(em);
-	em += kengine::KinematicSystem(em);
-	em += kengine::RecastSystem(em);
+	kengine::entities += kengine::BulletSystem();
+	kengine::entities += kengine::KinematicSystem();
+	kengine::entities += kengine::RecastSystem();
 
-	em += kengine::ImGuiAdjustableSystem(em);
-	em += kengine::ImGuiToolSystem(em);
-	em += kengine::ImGuiEntityEditorSystem(em);
-	em += kengine::ImGuiEntitySelectorSystem(em);
-	em += kengine::ImGuiPromptSystem(em);
+	kengine::entities += kengine::ImGuiAdjustableSystem();
+	kengine::entities += kengine::ImGuiToolSystem();
+	kengine::entities += kengine::ImGuiEntityEditorSystem();
+	kengine::entities += kengine::ImGuiEntitySelectorSystem();
+	kengine::entities += kengine::ImGuiPromptSystem();
 
 	putils::PluginManager pm;
-	pm.rescanDirectory("plugins", "loadKenginePlugin", em);
+	pm.rescanDirectory("plugins", "loadKenginePlugin", kengine::getState());
 
-	kengine::imguiLuaHelper::initBindings(em);
+	kengine::imguiLuaHelper::initBindings();
 
-	kengine::mainLoop::timeModulated::run(em);
+	kengine::mainLoop::timeModulated::run();
 
 	return 0;
 }

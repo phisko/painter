@@ -2,9 +2,9 @@
 #include "data/LuaComponent.hpp"
 #include "data/LuaTableComponent.hpp"
 
-void registerLuaComponent(kengine::EntityManager & em) {
+void registerLuaComponent() {
 	kengine::registerComponents<
 		kengine::LuaComponent,
 		kengine::LuaTableComponent
-	>(em);
+	>();
 }

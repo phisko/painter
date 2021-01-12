@@ -1,7 +1,8 @@
 #include "helpers/registerTypeHelper.hpp"
 #include "Point.hpp"
+#include "Rect.hpp"
 
-#define REGISTER_FUNC_DECL(COMP) void register##COMP##Component(kengine::EntityManager & em);
+#define REGISTER_FUNC_DECL(COMP) void register##COMP##Component();
 
 REGISTER_FUNC_DECL(Adjustable);
 REGISTER_FUNC_DECL(Animation);
@@ -36,7 +37,7 @@ REGISTER_FUNC_DECL(UI);
 
 #define REGISTER_FUNC_NAME(COMP) register##COMP##Component
 
-using RegisterFunc = void(*)(kengine::EntityManager &);
+using RegisterFunc = void(*)();
 static const RegisterFunc funcs[] = {
 	REGISTER_FUNC_NAME(Adjustable),
 	REGISTER_FUNC_NAME(Animation),
@@ -70,12 +71,12 @@ static const RegisterFunc funcs[] = {
 	REGISTER_FUNC_NAME(UI),
 };
 
-void registerTypes(kengine::EntityManager & em) {
+void registerTypes() {
 	kengine::registerTypes<
-		putils::Rect3f, putils::Point3f,
+		putils::Rect3f,
 		putils::Color, putils::NormalizedColor
-	>(em);
+	>();
 
 	for (const auto f : funcs)
-		f(em);
+		f();
 }

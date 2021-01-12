@@ -1,8 +1,8 @@
 #include "helpers/registerTypeHelper.hpp"
 #include "data/TransformComponent.hpp"
 
-void registerTransformComponent(kengine::EntityManager & em) {
+void registerTransformComponent() {
 	kengine::registerComponents<
 		kengine::TransformComponent
-	>(em);
+	>();
 }

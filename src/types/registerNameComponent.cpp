@@ -1,8 +1,8 @@
 #include "helpers/registerTypeHelper.hpp"
 #include "data/NameComponent.hpp"
 
-void registerNameComponent(kengine::EntityManager & em) {
+void registerNameComponent() {
 	kengine::registerComponents<
 		kengine::NameComponent
-	>(em);
+	>();
 }
