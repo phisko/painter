@@ -14,6 +14,7 @@
 
 #include "systems/imgui_adjustable/ImGuiAdjustableSystem.hpp"
 #include "systems/imgui_tool/ImGuiToolSystem.hpp"
+#include "systems/imgui_engine_stats/ImGuiEngineStatsSystem.hpp"
 #include "systems/imgui_entity_editor/ImGuiEntityEditorSystem.hpp"
 #include "systems/imgui_entity_selector/ImGuiEntitySelectorSystem.hpp"
 #include "systems/imgui_prompt/ImGuiPromptSystem.hpp"
@@ -70,6 +71,7 @@ int main(int, char **av) {
 
 	kengine::entities += kengine::ImGuiAdjustableSystem();
 	kengine::entities += kengine::ImGuiToolSystem();
+	kengine::entities += kengine::ImGuiEngineStatsSystem();
 	kengine::entities += kengine::ImGuiEntityEditorSystem();
 	kengine::entities += kengine::ImGuiEntitySelectorSystem();
 	kengine::entities += kengine::ImGuiPromptSystem();

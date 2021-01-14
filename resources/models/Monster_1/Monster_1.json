@@ -1,6 +1,8 @@
 {
     "ModelComponent": {
-        "file": "resources/models/Monster_1/Monster_1.dae",
+        "file": "resources/models/Monster_1/Monster_1.dae"
+    },
+    "TransformComponent": {
         "boundingBox": {
             "size": {
                 "x": 0.2,

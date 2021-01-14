@@ -1,6 +1,8 @@
 {
     "ModelComponent": {
-        "file": "resources/models/scene_house6.vox",
+        "file": "resources/models/scene_house6.vox"
+    },
+    "TransformComponent": {
         "boundingBox": {
             "size": {
                 "x": 0.1,

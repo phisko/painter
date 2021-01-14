@@ -1,6 +1,8 @@
 {
     "ModelComponent": {
-        "file": "resources/models/veh_truck4.vox",
+        "file": "resources/models/veh_truck4.vox"
+    },
+    "TransformComponent": {
         "boundingBox": {
             "size": {
                 "x": 0.1,

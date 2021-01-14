@@ -1,6 +1,8 @@
 {
     "ModelComponent": {
-        "file": "resources/models/scene_riot.vox",
+        "file": "resources/models/scene_riot.vox"
+    },
+    "TransformComponent": {
         "boundingBox": {
             "size": {
                 "x": 0.1,
