@@ -86,6 +86,9 @@ EXPORT void loadKenginePlugin(void * state) noexcept {
 
 		static void updateOrientations() noexcept {
 			for (auto [e, transform, physics, pathfinding] : kengine::entities.with<kengine::TransformComponent, kengine::PhysicsComponent, kengine::PathfindingComponent>()) {
+				if (pathfinding.environment == kengine::INVALID_ID)
+					continue;
+
 				e += kengine::KinematicComponent{};
 
 				const auto yawTo = putils::getYawFromNormalizedDirection(physics.movement);

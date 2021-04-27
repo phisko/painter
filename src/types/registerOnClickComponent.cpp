@@ -1,8 +1,8 @@
 #include "helpers/registerTypeHelper.hpp"
-#include "data/OnClickComponent.hpp"
+#include "functions/OnClick.hpp"
 
 void registerOnClickComponent() {
 	kengine::registerComponents<
-		kengine::OnClickComponent
+		kengine::functions::OnClick
 	>();
 }

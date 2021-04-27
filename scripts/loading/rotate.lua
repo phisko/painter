@@ -1,9 +1,7 @@
-if not self:hasLuaTableComponent() then
-    self:attachLuaTableComponent()
-
+if not self:hasOnClick() then
     math.randomseed(os.time())
     local id = self.id -- used in lambda
-    self:attachOnClickComponent().onClick = function()
+    self:attachOnClick().func = function()
         local color = getEntity(id):getGraphicsComponent().color
         color.r = math.random()
         color.g = math.random()
