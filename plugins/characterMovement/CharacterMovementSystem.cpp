@@ -52,8 +52,10 @@ EXPORT void loadKenginePlugin(void * state) noexcept {
 
 			for (const auto & [e, getPositionInPixel] : kengine::entities.with<kengine::functions::GetPositionInPixel>()) {
 				const auto pos = getPositionInPixel(window, screenCoordinates);
+				if (!pos)
+					continue;
 				for (const auto & [e, pathfinding] : kengine::entities.with<kengine::PathfindingComponent>())
-					pathfinding.destination = pos;
+					pathfinding.destination = *pos;
 			}
 		}
 
@@ -111,9 +113,8 @@ EXPORT void loadKenginePlugin(void * state) noexcept {
 
 		static void debug(kengine::Entity & e, const putils::Point3f & pos, const kengine::PathfindingComponent & pathfinding) noexcept {
 			const auto obj = kengine::entities[pathfinding.environment];
-			const auto & navMesh = kengine::instanceHelper::getModel<kengine::NavMeshComponent>(obj);
-
-			const auto path = navMesh.getPath(obj, pos, pathfinding.destination);
+			const auto & getPath = kengine::instanceHelper::getModel<kengine::functions::GetPath>(obj);
+			const auto path = getPath(obj, pos, pathfinding.destination);
 
 			auto & debug = e.attach<kengine::DebugGraphicsComponent>();
 			debug.elements.clear();
@@ -123,14 +124,22 @@ EXPORT void loadKenginePlugin(void * state) noexcept {
 			for (auto pos : path) {
 				pos.y += 1.f;
 
-				auto & element = debug.elements.emplace_back(kengine::DebugGraphicsComponent::Sphere{ .1f });
-				element.pos = pos;
-				element.referenceSpace = kengine::DebugGraphicsComponent::ReferenceSpace::World;
+				kengine::DebugGraphicsComponent::Element debugElement;  {
+					debugElement.type = kengine::DebugGraphicsComponent::Type::Sphere;
+					debugElement.sphere.radius = .1f;
+					debugElement.pos = pos;
+					debugElement.referenceSpace = kengine::DebugGraphicsComponent::ReferenceSpace::World;
+				};
+				debug.elements.emplace_back(std::move(debugElement));
 
 				if (!first) {
-					auto & element = debug.elements.emplace_back(kengine::DebugGraphicsComponent::Line{ lastPos });
-					element.pos = pos;
-					element.referenceSpace = kengine::DebugGraphicsComponent::ReferenceSpace::World;
+					kengine::DebugGraphicsComponent::Element debugElement; {
+						debugElement.type = kengine::DebugGraphicsComponent::Type::Line;
+						debugElement.line.end = lastPos;
+						debugElement.pos = pos;
+						debugElement.referenceSpace = kengine::DebugGraphicsComponent::ReferenceSpace::World;
+					}
+					debug.elements.emplace_back(std::move(debugElement));
 				}
 
 				first = false;

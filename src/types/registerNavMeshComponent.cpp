@@ -3,7 +3,6 @@
 
 void registerNavMeshComponent() {
 	kengine::registerComponents<
-		kengine::NavMeshComponent,
-		kengine::RebuildNavMeshComponent
+		kengine::NavMeshComponent
 	>();
 }
