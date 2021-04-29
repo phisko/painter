@@ -12,7 +12,7 @@
         },
         "yaw": 3.14
     },
-    "ModelAnimationComponent": {
+    "AnimationFilesComponent": {
         "files": [
             "resources/models/Mannequin_figure/animations/idle.dae",
             "resources/models/Mannequin_figure/animations/jump.dae",
