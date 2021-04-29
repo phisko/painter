@@ -4,6 +4,10 @@
     },
     "TransformComponent": {
         "boundingBox": {
+            "position": {
+                "x": -7,
+                "z": -17
+            },
             "size": {
                 "x": 0.1,
                 "y": 0.1,

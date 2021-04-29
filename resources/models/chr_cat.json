@@ -4,7 +4,7 @@
         },
         "TransformComponent": {
 			"boundingBox": {
-                 "position": { "x": 0.05, "z": 0.1 },
+                 "position": { "x": -9.95, "z": -9.9 },
                  "size": { "x": 0.1, "y": 0.1, "z": 0.1 }
             },
             "yaw": 3.14
