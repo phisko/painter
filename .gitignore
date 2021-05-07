@@ -1,5 +1,10 @@
 .vs/
+.idea/
+cmake-build-debug/
+cmake-build-release/
 build/
+build-home/
+build-work/
 bin/
 lib/
 *.swp
