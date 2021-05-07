@@ -1,6 +1,4 @@
-#include "helpers/registerTypeHelper.hpp"
-#include "Point.hpp"
-#include "Rect.hpp"
+#include "helpers/logHelper.hpp"
 
 #define REGISTER_FUNC_DECL(COMP) void register##COMP##Component();
 
@@ -35,9 +33,13 @@ REGISTER_FUNC_DECL(TimeModulator);
 REGISTER_FUNC_DECL(Transform);
 REGISTER_FUNC_DECL(UI);
 
-#define REGISTER_FUNC_NAME(COMP) register##COMP##Component
+#define REGISTER_FUNC_NAME(COMP) { #COMP "Component", register##COMP##Component }
 
-using RegisterFunc = void(*)();
+struct RegisterFunc {
+	const char * name;
+	using Func = void();
+	Func * func;
+};
 static const RegisterFunc funcs[] = {
 	REGISTER_FUNC_NAME(Adjustable),
 	REGISTER_FUNC_NAME(Animation),
@@ -68,15 +70,11 @@ static const RegisterFunc funcs[] = {
 	REGISTER_FUNC_NAME(Text),
 	REGISTER_FUNC_NAME(TimeModulator),
 	REGISTER_FUNC_NAME(Transform),
-	REGISTER_FUNC_NAME(UI),
+	REGISTER_FUNC_NAME(UI)
 };
 
 void registerTypes() {
-	kengine::registerTypes<
-		putils::Rect3f,
-		putils::Color, putils::NormalizedColor
-	>();
-
+	kengine_log(Log, "Init", "Registering types");
 	for (const auto f : funcs)
-		f();
+		f.func();
 }

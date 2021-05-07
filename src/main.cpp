@@ -19,6 +19,9 @@
 #include "systems/imgui_entity_selector/ImGuiEntitySelectorSystem.hpp"
 #include "systems/imgui_prompt/ImGuiPromptSystem.hpp"
 
+#include "systems/log_imgui/LogImGuiSystem.hpp"
+#include "systems/log_visual_studio/LogVisualStudio.hpp"
+
 #include "systems/model_creator/ModelCreatorSystem.hpp"
 #include "systems/polyvox/PolyVoxSystem.hpp"
 #include "systems/polyvox/MagicaVoxelSystem.hpp"
@@ -32,8 +35,6 @@
 #include "systems/kinematic/KinematicSystem.hpp"
 
 #include "data/WindowComponent.hpp"
-#include "data/LuaComponent.hpp"
-#include "data/PythonComponent.hpp"
 
 int main(int, char **av) {
 	putils::goToBinDir(av[0]);
@@ -43,6 +44,9 @@ int main(int, char **av) {
 #endif
 
 	kengine::init(std::thread::hardware_concurrency());
+
+	kengine::entities += kengine::LogImGuiSystem();
+	kengine::entities += kengine::LogVisualStudioSystem();
 
 	kengine::entities += kengine::LuaSystem();
 	kengine::entities += kengine::PythonSystem();

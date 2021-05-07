@@ -14,8 +14,11 @@
 #include "json.hpp"
 
 #include "helpers/pluginHelper.hpp"
+#include "helpers/logHelper.hpp"
+
 #include "vector.hpp"
 #include "string.hpp"
+#include "thread_name.hpp"
 
 static std::thread * g_loadingThread = nullptr;
 
@@ -115,6 +118,8 @@ EXPORT void loadKenginePlugin(void * state) noexcept {
 		}
 
 		static void loadModels(const std::filesystem::path & dir) noexcept {
+			kengine_logf(Log, "Loading", "Loading models from %s", dir.c_str());
+
 			namespace fs = std::filesystem;
 
 			putils::vector<putils::string<128>, 64> models;
@@ -145,6 +150,8 @@ EXPORT void loadKenginePlugin(void * state) noexcept {
 		}
 
 		static void loadScene(const char * file) noexcept {
+			kengine_logf(Log, "Loading", "Loading scene from %s", file);
+
 			std::ifstream f(file);
 			static const putils::json fileJSON = putils::json::parse(f);
 
