@@ -77,7 +77,7 @@ EXPORT void loadKenginePlugin(void * state) noexcept {
 				e.detach<kengine::SelectedComponent>();
 			else {
 				e += kengine::SelectedComponent{};
-				e += kengine::HighlightComponent{ .color = SELECTED_COLOR,.intensity = SELECTED_INTENSITY };
+				e += kengine::HighlightComponent{ .color = SELECTED_COLOR, .intensity = SELECTED_INTENSITY };
 			}
 		}
 
