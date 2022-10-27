@@ -3,7 +3,7 @@ project(painter)
 
 set(CMAKE_CXX_STANDARD 20)
 if(WIN32)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj /std:c++17 /DNOMINMAX")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj /DNOMINMAX")
 endif()
 
 add_compile_definitions(
@@ -12,26 +12,8 @@ add_compile_definitions(
 	KENGINE_USE_SPINLOCK
 )
 
-set(libdir "${PROJECT_SOURCE_DIR}/lib")
-set(bindir "${PROJECT_SOURCE_DIR}/bin")
-
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${libdir})
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${libdir}/debug)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${libdir}/release)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELWITHDEBINFO ${libdir}/relwithdebinfo)
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_MINSIZEREL ${libdir}/minsizerel)
-
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${bindir})
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${bindir}/debug)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${bindir}/release)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${bindir}/relwithdebinfo)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL ${bindir}/minsizerel)
-
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${bindir}/plugins)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${bindir}/debug/plugins)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${bindir}/release/plugins)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELWITHDEBINFO ${bindir}/relwithdebinfo/plugins)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_MINSIZEREL ${bindir}/minsizerel/plugins)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins)
 
 #
 # Actual project
@@ -39,7 +21,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_MINSIZEREL ${bindir}/minsizerel/plugins)
 
 ## Kengine
 
-set(KENGINE_ALL_SYSTEMS TRUE)
+set(KENGINE_ALL_SYSTEMS ON)
 add_subdirectory(kengine)
 
 ## API
@@ -61,3 +43,18 @@ target_include_directories(${exe_name} PRIVATE src)
 target_link_libraries(${exe_name} kengine api)
 
 add_subdirectory(plugins)
+
+## Resources
+
+add_custom_command(TARGET ${exe_name} POST_BUILD COMMAND
+		${CMAKE_COMMAND} -E copy_directory
+		${CMAKE_CURRENT_LIST_DIR}/resources
+		$<TARGET_FILE_DIR:painter>/resources)
+add_custom_command(TARGET ${exe_name} POST_BUILD COMMAND
+		${CMAKE_COMMAND} -E copy_directory
+		${CMAKE_CURRENT_LIST_DIR}/scripts
+		$<TARGET_FILE_DIR:painter>/scripts)
+add_custom_command(TARGET ${exe_name} POST_BUILD COMMAND
+		${CMAKE_COMMAND} -E copy_if_different
+		${CMAKE_CURRENT_LIST_DIR}/adjust.ini
+		$<TARGET_FILE_DIR:painter>/adjust.ini)
