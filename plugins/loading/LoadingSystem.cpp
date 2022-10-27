@@ -83,7 +83,7 @@ EXPORT void loadKenginePlugin(void * state) noexcept {
 				putils::set_thread_name(L"Loading thread");
 				loadingThread();
 				loadingState = LoadingState::LoadingDone;
-				});
+            });
 		}
 
 		static void loadTemporaryScene(const char * file) noexcept {
@@ -113,8 +113,10 @@ EXPORT void loadKenginePlugin(void * state) noexcept {
 		}
 
 		static void loadingThread() noexcept {
+            kengine_log(Log, "Loading", "Starting");
 			loadModels("resources/models");
 			loadScene("resources/scene.json");
+            kengine_log(Log, "Loading", "Exiting");
 		}
 
 		static void loadModels(const std::filesystem::path & dir) noexcept {
@@ -147,6 +149,8 @@ EXPORT void loadKenginePlugin(void * state) noexcept {
 					loadCurrentModels();
 			}
 			loadCurrentModels();
+
+            kengine_log(Log, "Loading", "Finished loading models");
 		}
 
 		static void loadScene(const char * file) noexcept {
@@ -160,6 +164,8 @@ EXPORT void loadKenginePlugin(void * state) noexcept {
 					return;
 				kengine::entities += [&](kengine::Entity & e) noexcept { loadEntity(e, json, false); };
 			}
+
+            kengine_log(Log, "Loading", "Finished loading scene");
 		}
 	};
 
