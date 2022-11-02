@@ -49,9 +49,6 @@ int main(int, char **av) {
 	kengine::entities += kengine::LuaSystem();
 	kengine::entities += kengine::PythonSystem();
 
-	extern void registerTypes();
-	registerTypes();
-
 	kengine::entities += [&](kengine::Entity & e) {
 		e += kengine::WindowComponent{
 			"Painter"
@@ -77,6 +74,8 @@ int main(int, char **av) {
 	kengine::entities += kengine::ImGuiEntityEditorSystem();
 	kengine::entities += kengine::ImGuiEntitySelectorSystem();
 	kengine::entities += kengine::ImGuiPromptSystem();
+
+	kengine::types::registerTypes();
 
 	putils::PluginManager pm;
 	pm.rescanDirectory("plugins", "loadKenginePlugin", kengine::getState());

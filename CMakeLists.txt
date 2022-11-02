@@ -22,6 +22,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins)
 ## Kengine
 
 set(KENGINE_ALL_SYSTEMS ON)
+set(KENGINE_TYPE_REGISTRATION ON)
 add_subdirectory(kengine)
 
 ## API
