@@ -4,6 +4,7 @@
 #include "PluginManager.hpp"
 #include "kengine.hpp"
 
+#include "helpers/commandLineHelper.hpp"
 #include "helpers/mainLoop.hpp"
 #include "helpers/imguiLuaHelper.hpp"
 
@@ -34,7 +35,7 @@
 
 #include "data/WindowComponent.hpp"
 
-int main(int, char **av) {
+int main(int ac, const char ** av) {
 	putils::goToBinDir(av[0]);
 
 #if defined(_WIN32) && defined(KENGINE_NDEBUG)
@@ -42,6 +43,8 @@ int main(int, char **av) {
 #endif
 
 	kengine::init(std::thread::hardware_concurrency());
+
+	kengine::createCommandLineEntity(ac, av);
 
 	kengine::entities += kengine::LogImGuiSystem();
 	kengine::entities += kengine::LogVisualStudioSystem();
