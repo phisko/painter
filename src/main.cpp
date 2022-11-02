@@ -20,8 +20,10 @@
 #include "systems/imgui_entity_selector/ImGuiEntitySelectorSystem.hpp"
 #include "systems/imgui_prompt/ImGuiPromptSystem.hpp"
 
+#include "systems/log_file/LogFileSystem.hpp"
 #include "systems/log_imgui/LogImGuiSystem.hpp"
-#include "systems/log_visual_studio/LogVisualStudio.hpp"
+#include "systems/log_stdout/LogStdoutSystem.hpp"
+#include "systems/log_visual_studio/LogVisualStudioSystem.hpp"
 
 #include "systems/model_creator/ModelCreatorSystem.hpp"
 #include "systems/polyvox/PolyVoxSystem.hpp"
@@ -46,7 +48,9 @@ int main(int ac, const char ** av) {
 
 	kengine::createCommandLineEntity(ac, av);
 
+    kengine::entities += kengine::LogFileSystem();
 	kengine::entities += kengine::LogImGuiSystem();
+    kengine::entities += kengine::LogStdoutSystem();
 	kengine::entities += kengine::LogVisualStudioSystem();
 
 	kengine::entities += kengine::LuaSystem();
