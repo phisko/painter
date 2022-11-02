@@ -42,7 +42,7 @@ struct Key {
 	int code;
 	bool pressed;
 };
-static Key keys[putils::magic_enum::enum_count<Inputs>()];
+static Key keys[magic_enum::enum_count<Inputs>()];
 
 static kengine::EntityID g_capturedCamera = kengine::INVALID_ID;
 static putils::Vector3f front;

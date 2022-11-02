@@ -36,7 +36,9 @@
 			"diffuseStrength": 0.9,
 			"specularStrength": 0.05,
 			"direction": { "x": 1, "y": -1, "z": 1 },
-			"cascadeEnds": [ 5, 10, 20, 40, 100 ]
+			"cascadeEnds": [ 16, 32, 64, 128, 256 ],
+			"shadowMapMinBias": 0.001,
+			"shadowMapMaxBias": 0.01
 		},
 		"GodRaysComponent": {},
 		"SkyBoxComponent": {

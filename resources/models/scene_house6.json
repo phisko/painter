@@ -24,25 +24,29 @@
         "colliders": [
             {
                 "shape": "Box",
-                "boundingBox": {
-                    "size": {
-                        "x": 12.5,
-                        "y": 0.25,
-                        "z": 12.1
+                "transform": {
+                    "boundingBox": {
+                        "size": {
+                            "x": 12.5,
+                            "y": 0.25,
+                            "z": 12.1
+                        }
                     }
                 }
             },
             {
                 "shape": "Box",
-                "boundingBox": {
-                    "position": {
-                        "y": 2.5,
-                        "z": -1.1
-                    },
-                    "size": {
-                        "x": 6,
-                        "y": 5,
-                        "z": 5
+                "transform": {
+                    "boundingBox": {
+                        "position": {
+                            "y": 2.5,
+                            "z": -1.1
+                        },
+                        "size": {
+                            "x": 6,
+                            "y": 5,
+                            "z": 5
+                        }
                     }
                 }
             }

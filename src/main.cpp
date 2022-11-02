@@ -25,11 +25,9 @@
 #include "systems/model_creator/ModelCreatorSystem.hpp"
 #include "systems/polyvox/PolyVoxSystem.hpp"
 #include "systems/polyvox/MagicaVoxelSystem.hpp"
-#include "systems/assimp/AssimpSystem.hpp"
-#include "systems/opengl/OpenGLSystem.hpp"
-#include "systems/opengl_sprites/OpenGLSpritesSystem.hpp"
 #include "systems/recast/RecastSystem.hpp"
 #include "systems/glfw/GLFWSystem.hpp"
+#include "systems/kreogl/KreoglSystem.hpp"
 
 #include "systems/bullet/BulletSystem.hpp"
 #include "systems/kinematic/KinematicSystem.hpp"
@@ -64,12 +62,10 @@ int main(int, char **av) {
 	kengine::entities += kengine::OnClickSystem();
 
 	kengine::entities += kengine::ModelCreatorSystem();
-	kengine::entities += kengine::OpenGLSystem();
+    kengine::entities += kengine::KreoglSystem();
 	kengine::entities += kengine::GLFWSystem();
-	kengine::entities += kengine::OpenGLSpritesSystem();
 	kengine::entities += kengine::PolyVoxSystem();
 	kengine::entities += kengine::MagicaVoxelSystem();
-	kengine::entities += kengine::AssImpSystem();
 
 	kengine::entities += kengine::BulletSystem();
 	kengine::entities += kengine::KinematicSystem();

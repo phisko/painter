@@ -11,7 +11,7 @@
 #include "functions/OnTerminate.hpp"
 
 #include "meta/LoadFromJSON.hpp"
-#include "json.hpp"
+#include "nlohmann/json.hpp"
 
 #include "helpers/pluginHelper.hpp"
 #include "helpers/logHelper.hpp"
@@ -88,7 +88,7 @@ EXPORT void loadKenginePlugin(void * state) noexcept {
 
 		static void loadTemporaryScene(const char * file) noexcept {
 			std::ifstream f(file);
-			static const putils::json fileJSON = putils::json::parse(f);
+			static const auto fileJSON = nlohmann::json::parse(f);
 
 			for (const auto & json : fileJSON)
 				kengine::entities += [&](kengine::Entity & e) noexcept {
@@ -97,7 +97,7 @@ EXPORT void loadKenginePlugin(void * state) noexcept {
 			};
 		}
 
-		static void loadEntity(kengine::Entity & e, const putils::json & json, bool active) noexcept {
+		static void loadEntity(kengine::Entity & e, const nlohmann::json & json, bool active) noexcept {
 			if (!active) {
 				kengine::entities.setActive(e, false);
 				g_toEnable.push_back(e.id);
@@ -131,7 +131,7 @@ EXPORT void loadKenginePlugin(void * state) noexcept {
 						return;
 					kengine::entities += [&](kengine::Entity & e) noexcept {
 						std::ifstream f(file.c_str());
-						loadEntity(e, putils::json::parse(f), true);
+						loadEntity(e, nlohmann::json::parse(f), true);
 					};
 				}
 				models.clear();
@@ -157,7 +157,7 @@ EXPORT void loadKenginePlugin(void * state) noexcept {
 			kengine_logf(Log, "Loading", "Loading scene from %s", file);
 
 			std::ifstream f(file);
-			static const putils::json fileJSON = putils::json::parse(f);
+			static const auto fileJSON = nlohmann::json::parse(f);
 
 			for (const auto & json : fileJSON) {
 				if (!kengine::isRunning())
