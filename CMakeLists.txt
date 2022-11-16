@@ -12,17 +12,18 @@ add_compile_definitions(
 	KENGINE_USE_SPINLOCK
 )
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/plugins)
-
-#
-# Actual project
-#
+# These must be set before processing kengine, as conan DLLs need to be copied here
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/kengine/putils/reflection/meta/cmake_helpers/CMakeModules)
+include(putils_set_output_directories)
+putils_set_output_directories(bin bin/plugins lib)
 
 ## Kengine
 
 set(KENGINE_ALL_SYSTEMS ON)
 set(KENGINE_TYPE_REGISTRATION ON)
+
+option(TRACY_STATIC ON)
+set(TRACY_STATIC OFF) # Use a shared instance of tracy for all plugins
 add_subdirectory(kengine)
 
 ## API
@@ -41,7 +42,9 @@ file(GLOB exeFiles src/*.cpp src/*.hpp
 
 add_executable(${exe_name} ${exeFiles} ${commonFiles})
 target_include_directories(${exe_name} PRIVATE src)
-target_link_libraries(${exe_name} kengine api)
+target_link_libraries(${exe_name} PRIVATE kengine api)
+
+putils_copy_dlls(${exe_name})
 
 add_subdirectory(plugins)
 

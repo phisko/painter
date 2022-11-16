@@ -2,7 +2,7 @@ if not __init_done__ then
 	__init_done__ = true
 	local behavior = self:attachExecute()
 	behavior.func = function(deltaTime)
-		print("Test")
+		print("Test from Lua")
 	end
 end
 
