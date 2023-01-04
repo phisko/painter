@@ -1,9 +1,9 @@
 {
-    "ModelComponent": {
+    "model": {
         "file": "resources/models/Guard/boblampclean.md5mesh"
     },
-    "TransformComponent": {
-        "boundingBox": {
+    "transform": {
+        "bounding_box": {
             "size": {
                 "x": 0.05,
                 "y": 0.05,

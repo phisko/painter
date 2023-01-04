@@ -1,9 +1,9 @@
 {
-    "ModelComponent": {
+    "model": {
         "file": "resources/models/scene_riot.vox"
     },
-    "TransformComponent": {
-        "boundingBox": {
+    "transform": {
+        "bounding_box": {
             "position": {
                 "x": -64,
                 "z": -64

@@ -1,9 +1,9 @@
-def callback(deltaTime):
+def callback(delta_time):
     print("Test from Python")
 
-comp = kengine.self.getPythonComponent()
+comp = kengine.self.get_python()
 
-behavior = kengine.self.attachExecute()
+behavior = kengine.self.emplace_execute()
 behavior.func = callback
 
 for i in range(0, comp.scripts.size()):

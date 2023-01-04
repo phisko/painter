@@ -1,9 +1,9 @@
 {
-    "ModelComponent": {
+    "model": {
         "file": "resources/models/Mannequin_figure/free3Dmodel.dae"
     },
-    "TransformComponent": {
-        "boundingBox": {
+    "transform": {
+        "bounding_box": {
             "size": {
                 "x": 0.3,
                 "y": 0.3,
@@ -12,7 +12,7 @@
         },
         "yaw": 3.14
     },
-    "AnimationFilesComponent": {
+    "animation_files": {
         "files": [
             "resources/models/Mannequin_figure/animations/idle.dae",
             "resources/models/Mannequin_figure/animations/jump.dae",
@@ -26,14 +26,14 @@
             "resources/models/Mannequin_figure/animations/walking.dae"
         ]
     },
-    "ModelColliderComponent": {
-        "referenceBone": "hips",
+    "model_collider": {
+        "reference_bone": "hips",
         "colliders": [
             {
                 "shape": "Sphere",
-                "boneName": "head",
+                "bone_name": "head",
                 "transform": {
-                    "boundingBox": {
+                    "bounding_box": {
                         "position": {
                             "y": 0.2
                         }
@@ -42,9 +42,9 @@
             },
             {
                 "shape": "Box",
-                "boneName": "chest",
+                "bone_name": "chest",
                 "transform": {
-                    "boundingBox": {
+                    "bounding_box": {
                         "position": {
                             "y": 0.06,
                             "z": 0.05
@@ -59,9 +59,9 @@
             },
             {
                 "shape": "Box",
-                "boneName": "hips",
+                "bone_name": "hips",
                 "transform": {
-                    "boundingBox": {
+                    "bounding_box": {
                         "position": {
                             "y": 0.05,
                             "z": 0.02
@@ -76,9 +76,9 @@
             },
             {
                 "shape": "Capsule",
-                "boneName": "forearm.L",
+                "bone_name": "forearm.L",
                 "transform": {
-                    "boundingBox": {
+                    "bounding_box": {
                         "position": {
                             "y": 0.15
                         },
@@ -92,9 +92,9 @@
             },
             {
                 "shape": "Capsule",
-                "boneName": "upper_arm.L",
+                "bone_name": "upper_arm.L",
                 "transform": {
-                    "boundingBox": {
+                    "bounding_box": {
                         "position": {
                             "y": 0.15
                         },
@@ -108,9 +108,9 @@
             },
             {
                 "shape": "Capsule",
-                "boneName": "forearm.R",
+                "bone_name": "forearm.R",
                 "transform": {
-                    "boundingBox": {
+                    "bounding_box": {
                         "position": {
                             "y": 0.15
                         },
@@ -124,9 +124,9 @@
             },
             {
                 "shape": "Capsule",
-                "boneName": "upper_arm.R",
+                "bone_name": "upper_arm.R",
                 "transform": {
-                    "boundingBox": {
+                    "bounding_box": {
                         "position": {
                             "y": 0.15
                         },
@@ -140,9 +140,9 @@
             },
             {
                 "shape": "Capsule",
-                "boneName": "thigh.L",
+                "bone_name": "thigh.L",
                 "transform": {
-                    "boundingBox": {
+                    "bounding_box": {
                         "position": {
                             "y": 0.3
                         },
@@ -156,9 +156,9 @@
             },
             {
                 "shape": "Capsule",
-                "boneName": "shin.L",
+                "bone_name": "shin.L",
                 "transform": {
-                    "boundingBox": {
+                    "bounding_box": {
                         "position": {
                             "y": 0.3
                         },
@@ -172,9 +172,9 @@
             },
             {
                 "shape": "Capsule",
-                "boneName": "thigh.R",
+                "bone_name": "thigh.R",
                 "transform": {
-                    "boundingBox": {
+                    "bounding_box": {
                         "position": {
                             "y": 0.3
                         },
@@ -188,9 +188,9 @@
             },
             {
                 "shape": "Capsule",
-                "boneName": "shin.R",
+                "bone_name": "shin.R",
                 "transform": {
-                    "boundingBox": {
+                    "bounding_box": {
                         "position": {
                             "y": 0.3
                         },

@@ -1,9 +1,9 @@
 {
-    "ModelComponent": {
+    "model": {
         "file": "resources/models/scene_house6.vox"
     },
-    "TransformComponent": {
-        "boundingBox": {
+    "transform": {
+        "bounding_box": {
             "position": {
                 "x": -64,
                 "z": -64
@@ -15,17 +15,17 @@
             }
         }
     },
-    "NavMeshComponent": {
-        "characterHeight": 10,
-        "characterClimb": 7.5,
-        "characterRadius": 1
+    "nav_mesh": {
+        "character_height": 10,
+        "character_climb": 7.5,
+        "character_radius": 1
     },
-    "ModelColliderComponent": {
+    "model_collider": {
         "colliders": [
             {
                 "shape": "Box",
                 "transform": {
-                    "boundingBox": {
+                    "bounding_box": {
                         "size": {
                             "x": 12.5,
                             "y": 0.25,
@@ -37,7 +37,7 @@
             {
                 "shape": "Box",
                 "transform": {
-                    "boundingBox": {
+                    "bounding_box": {
                         "position": {
                             "y": 2.5,
                             "z": -1.1

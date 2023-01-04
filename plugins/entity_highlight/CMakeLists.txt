@@ -1,4 +1,4 @@
-set(name rotateSun)
+set(name entity_highlight)
 
 file(GLOB src
         *.cpp *.hpp)

@@ -1,4 +1,4 @@
-set(name characterAnimation)
+set(name character_animation)
 
 file(GLOB src
         *.cpp *.hpp)

@@ -1,14 +1,14 @@
 [
 	{
-		"NameComponent": { "name": "First camera" },
-		"ViewportComponent": {
+		"name": { "name": "First camera" },
+		"viewport": {
 			"resolution": { "x": 640, "y": 720 },
-			"boundingBox": {
+			"bounding_box": {
 				 "size": { "x": 0.49 }
 			},
-			"coordinateType": "ScreenPercentage"
+			"coordinates": "screen_percentage"
 		},
-		"CameraComponent": {
+		"camera": {
 			"frustum": { "position": { "x": -7, "y": 2, "z": -11 } },
 			"yaw": 0.755,
 			"pitch": -0.075
@@ -16,32 +16,32 @@
 	},
 
 	{
-		"NameComponent": { "name": "Second camera" },
-		"ViewportComponent": {
+		"name": { "name": "Second camera" },
+		"viewport": {
 			"resolution": { "x": 640, "y": 720 },
-			"boundingBox": {
+			"bounding_box": {
 				 "position": { "x": 0.51 },
 				 "size": { "x": 0.49 }
 			},
-			"coordinateType": "ScreenPercentage"
+			"coordinates": "screen_percentage"
 		},
-		"CameraComponent": {}
+		"camera": {}
 	},
 
 
 	{
-		"NameComponent": { "name": "Sun" },
-		"DirLightComponent": {
-			"ambientStrength": 0.05,
-			"diffuseStrength": 0.9,
-			"specularStrength": 0.05,
+		"name": { "name": "Sun" },
+		"dir_light": {
+			"ambient_strength": 0.05,
+			"diffuse_strength": 0.9,
+			"specular_strength": 0.05,
 			"direction": { "x": 1, "y": -1, "z": 1 },
-			"cascadeEnds": [ 16, 32, 64, 128, 256 ],
-			"shadowMapMinBias": 0.001,
-			"shadowMapMaxBias": 0.01
+			"cascade_ends": [ 16, 32, 64, 128, 256 ],
+			"shadow_map_min_bias": 0.001,
+			"shadow_map_max_bias": 0.01
 		},
-		"GodRaysComponent": {},
-		"SkyBoxComponent": {
+		"god_rays": {},
+		"sky_box": {
 			"left": "resources/skybox/left.jpg",
 			"right": "resources/skybox/right.jpg",
 			"top": "resources/skybox/top.jpg",
@@ -51,115 +51,115 @@
 		}
 	},
 	{
-		"NameComponent": { "name": "Point light" },
-		"PointLightComponent": {
-			"diffuseStrength": 1,
-			"specularStrength": 5
+		"name": { "name": "Point light" },
+		"point_light": {
+			"diffuse_strength": 1,
+			"specular_strength": 5
 		},
-		"TransformComponent": { "boundingBox": { "position": { "x": 0, "y": 15, "z": 0 } } },
-		"GodRaysComponent": {}
+		"transform": { "bounding_box": { "position": { "x": 0, "y": 15, "z": 0 } } },
+		"god_rays": {}
 	},
 
 	{
-		"NameComponent": { "name": "House" },
-		"GraphicsComponent": { "appearance": "resources/models/scene_house6.vox" },
-		"TransformComponent": {},
-		"PhysicsComponent": { "mass": 0 }
+		"name": { "name": "House" },
+		"graphics": { "appearance": "resources/models/scene_house6.vox" },
+		"transform": {},
+		"physics": { "mass": 0 }
 	},
 	{
-		"NameComponent": { "name": "Shop" },
-		"GraphicsComponent": { "appearance": "resources/models/scene_riot.vox" },
-		"TransformComponent": { "boundingBox": { "position": { "x": 12.2, "y": 0.1, "z": -4 } } },
-		"PhysicsComponent": { "mass": 0 }
+		"name": { "name": "Shop" },
+		"graphics": { "appearance": "resources/models/scene_riot.vox" },
+		"transform": { "bounding_box": { "position": { "x": 12.2, "y": 0.1, "z": -4 } } },
+		"physics": { "mass": 0 }
 	},
 
 
 	{
-		"NameComponent": { "name": "Truck" },
-		"GraphicsComponent": { "appearance": "resources/models/veh_truck4.vox" },
-		"TransformComponent": {
-			"boundingBox": { "position": { "x": 6, "y": 0.25, "z": -5.5 } },
+		"name": { "name": "Truck" },
+		"graphics": { "appearance": "resources/models/veh_truck4.vox" },
+		"transform": {
+			"bounding_box": { "position": { "x": 6, "y": 0.25, "z": -5.5 } },
 			"yaw": 1
 		},
-		"PhysicsComponent": {}
+		"physics": {}
 	},
 	{
-		"NameComponent": { "name": "Cat" },
-		"GraphicsComponent": { "appearance": "resources/models/chr_cat.vox" },
-		"TransformComponent": { "boundingBox": { "position": { "y": 0.15, "z": -5 } } },
-		"PhysicsComponent": {},
-		"PathfindingComponent": {
+		"name": { "name": "Cat" },
+		"graphics": { "appearance": "resources/models/chr_cat.vox" },
+		"transform": { "bounding_box": { "position": { "y": 0.15, "z": -5 } } },
+		"physics": {},
+		"pathfinding": {
 			"destination": { "z": -5 }
 		}
 	},
 
 	{
-		"NameComponent": { "name": "Funnyman" },
-		"GraphicsComponent": { "appearance": "resources/models/funnyman/funnyman.fbx" },
-		"TransformComponent": { "boundingBox": { "position": { "x": 2, "z": -5 } } },
-		"AnimationComponent": {}
+		"name": { "name": "Funnyman" },
+		"graphics": { "appearance": "resources/models/funnyman/funnyman.fbx" },
+		"transform": { "bounding_box": { "position": { "x": 2, "z": -5 } } },
+		"animation": {}
 	},
 
 	{
-		"NameComponent": { "name": "Zombie" },
-		"GraphicsComponent": { "appearance": "resources/models/Monster_1/Monster_1.dae" },
-		"TransformComponent": { "boundingBox": { "position": { "x": -2, "y": 0.15, "z": -5 } } },
-		"PhysicsComponent": {},
-		"AnimationComponent": {}
+		"name": { "name": "Zombie" },
+		"graphics": { "appearance": "resources/models/Monster_1/Monster_1.dae" },
+		"transform": { "bounding_box": { "position": { "x": -2, "y": 0.15, "z": -5 } } },
+		"physics": {},
+		"animation": {}
 	},
 	{
-		"NameComponent": { "name": "Guard" },
-		"GraphicsComponent": { "appearance": "resources/models/Guard/boblampclean.md5mesh" },
-		"TransformComponent": { "boundingBox": { "position": { "x": -2.4, "y": 0.25, "z": -2 } } },
-		"PhysicsComponent": {},
-		"AnimationComponent": {}
+		"name": { "name": "Guard" },
+		"graphics": { "appearance": "resources/models/Guard/boblampclean.md5mesh" },
+		"transform": { "bounding_box": { "position": { "x": -2.4, "y": 0.25, "z": -2 } } },
+		"physics": {},
+		"animation": {}
 	},
 
 	{
-		"NameComponent": { "name": "Mannequin" },
-		"GraphicsComponent": { "appearance": "resources/models/Mannequin_figure/free3Dmodel.dae" },
-		"TransformComponent": { "boundingBox": { "position": { "x": -4, "y": 0.15, "z": -5.5 } } },
-		"KinematicComponent": {},
-		"PhysicsComponent": {},
-		"AnimationComponent": {
-			"currentAnim": 1
+		"name": { "name": "Mannequin" },
+		"graphics": { "appearance": "resources/models/Mannequin_figure/free3Dmodel.dae" },
+		"transform": { "bounding_box": { "position": { "x": -4, "y": 0.15, "z": -5.5 } } },
+		"kinematic": {},
+		"physics": {},
+		"animation": {
+			"current_anim": 1
 		}
 	},
 	{
-		"NameComponent": { "name": "Second Mannequin" },
-		"GraphicsComponent": { "appearance": "resources/models/Mannequin_figure/free3Dmodel.dae" },
-		"TransformComponent": {
-			 "boundingBox": { "position": { "x": -5, "y": 0.15, "z": -5.5 } },
+		"name": { "name": "Second Mannequin" },
+		"graphics": { "appearance": "resources/models/Mannequin_figure/free3Dmodel.dae" },
+		"transform": {
+			 "bounding_box": { "position": { "x": -5, "y": 0.15, "z": -5.5 } },
 			 "yaw": 1
 		},
-		"KinematicComponent": {},
-		"PhysicsComponent": {},
-		"AnimationComponent": {
-			"currentAnim": 10
+		"kinematic": {},
+		"physics": {},
+		"animation": {
+			"current_anim": 10
 		}
 	},
 
 	{
-		"NameComponent": { "name": "Poop" },
-		"UIComponent": {},
-		"GraphicsComponent": { "appearance": "resources/sprites/poop.png" },
-		"SpriteComponent3D": {},
-		"TransformComponent": { "boundingBox": {
+		"name": { "name": "Poop" },
+		"ui": {},
+		"graphics": { "appearance": "resources/sprites/poop.png" },
+		"sprite_3d": {},
+		"transform": { "bounding_box": {
 			"size": { "x": 1, "y": 1, "z": 0 },
 			"position": { "x": -5, "y": 1, "z": -5 }
 		} }
 	},
 
 	{
-		"NameComponent": { "name": "Text" },
-		"UIComponent": {},
-		"TextComponent3D": {
+		"name": { "name": "Text" },
+		"ui": {},
+		"text_3d": {
 			"font": "resources/fonts/arial.ttf",
-			"text": "Hi, I'm debug text!",
-			"fontSize": 1000
+			"value": "Hi, I'm debug text!",
+			"font_size": 1000
 		},
-		"TransformComponent": {
-			"boundingBox": {
+		"transform": {
+			"bounding_box": {
 				"size": { "x": 1, "y": 1, "z": 1 },
 				"position": { "x": -5, "y": 2, "z": -5 }
 			}

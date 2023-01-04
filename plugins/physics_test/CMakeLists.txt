@@ -1,4 +1,4 @@
-set(name physicsTest)
+set(name physics_test)
 
 file(GLOB src
         *.cpp *.hpp)

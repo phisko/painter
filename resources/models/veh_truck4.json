@@ -1,9 +1,9 @@
 {
-    "ModelComponent": {
+    "model": {
         "file": "resources/models/veh_truck4.vox"
     },
-    "TransformComponent": {
-        "boundingBox": {
+    "transform": {
+        "bounding_box": {
             "position": {
                 "x": -7,
                 "z": -17

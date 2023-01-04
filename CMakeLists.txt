@@ -1,16 +1,15 @@
 cmake_minimum_required(VERSION 3.10)
 project(painter)
 
+add_compile_definitions(KENGINE_IMGUI_ASSERT_HANDLER)
+
 set(CMAKE_CXX_STANDARD 20)
 if(WIN32)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj /DNOMINMAX")
 endif()
 
-add_compile_definitions(
-    KENGINE_COMPONENT_COUNT=256
-    KENGINE_MAX_CSM_COUNT=10
-	KENGINE_USE_SPINLOCK
-)
+# We're using plugins, so we need shared libraries to share global state
+set(BUILD_SHARED_LIBS ON)
 
 # These must be set before processing kengine, as conan DLLs need to be copied here
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/kengine/putils/reflection/meta/cmake_helpers/CMakeModules)

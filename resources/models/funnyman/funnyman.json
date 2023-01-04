@@ -1,11 +1,11 @@
 {
-    "ModelComponent": {
+    "model": {
         "file": "resources/models/funnyman/funnyman.fbx"
     },
-    "TransformComponent": {
+    "transform": {
         "yaw": 3.14
     },
-    "ModelAnimationComponent": {
+    "model_animation": {
         "files": [
             "resources/models/funnyman/animations/dancing.fbx"
         ]

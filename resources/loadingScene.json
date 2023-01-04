@@ -1,38 +1,38 @@
 [
     {
-        "ViewportComponent": {
-             "boundingBox": { "position": { "z": 1 } },
-             "coordinateType": "ScreenPercentage"
+        "viewport": {
+             "bounding_box": { "position": { "z": 1 } },
+             "coordinates": "screen_percentage"
         },
-        "CameraComponent": {},
-        "DirLightComponent": {}
+        "camera": {},
+        "dir_light": {}
     },
     {
-        "GraphicsComponent": { "appearance": "resources/sprites/koala.png" },
-        "SpriteComponent2D": { "coordinateType": "ScreenPercentage" },
-        "TransformComponent": {
-            "boundingBox": {
+        "graphics": { "appearance": "resources/sprites/koala.png" },
+        "sprite_2d": { "coordinates": "screen_percentage" },
+        "transform": {
+            "bounding_box": {
                 "position": { "x": 0.5, "y": 0.5 },
                 "size": { "x": 0.28125, "y": 0.5 }
             }
         },
-        "LuaComponent": { "scripts": [ "scripts/loading/rotate.lua" ] }
+        "lua": { "scripts": [ "scripts/loading/rotate.lua" ] }
     },
 
 	{
-		"TextComponent2D": {
+		"text_2d": {
 			"font": "resources/fonts/arial.ttf",
-			"text": "Loading...",
-            "fontSize": 1000,
+			"value": "Loading...",
+            "font_size": 1000,
             "alignment": "Left",
-            "coordinateType": "ScreenPercentage"
+            "coordinates": "screen_percentage"
 		},
-		"TransformComponent": {
-			"boundingBox": {
+		"transform": {
+			"bounding_box": {
 				"position": { "x": 0.40, "y": 0.85 },
 				"size": { "y": 0.2 }
             }
 		},
-        "LuaComponent": { "scripts": [ "scripts/loading/text.lua" ] }
+        "lua": { "scripts": [ "scripts/loading/text.lua" ] }
     }
 ]

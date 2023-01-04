@@ -1,4 +1,4 @@
-set(name characterMovement)
+set(name character_movement)
 
 file(GLOB src
         *.cpp *.hpp)

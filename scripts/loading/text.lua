@@ -5,5 +5,5 @@ for i = 1, count do
     str = str .. "."
 end
 
-local text = self:getTextComponent2D()
-text.text:assign(str)
+local text = self:get_text_2d()
+text.value:assign(str)
