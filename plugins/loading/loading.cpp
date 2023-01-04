@@ -18,16 +18,8 @@
 #include "putils/thread_name.hpp"
 #include "putils/vector.hpp"
 
-// kengine data
-#include "kengine/data/name.hpp"
-
 // kengine functions
 #include "kengine/functions/execute.hpp"
-
-// kengine meta
-#include "kengine/meta/has.hpp"
-#include "kengine/meta/move.hpp"
-#include "kengine/meta/load_from_json.hpp"
 
 // kengine helpers
 #include "kengine/helpers/is_running.hpp"
