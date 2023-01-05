@@ -21,11 +21,19 @@
 // kengine functions
 #include "kengine/functions/execute.hpp"
 
+// kengine meta
+#include "kengine/meta/emplace_or_replace.hpp"
+#include "kengine/meta/get.hpp"
+#include "kengine/meta/has.hpp"
+
 // kengine helpers
 #include "kengine/helpers/is_running.hpp"
 #include "kengine/helpers/json_helper.hpp"
 #include "kengine/helpers/log_helper.hpp"
 #include "kengine/helpers/profiling_helper.hpp"
+
+// kengine types
+#include "kengine/types/register_types.hpp"
 
 namespace data {
 	struct to_enable {};
@@ -35,7 +43,8 @@ namespace systems {
 	struct loading {
 		entt::registry & r;
 
-		std::thread * loading_thread = nullptr;
+		std::thread loading_thread;
+		entt::registry loading_registry;
 
 		enum class loading_state {
 			not_started,
@@ -46,22 +55,20 @@ namespace systems {
 
 		std::atomic<loading_state> state = loading_state::not_started;
 
-		std::vector<entt::entity> to_enable;
 		std::vector<entt::entity> to_remove;
 
 		loading(entt::handle e) noexcept
 			: r(*e.registry()) {
 			KENGINE_PROFILING_SCOPE;
+
 			e.emplace<kengine::functions::execute>(putils_forward_to_this(execute));
+			kengine::types::register_types(loading_registry);
 		}
 
 		~loading() noexcept {
 			KENGINE_PROFILING_SCOPE;
-
-			if (loading_thread == nullptr)
-				return;
-			loading_thread->join();
-			delete loading_thread;
+			if (loading_thread.joinable())
+				loading_thread.join();
 		}
 
 		void execute(float delta_time) noexcept {
@@ -74,25 +81,33 @@ namespace systems {
 					break;
 				}
 				case loading_state::done: {
-#if 0
-				for (const auto id : to_enable)
-					kengine::entities.setActive(id, true);
-#endif
-					to_enable.clear();
+					move_entities_to_registry();
 
 					r.destroy(to_remove.begin(), to_remove.end());
 					to_remove.clear();
 
 					state = loading_state::complete;
-#if 0
-				loading_thread->join();
-				delete loading_thread;
-				loading_thread = nullptr;
-#endif
+					if (loading_thread.joinable())
+						loading_thread.join();
 					break;
 				}
 				default: break;
 			}
+		}
+
+		void move_entities_to_registry() noexcept {
+			for (const auto [e] : loading_registry.view<data::to_enable>().each()) {
+				const entt::handle src{ loading_registry, e };
+				const entt::handle dst{ r, r.create() };
+
+				for (const auto & [type, get, has, emplace_or_replace_move] : r.view<kengine::meta::get, kengine::meta::has, kengine::meta::emplace_or_replace_move>().each()) {
+					if (has(src)) {
+						const auto src_comp = get(src);
+						emplace_or_replace_move(dst, src_comp);
+					}
+				}
+			}
+			loading_registry.clear();
 		}
 
 		void setup_loading() noexcept {
@@ -100,11 +115,11 @@ namespace systems {
 
 			load_temporary_scene("resources/loadingScene.json");
 
-			// loading_thread = new std::thread([]() noexcept {
-			putils::set_thread_name(L"Loading thread");
-			run_loading_thread();
-			state = loading_state::done;
-			// });
+			loading_thread = std::thread([this]() noexcept {
+				putils::set_thread_name(L"Loading thread");
+				run_loading_thread();
+				state = loading_state::done;
+			});
 		}
 
 		nlohmann::json temporary_scene_json;
@@ -117,22 +132,8 @@ namespace systems {
 			for (const auto & json : temporary_scene_json) {
 				const auto e = r.create();
 				to_remove.push_back(e);
-				load_entity({ r, e }, json, true);
+				kengine::json_helper::load_entity(json, { r, e });
 			}
-		}
-
-		void load_entity(entt::handle e, const nlohmann::json & json, bool active) noexcept {
-			KENGINE_PROFILING_SCOPE;
-
-			if (!active) {
-				e.emplace<data::to_enable>();
-#if 0
-			kengine::entities.setActive(e, false);
-			to_enable.push_back(e.id);
-#endif
-			}
-
-			kengine::json_helper::load_entity(json, e);
 		}
 
 		void run_loading_thread() noexcept {
@@ -158,7 +159,7 @@ namespace systems {
 						return;
 					const auto e = r.create();
 					std::ifstream f(file.c_str());
-					load_entity({ r, e }, nlohmann::json::parse(f), true);
+					kengine::json_helper::load_entity(nlohmann::json::parse(f), { r, e });
 				}
 				models.clear();
 			};
@@ -190,8 +191,9 @@ namespace systems {
 			for (const auto & json : scene_json) {
 				if (!kengine::is_running(r))
 					return;
-				const auto e = r.create();
-				load_entity({ r, e }, json, false);
+				const auto e = loading_registry.create();
+				loading_registry.emplace<data::to_enable>(e);
+				kengine::json_helper::load_entity(json, { loading_registry, e });
 			}
 
 			kengine_log(r, log, "Loading", "Finished loading scene");
