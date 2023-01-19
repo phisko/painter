@@ -1,11 +1,8 @@
 #pragma once
 
 namespace data {
+	//! putils reflect all
 	struct ui {};
 }
 
-#define refltype data::ui
-putils_reflection_info {
-	putils_reflection_class_name;
-};
-#undef refltype
+#include "ui.rpp"
