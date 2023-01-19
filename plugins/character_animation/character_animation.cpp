@@ -18,7 +18,7 @@
 #include "kengine/functions/execute.hpp"
 
 // kengine helpers
-#include "kengine/helpers/register_type_helper.hpp"
+#include "kengine/helpers/meta/register_everything.hpp"
 
 namespace data {
 	struct wobble {
@@ -45,7 +45,7 @@ namespace systems {
 			: r(*e.registry()) {
 			KENGINE_PROFILING_SCOPE;
 
-			kengine::register_components<data::wobble>(r);
+			kengine::register_everything<data::wobble>(r);
 
 			e.emplace<kengine::functions::execute>(putils_forward_to_this(execute));
 			e.emplace<kengine::data::adjustable>() = {
