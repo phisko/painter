@@ -15,7 +15,7 @@ endif()
 set(BUILD_SHARED_LIBS ON)
 
 # These must be set before processing kengine, as conan DLLs need to be copied here
-include(${CMAKE_CURRENT_LIST_DIR}/kengine/putils/reflection/meta/cmake_helpers/putils_set_output_directories.cmake)
+include(kengine/putils/reflection/meta/cmake_helpers/putils_set_output_directories.cmake)
 putils_set_output_directories(bin bin/plugins lib)
 
 # Kengine
