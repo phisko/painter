@@ -32,9 +32,6 @@
 #include "kengine/helpers/log_helper.hpp"
 #include "kengine/helpers/profiling_helper.hpp"
 
-// kengine types
-#include "kengine/types/register_types.hpp"
-
 namespace data {
 	struct to_enable {};
 }
@@ -60,7 +57,6 @@ namespace systems {
 			KENGINE_PROFILING_SCOPE;
 
 			e.emplace<kengine::functions::execute>(putils_forward_to_this(execute));
-			kengine::types::register_types(loading_registry);
 		}
 
 		~loading() noexcept {
