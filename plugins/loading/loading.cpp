@@ -42,9 +42,7 @@ namespace data {
 namespace systems {
 	struct loading {
 		entt::registry & r;
-
 		std::thread loading_thread;
-		entt::registry loading_registry;
 
 		enum class loading_state {
 			not_started,
@@ -81,33 +79,18 @@ namespace systems {
 					break;
 				}
 				case loading_state::done: {
-					move_entities_to_registry();
+					state = loading_state::complete;
+					if (loading_thread.joinable())
+						loading_thread.join();
 
 					r.destroy(to_remove.begin(), to_remove.end());
 					to_remove.clear();
 
-					state = loading_state::complete;
-					if (loading_thread.joinable())
-						loading_thread.join();
+					load_scene("resources/scene.json");
 					break;
 				}
 				default: break;
 			}
-		}
-
-		void move_entities_to_registry() noexcept {
-			for (const auto [e] : loading_registry.view<data::to_enable>().each()) {
-				const entt::handle src{ loading_registry, e };
-				const entt::handle dst{ r, r.create() };
-
-				for (const auto & [type, get, has, emplace_or_replace_move] : r.view<kengine::meta::get, kengine::meta::has, kengine::meta::emplace_or_replace_move>().each()) {
-					if (has(src)) {
-						const auto src_comp = get(src);
-						emplace_or_replace_move(dst, src_comp);
-					}
-				}
-			}
-			loading_registry.clear();
 		}
 
 		void setup_loading() noexcept {
@@ -141,7 +124,6 @@ namespace systems {
 
 			kengine_log(r, log, "Loading", "Starting");
 			load_models("resources/models");
-			load_scene("resources/scene.json");
 			kengine_log(r, log, "Loading", "Exiting");
 		}
 
@@ -149,33 +131,17 @@ namespace systems {
 			KENGINE_PROFILING_SCOPE;
 			kengine_logf(r, log, "Loading", "Loading models from %s", dir.string().c_str());
 
-			namespace fs = std::filesystem;
-
-			putils::vector<putils::string<128>, 64> models;
-
-			auto load_current_models = [&]() noexcept {
-				for (const auto & file : models) {
-					if (!kengine::is_running(r))
-						return;
-					const auto e = r.create();
-					std::ifstream f(file.c_str());
-					kengine::json_helper::load_entity(nlohmann::json::parse(f), { r, e });
-				}
-				models.clear();
-			};
-
-			for (const auto & entry : fs::recursive_directory_iterator(dir)) {
+			for (const auto & entry : std::filesystem::recursive_directory_iterator(dir)) {
 				if (!kengine::is_running(r))
 					return;
 
 				if (entry.path().extension() != ".json")
 					continue;
 
-				models.push_back(entry.path().string());
-				if (models.full())
-					load_current_models();
+				const auto e = r.create();
+				std::ifstream f(entry.path());
+				kengine::json_helper::load_entity(nlohmann::json::parse(f), { r, e });
 			}
-			load_current_models();
 
 			kengine_log(r, log, "Loading", "Finished loading models");
 		}
@@ -191,9 +157,9 @@ namespace systems {
 			for (const auto & json : scene_json) {
 				if (!kengine::is_running(r))
 					return;
-				const auto e = loading_registry.create();
-				loading_registry.emplace<data::to_enable>(e);
-				kengine::json_helper::load_entity(json, { loading_registry, e });
+				const auto e = r.create();
+				r.emplace<data::to_enable>(e);
+				kengine::json_helper::load_entity(json, { r, e });
 			}
 
 			kengine_log(r, log, "Loading", "Finished loading scene");
