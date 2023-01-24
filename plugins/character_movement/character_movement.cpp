@@ -14,13 +14,13 @@
 
 // kengine data
 #include "kengine/data/adjustable.hpp"
+#include "kengine/data/input.hpp"
 #include "kengine/data/kinematic.hpp"
+#include "kengine/data/name.hpp"
+#include "kengine/data/nav_mesh.hpp"
+#include "kengine/data/pathfinding.hpp"
 #include "kengine/data/physics.hpp"
 #include "kengine/data/transform.hpp"
-#include "kengine/data/input.hpp"
-#include "kengine/data/pathfinding.hpp"
-#include "kengine/data/nav_mesh.hpp"
-#include "kengine/data/name.hpp"
 
 #ifndef KENGINE_NDEBUG
 #include "kengine/data/debug_graphics.hpp"
