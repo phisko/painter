@@ -81,7 +81,7 @@ namespace systems {
 		void on_destroy_selected(entt::registry & r, entt::entity e) noexcept {
 			KENGINE_PROFILING_SCOPE;
 			if (!r.any_of<data::hovered>(e))
-				r.erase<kengine::data::highlight>(e);
+				r.remove<kengine::data::highlight>(e);
 		}
 
 		void on_construct_hovered(entt::registry & r, entt::entity e) noexcept {
@@ -99,7 +99,7 @@ namespace systems {
 		void on_destroy_hovered(entt::registry & r, entt::entity e) noexcept {
 			KENGINE_PROFILING_SCOPE;
 			if (!r.any_of<kengine::data::selected>(e))
-				r.erase<kengine::data::highlight>(e);
+				r.remove<kengine::data::highlight>(e);
 		}
 
 		void click(entt::handle window, const putils::point2f & coords) noexcept {
