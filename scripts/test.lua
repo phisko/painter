@@ -1,3 +1,4 @@
+print("pute")
 if not __init_done__ then
 	__init_done__ = true
 	local behavior = self:emplace_execute()
@@ -6,8 +7,8 @@ if not __init_done__ then
 	end
 end
 
-local scripts = self:get_lua().scripts
-for i = 0, scripts:size() - 1 do
-	local s = scripts:get(i)
+local files = self:get_lua_scripts().files
+for i = 0, files:size() - 1 do
+	local s = files:get(i)
 	print(s)
 end

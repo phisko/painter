@@ -2,7 +2,7 @@ if not self:has_on_click() then
     math.randomseed(os.time())
     local me = self
     self:emplace_on_click().func = function()
-        local color = me:get_graphics().color
+        local color = me:get_drawable().color
         color.r = math.random()
         color.g = math.random()
         color.b = math.random()

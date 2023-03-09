@@ -1,5 +1,3 @@
-#include "Export.hpp"
-
 // entt
 #include <entt/entity/handle.hpp>
 #include <entt/entity/registry.hpp>
@@ -11,53 +9,48 @@
 #include "putils/angle.hpp"
 #include "putils/forward_to.hpp"
 #include "putils/rand.hpp"
+#include "putils/plugin_manager/export.hpp"
 
-// kengine data
-#include "kengine/data/adjustable.hpp"
-#include "kengine/data/pathfinding.hpp"
-#include "kengine/data/graphics.hpp"
-#include "kengine/data/instance.hpp"
-#include "kengine/data/input.hpp"
-#include "kengine/data/no_shadow.hpp"
-#include "kengine/data/physics.hpp"
-#include "kengine/data/transform.hpp"
+// kengine
+#include "kengine/config/data/configurable.hpp"
+#include "kengine/core/data/name.hpp"
+#include "kengine/core/data/transform.hpp"
+#include "kengine/core/profiling/helpers/kengine_profiling_scope.hpp"
+#include "kengine/imgui/helpers/set_context.hpp"
+#include "kengine/input/data/handler.hpp"
+#include "kengine/model/data/instance.hpp"
+#include "kengine/main_loop/functions/execute.hpp"
+#include "kengine/pathfinding/data/navigation.hpp"
+#include "kengine/physics/data/inertia.hpp"
+#include "kengine/render/data/drawable.hpp"
+#include "kengine/render/data/no_shadow.hpp"
+#include "kengine/system_creator/helpers/system_creator_helper.hpp"
 
-// kengine functions
-#include "kengine/functions/execute.hpp"
-
-// kengine helpers
-#include "kengine/helpers/profiling_helper.hpp"
+#include "config.hpp"
 
 namespace data {
-		struct particle_timer {
-			float lifetime = 0.f;
-		};
+	struct particle_timer {
+		float lifetime = 0.f;
+	};
 }
 
-namespace systems {
-	struct physics_test {
+namespace physics_test {
+	struct system {
 		entt::registry & r;
 
-		struct {
-			float particle_duration = 5.f;
-			int spawn_count = 1;
-		} adjustables;
-
 		size_t particle_count = 0;
+		const config * cfg = nullptr;
 
-		physics_test(entt::handle e) noexcept
+		system(entt::handle e) noexcept
 			: r(*e.registry()) {
 			KENGINE_PROFILING_SCOPE;
 
-			e.emplace<kengine::functions::execute>(putils_forward_to_this(execute));
-			e.emplace<kengine::data::adjustable>() = {
-				"Physics/Debug",
-				{
-					{ "Spawn count", &adjustables.spawn_count },
-					{ "Duration", &adjustables.particle_duration },
-				}
-			};
-			e.emplace<kengine::data::input>() = { .on_key = putils_forward_to_this(on_key) };
+			e.emplace<kengine::main_loop::execute>(putils_forward_to_this(execute));
+			e.emplace<kengine::input::handler>() = { .on_key = putils_forward_to_this(on_key) };
+
+			e.emplace<kengine::core::name>("Physics/Debug");
+			e.emplace<kengine::config::configurable>();
+			cfg = &e.emplace<config>();
 		}
 
 		void execute(float delta_time) noexcept {
@@ -65,11 +58,14 @@ namespace systems {
 
 			for (const auto & [e, timer] : r.view<data::particle_timer>().each()) {
 				timer.lifetime += delta_time;
-				if (timer.lifetime >= adjustables.particle_duration) {
+				if (timer.lifetime >= cfg->particle_duration) {
 					r.destroy(e);
 					--particle_count;
 				}
 			}
+
+			if (!kengine::imgui::set_context(r))
+				return;
 
 			if (ImGui::Begin("Particles"))
 				ImGui::Text("Count: %zu", particle_count);
@@ -81,10 +77,10 @@ namespace systems {
 
 			if (!pressed || keycode != 'Y')
 				return;
-			for (auto [e, physics] : window.registry()->view<kengine::data::pathfinding>().each())
-				for (int i = 0; i < adjustables.spawn_count; ++i) {
+
+			for (auto [e, physics] : window.registry()->view<kengine::pathfinding::navigation>().each())
+				for (int i = 0; i < cfg->spawn_count; ++i)
 					add_particle(e, window.registry()->create());
-				}
 		}
 
 		void add_particle(entt::entity parent, entt::entity particle) noexcept {
@@ -93,16 +89,16 @@ namespace systems {
 			++particle_count;
 
 			r.emplace<data::particle_timer>(particle);
-			r.emplace<kengine::data::no_shadow>(particle);
+			r.emplace<kengine::render::no_shadow>(particle);
 
-			auto & graphics_storage = r.storage<kengine::data::graphics>();
-			graphics_storage.emplace(particle, graphics_storage.get(parent));
-
-			auto & instance_storage = r.storage<kengine::data::instance>();
+			auto & instance_storage = r.storage<kengine::model::instance>();
 			instance_storage.emplace(particle, instance_storage.get(parent));
 
-			auto & particle_transform = r.emplace<kengine::data::transform>(particle);
-			particle_transform.bounding_box = r.get<kengine::data::transform>(parent).bounding_box;
+			auto & drawable_storage = r.storage<kengine::render::drawable>();
+			drawable_storage.emplace(particle, drawable_storage.get(parent));
+
+			auto & particle_transform = r.emplace<kengine::core::transform>(particle);
+			particle_transform.bounding_box = r.get<kengine::core::transform>(parent).bounding_box;
 			particle_transform.bounding_box.position += putils::vec3f{ 0.f, 1.f, 0.f };
 			particle_transform.bounding_box.size *= putils::vec3f{ .1f, .1f, .1f };
 
@@ -113,13 +109,14 @@ namespace systems {
 			const putils::vec3f dir{ putils::rand<float>(-1.f, 1.f), .5f, putils::rand<float>(-1.f, 1.f) };
 			particle_transform.bounding_box.position += dir;
 
-			auto & particle_physics = r.emplace<kengine::data::physics>(particle);
+			auto & particle_physics = r.emplace<kengine::physics::inertia>(particle);
 			particle_physics.movement = dir;
 		}
 	};
+
+	DEFINE_KENGINE_SYSTEM_CREATOR(system, data::particle_timer);
 }
 
 EXPORT void load_kengine_plugin(entt::registry & r) noexcept {
-	const entt::handle e{ r, r.create() };
-	e.emplace<systems::physics_test>(e);
+	physics_test::add_system(r);
 }

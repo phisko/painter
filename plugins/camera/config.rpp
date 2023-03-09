@@ -1,0 +1,18 @@
+#pragma once
+
+#include "putils/reflection.hpp"
+
+#define refltype camera::config
+putils_reflection_info {
+	putils_reflection_custom_class_name(camera_config);
+	putils_reflection_attributes(
+		putils_reflection_attribute(mouse_sensitivity),
+		putils_reflection_attribute(movement_speed),
+		putils_reflection_attribute(movement_speed_modifier),
+		putils_reflection_attribute(zoom_speed)
+	);
+	putils_reflection_type_metadata(
+		putils_reflection_metadata("config", true)
+	);
+};
+#undef refltype

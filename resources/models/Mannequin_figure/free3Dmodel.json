@@ -1,5 +1,5 @@
 {
-    "model": {
+    "asset": {
         "file": "resources/models/Mannequin_figure/free3Dmodel.dae"
     },
     "transform": {
@@ -13,7 +13,7 @@
         "yaw": 3.14
     },
     "animation_files": {
-        "files": [
+        "list": [
             "resources/models/Mannequin_figure/animations/idle.dae",
             "resources/models/Mannequin_figure/animations/jump.dae",
             "resources/models/Mannequin_figure/animations/left_strafe.dae",

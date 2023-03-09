@@ -1,5 +1,3 @@
-#include "Export.hpp"
-
 // entt
 #include <entt/entity/handle.hpp>
 #include <entt/entity/registry.hpp>
@@ -17,33 +15,28 @@
 #include "putils/angle.hpp"
 #include "putils/forward_to.hpp"
 #include "putils/vector.hpp"
+#include "putils/plugin_manager/export.hpp"
 
-// kengine data
-#include "kengine/data/adjustable.hpp"
-#include "kengine/data/camera.hpp"
-#include "kengine/data/viewport.hpp"
-#include "kengine/data/input.hpp"
-#include "kengine/data/transform.hpp"
-#include "kengine/data/light.hpp"
+// kengine
+#include "kengine/config/data/configurable.hpp"
+#include "kengine/core/data/name.hpp"
+#include "kengine/core/data/transform.hpp"
+#include "kengine/core/profiling/helpers/kengine_profiling_scope.hpp"
+#include "kengine/input/data/handler.hpp"
+#include "kengine/main_loop/functions/execute.hpp"
+#include "kengine/render/data/camera.hpp"
+#include "kengine/render/data/light.hpp"
+#include "kengine/render/data/viewport.hpp"
+#include "kengine/render/functions/on_mouse_captured.hpp"
+#include "kengine/render/helpers/get_viewport_for_pixel.hpp"
+#include "kengine/system_creator/helpers/system_creator_helper.hpp"
 
-// kengine functions
-#include "kengine/functions/execute.hpp"
-#include "kengine/functions/on_mouse_captured.hpp"
+#include "config.hpp"
 
-// kengine helpers
-#include "kengine/helpers/camera_helper.hpp"
-#include "kengine/helpers/profiling_helper.hpp"
-
-namespace systems {
-	struct camera {
+namespace camera {
+	struct system {
 		entt::registry & r;
-
-		struct {
-			float mouse_sensitivity = .005f;
-			float movement_speed = 10.f;
-			float movement_speed_modifier = 2.f;
-			float zoom_speed = .1f;
-		} adjustables;
+		const config * cfg = nullptr;
 
 		enum class inputs {
 			forward,
@@ -68,23 +61,18 @@ namespace systems {
 		putils::vec3f right;
 		putils::vec3f up;
 
-		camera(entt::handle e) noexcept
+		system(entt::handle e) noexcept
 			: r(*e.registry()) {
 			KENGINE_PROFILING_SCOPE;
 
 			init_keys();
 
-			e.emplace<kengine::functions::execute>(putils_forward_to_this(execute));
-			e.emplace<kengine::data::input>(camera_controller());
-			e.emplace<kengine::data::adjustable>() = {
-				"Camera",
-				{
-					{ "Mouse sensitivity", &adjustables.mouse_sensitivity },
-					{ "Movement speed", &adjustables.movement_speed },
-					{ "Movement speed modifier", &adjustables.movement_speed_modifier },
-					{ "Zoom speed", &adjustables.zoom_speed },
-				}
-			};
+			e.emplace<kengine::main_loop::execute>(putils_forward_to_this(execute));
+			e.emplace<kengine::input::handler>(camera_controller());
+
+			e.emplace<kengine::core::name>("Camera");
+			e.emplace<kengine::config::configurable>();
+			cfg = &e.emplace<config>();
 		}
 
 		void init_keys() noexcept {
@@ -112,7 +100,7 @@ namespace systems {
 			if (captured_camera == entt::null)
 				return;
 
-			auto & comp = r.get<kengine::data::camera>(captured_camera);
+			auto & comp = r.get<kengine::render::camera>(captured_camera);
 			if (first) {
 				update_vectors(comp);
 				first = false;
@@ -122,10 +110,11 @@ namespace systems {
 			process_keys(pos, delta_time);
 		}
 
+		float movement_speed = 1.f;
 		void process_keys(putils::point3f & pos, float delta_time) noexcept {
 			KENGINE_PROFILING_SCOPE;
 
-			const auto velocity = adjustables.movement_speed * delta_time;
+			const auto velocity = movement_speed * cfg->movement_speed * delta_time;
 
 			if (keys[int(inputs::forward)].pressed)
 				pos += front * velocity;
@@ -141,12 +130,12 @@ namespace systems {
 				pos -= up * velocity;
 
 			if (keys[int(inputs::speed_down)].pressed)
-				adjustables.movement_speed /= adjustables.movement_speed_modifier;
+				movement_speed /= cfg->movement_speed_modifier;
 			if (keys[int(inputs::speed_up)].pressed)
-				adjustables.movement_speed *= adjustables.movement_speed_modifier;
+				movement_speed *= cfg->movement_speed_modifier;
 		}
 
-		void update_vectors(const kengine::data::camera & cam) noexcept {
+		void update_vectors(const kengine::render::camera & cam) noexcept {
 			KENGINE_PROFILING_SCOPE;
 
 			front = {
@@ -164,10 +153,10 @@ namespace systems {
 		}
 
 		putils::point2f last_mouse_pos;
-		kengine::data::input camera_controller() noexcept {
+		kengine::input::handler camera_controller() noexcept {
 			KENGINE_PROFILING_SCOPE;
 
-			kengine::data::input input;
+			kengine::input::handler input;
 			input.on_mouse_move = [this](entt::handle window, const putils::point2f & coords, const putils::point2f & rel) noexcept {
 				last_mouse_pos = coords;
 				if (captured_camera != entt::null)
@@ -192,10 +181,10 @@ namespace systems {
 		void process_mouse_movement(const putils::point2f & movement) noexcept {
 			KENGINE_PROFILING_SCOPE;
 
-			const float xoffset = movement.x * adjustables.mouse_sensitivity;
-			const float yoffset = movement.y * adjustables.mouse_sensitivity;
+			const float xoffset = movement.x * cfg->mouse_sensitivity;
+			const float yoffset = movement.y * cfg->mouse_sensitivity;
 
-			auto & cam = r.get<kengine::data::camera>(captured_camera);
+			auto & cam = r.get<kengine::render::camera>(captured_camera);
 
 			cam.yaw -= xoffset;
 			cam.pitch -= yoffset;
@@ -210,11 +199,11 @@ namespace systems {
 		void process_mouse_scroll(float yoffset) noexcept {
 			KENGINE_PROFILING_SCOPE;
 
-			auto & cam = r.get<kengine::data::camera>(captured_camera);
+			auto & cam = r.get<kengine::render::camera>(captured_camera);
 
 			auto & zoom = cam.frustum.size.y;
 			if (zoom >= .001f && zoom <= putils::pi * .9f)
-				zoom -= yoffset * adjustables.zoom_speed;
+				zoom -= yoffset * cfg->zoom_speed;
 			zoom = std::max(zoom, .001f);
 			zoom = std::min(zoom, putils::pi * .9f);
 		}
@@ -225,17 +214,18 @@ namespace systems {
 			if (captured_camera != entt::null)
 				captured_camera = entt::null;
 			else {
-				const auto info = kengine::camera_helper::get_viewport_for_pixel(window, last_mouse_pos);
+				const auto info = kengine::render::get_viewport_for_pixel(window, last_mouse_pos);
 				captured_camera = info.camera;
 			}
 
-			for (const auto & [e, func] : r.view<kengine::functions::on_mouse_captured>().each())
+			for (const auto & [e, func] : r.view<kengine::render::on_mouse_captured>().each())
 				func(window, captured_camera != entt::null);
 		}
 	};
+
+	DEFINE_KENGINE_SYSTEM_CREATOR(system)
 }
 
 EXPORT void load_kengine_plugin(entt::registry & r) noexcept {
-	const entt::handle e{ r, r.create() };
-	e.emplace<systems::camera>(e);
+	camera::add_system(r);
 }

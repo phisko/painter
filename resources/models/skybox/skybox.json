@@ -1,0 +1,13 @@
+{
+		"name": {
+            "name": "sky_box_asset"
+        },
+		"sky_box_model": {
+			"left": "resources/models/skybox/left.jpg",
+			"right": "resources/models/skybox/right.jpg",
+			"top": "resources/models/skybox/top.jpg",
+			"bottom": "resources/models/skybox/bottom.jpg",
+			"front": "resources/models/skybox/front.jpg",
+			"back": "resources/models/skybox/back.jpg"
+		}
+}

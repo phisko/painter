@@ -8,7 +8,8 @@
         "dir_light": {}
     },
     {
-        "graphics": { "appearance": "resources/sprites/koala.png" },
+        "instance_of_asset": { "model": { "file": "resources/sprites/koala.png" } },
+		"drawable": {},
         "sprite_2d": { "coordinates": "screen_percentage" },
         "transform": {
             "bounding_box": {
@@ -16,7 +17,7 @@
                 "size": { "x": 0.28125, "y": 0.5 }
             }
         },
-        "lua": { "scripts": [ "scripts/loading/rotate.lua" ] }
+        "lua_scripts": { "files": [ "scripts/loading/rotate.lua" ] }
     },
 
 	{
@@ -33,6 +34,6 @@
 				"size": { "y": 0.2 }
             }
 		},
-        "lua": { "scripts": [ "scripts/loading/text.lua" ] }
+        "lua_scripts": { "files": [ "scripts/loading/text.lua" ] }
     }
 ]

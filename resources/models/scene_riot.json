@@ -1,5 +1,5 @@
 {
-    "model": {
+    "asset": {
         "file": "resources/models/scene_riot.vox"
     },
     "transform": {

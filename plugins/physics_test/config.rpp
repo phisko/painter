@@ -1,0 +1,16 @@
+#pragma once
+
+#include "putils/reflection.hpp"
+
+#define refltype physics_test::config
+putils_reflection_info {
+	putils_reflection_custom_class_name(physics_test_config);
+	putils_reflection_attributes(
+		putils_reflection_attribute(particle_duration),
+		putils_reflection_attribute(spawn_count)
+	);
+	putils_reflection_type_metadata(
+		putils_reflection_metadata("config", true)
+	);
+};
+#undef refltype

@@ -28,9 +28,11 @@
 		"camera": {}
 	},
 
-
 	{
 		"name": { "name": "Sun" },
+		"instance_of_name": { "model": { "name": "sky_box_asset" } },
+		"drawable": {},
+		"sky_box": {},
 		"dir_light": {
 			"ambient_strength": 0.05,
 			"diffuse_strength": 0.9,
@@ -40,15 +42,7 @@
 			"shadow_map_min_bias": 0.001,
 			"shadow_map_max_bias": 0.01
 		},
-		"god_rays": {},
-		"sky_box": {
-			"left": "resources/skybox/left.jpg",
-			"right": "resources/skybox/right.jpg",
-			"top": "resources/skybox/top.jpg",
-			"bottom": "resources/skybox/bottom.jpg",
-			"front": "resources/skybox/front.jpg",
-			"back": "resources/skybox/back.jpg"
-		}
+		"god_rays": {}
 	},
 	{
 		"name": { "name": "Point light" },
@@ -62,78 +56,87 @@
 
 	{
 		"name": { "name": "House" },
-		"graphics": { "appearance": "resources/models/scene_house6.vox" },
+		"instance_of_asset": { "model": { "file": "resources/models/scene_house6.vox" } },
+		"drawable": {},
 		"transform": {},
-		"physics": { "mass": 0 }
+		"inertia": { "mass": 0 }
 	},
 	{
 		"name": { "name": "Shop" },
-		"graphics": { "appearance": "resources/models/scene_riot.vox" },
+		"instance_of_asset": { "model": { "file": "resources/models/scene_riot.vox" } },
+		"drawable": {},
 		"transform": { "bounding_box": { "position": { "x": 12.2, "y": 0.1, "z": -4 } } },
-		"physics": { "mass": 0 }
+		"inertia": { "mass": 0 }
 	},
 
 
 	{
 		"name": { "name": "Truck" },
-		"graphics": { "appearance": "resources/models/veh_truck4.vox" },
+		"instance_of_asset": { "model": { "file": "resources/models/veh_truck4.vox" } },
+		"drawable": {},
 		"transform": {
 			"bounding_box": { "position": { "x": 6, "y": 0.25, "z": -5.5 } },
 			"yaw": 1
 		},
-		"physics": {}
+		"inertia": {}
 	},
 	{
 		"name": { "name": "Cat" },
-		"graphics": { "appearance": "resources/models/chr_cat.vox" },
+		"instance_of_asset": { "model": { "file": "resources/models/chr_cat.vox" } },
+		"drawable": {},
 		"transform": { "bounding_box": { "position": { "y": 0.15, "z": -5 } } },
-		"physics": {},
-		"pathfinding": {
+		"inertia": {},
+		"navigation": {
 			"destination": { "z": -5 }
 		}
 	},
 
 	{
 		"name": { "name": "Funnyman" },
-		"graphics": { "appearance": "resources/models/funnyman/funnyman.fbx" },
+		"instance_of_asset": { "model": { "file": "resources/models/funnyman/funnyman.fbx" } },
+		"drawable": {},
 		"transform": { "bounding_box": { "position": { "x": 2, "z": -5 } } },
 		"animation": {}
 	},
 
 	{
 		"name": { "name": "Zombie" },
-		"graphics": { "appearance": "resources/models/Monster_1/Monster_1.dae" },
+		"instance_of_asset": { "model": { "file": "resources/models/Monster_1/Monster_1.dae" } },
+		"drawable": {},
 		"transform": { "bounding_box": { "position": { "x": -2, "y": 0.15, "z": -5 } } },
-		"physics": {},
+		"inertia": {},
 		"animation": {}
 	},
 	{
 		"name": { "name": "Guard" },
-		"graphics": { "appearance": "resources/models/Guard/boblampclean.md5mesh" },
+		"instance_of_asset": { "model": { "file": "resources/models/Guard/boblampclean.md5mesh" } },
+		"drawable": {},
 		"transform": { "bounding_box": { "position": { "x": -2.4, "y": 0.25, "z": -2 } } },
-		"physics": {},
+		"inertia": {},
 		"animation": {}
 	},
 
 	{
 		"name": { "name": "Mannequin" },
-		"graphics": { "appearance": "resources/models/Mannequin_figure/free3Dmodel.dae" },
+		"instance_of_asset": { "model": { "file": "resources/models/Mannequin_figure/free3Dmodel.dae" } },
+		"drawable": {},
 		"transform": { "bounding_box": { "position": { "x": -4, "y": 0.15, "z": -5.5 } } },
 		"kinematic": {},
-		"physics": {},
+		"inertia": {},
 		"animation": {
 			"current_anim": 1
 		}
 	},
 	{
 		"name": { "name": "Second Mannequin" },
-		"graphics": { "appearance": "resources/models/Mannequin_figure/free3Dmodel.dae" },
+		"instance_of_asset": { "model": { "file": "resources/models/Mannequin_figure/free3Dmodel.dae" } },
+		"drawable": {},
 		"transform": {
 			 "bounding_box": { "position": { "x": -5, "y": 0.15, "z": -5.5 } },
 			 "yaw": 1
 		},
 		"kinematic": {},
-		"physics": {},
+		"inertia": {},
 		"animation": {
 			"current_anim": 10
 		}
@@ -142,7 +145,8 @@
 	{
 		"name": { "name": "Poop" },
 		"ui": {},
-		"graphics": { "appearance": "resources/sprites/poop.png" },
+		"instance_of_asset": { "model": { "file": "resources/sprites/poop.png" } },
+		"drawable": {},
 		"sprite_3d": {},
 		"transform": { "bounding_box": {
 			"size": { "x": 1, "y": 1, "z": 0 },

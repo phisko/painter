@@ -1,5 +1,5 @@
 {
-		"model": {
+		"asset": {
             "file": "resources/models/chr_cat.vox"
         },
         "transform": {

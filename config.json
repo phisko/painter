@@ -1,0 +1,92 @@
+{
+    "Camera": {
+        "camera_config": {
+            "mouse_sensitivity": 0.004999999888241291,
+            "movement_speed": 10.0,
+            "movement_speed_modifier": 2.0,
+            "zoom_speed": 0.10000000149011612
+        }
+    },
+    "Character": {
+        "Movement": {
+            "character_movement_config": {
+                "facing_strictness": 0.05000000074505806,
+                "turn_speed": 3.1415927410125732
+            }
+        },
+        "Wobble": {
+            "character_animation_config": {
+                "max_roll": 1.0,
+                "wobble_speed": 1.0
+            }
+        }
+    },
+    "Highlight": {
+        "entity_highlight_config": {
+            "hovered_color": {
+                "a": 1.0,
+                "b": 1.0,
+                "g": 1.0,
+                "r": 1.0
+            },
+            "hovered_intensity": 1.0,
+            "selected_color": {
+                "a": 1.0,
+                "b": 0.14924974739551544,
+                "g": 0.14924974739551544,
+                "r": 0.885869562625885
+            },
+            "selected_intensity": 2.0
+        }
+    },
+    "Log": {
+        "File": {
+            "severity_control": {
+                "global_severity": "warning"
+            }
+        },
+        "ImGui": {
+            "core_log_imgui_config": {
+                "max_events": 4096
+            }
+        },
+        "Standard output": {
+            "severity_control": {
+                "global_severity": "verbose"
+            }
+        },
+        "Visual Studio": {
+            "severity_control": {
+                "global_severity": "verbose"
+            }
+        }
+    },
+    "Physics": {
+        "Debug": {
+            "physics_test_config": {
+                "particle_duration": 5.0,
+                "spawn_count": 1
+            }
+        },
+        "physics_bullet_config": {
+            "editor_mode": false,
+            "enable_debug": false,
+            "gravity": 1.0
+        }
+    },
+    "Recast": {
+        "pathfinding_recast_config": {
+            "path_optimization_range": 2.0
+        }
+    },
+    "Sun": {
+        "rotate_sun_config": {
+            "sun_rotation": 0.10000000149011612
+        }
+    },
+    "kreogl": {
+        "scale": {
+            "modifier": 1.0
+        }
+    }
+}

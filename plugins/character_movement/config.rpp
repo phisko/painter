@@ -1,0 +1,16 @@
+#pragma once
+
+#include "putils/reflection.hpp"
+
+#define refltype character_movement::config
+putils_reflection_info {
+	putils_reflection_custom_class_name(character_movement_config);
+	putils_reflection_attributes(
+		putils_reflection_attribute(facing_strictness),
+		putils_reflection_attribute(turn_speed)
+	);
+	putils_reflection_type_metadata(
+		putils_reflection_metadata("config", true)
+	);
+};
+#undef refltype

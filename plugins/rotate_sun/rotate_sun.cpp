@@ -1,5 +1,3 @@
-#include "Export.hpp"
-
 // entt
 #include <entt/entity/handle.hpp>
 #include <entt/entity/registry.hpp>
@@ -7,53 +5,50 @@
 // putils
 #include "putils/angle.hpp"
 #include "putils/forward_to.hpp"
+#include "putils/plugin_manager/export.hpp"
 
-// kengine data
-#include "kengine/data/adjustable.hpp"
-#include "kengine/data/light.hpp"
+// kengine
+#include "kengine/config/data/configurable.hpp"
+#include "kengine/core/data/name.hpp"
+#include "kengine/core/profiling/helpers/kengine_profiling_scope.hpp"
+#include "kengine/main_loop/functions/execute.hpp"
+#include "kengine/render/data/light.hpp"
+#include "kengine/system_creator/helpers/system_creator_helper.hpp"
 
-// kengine functions
-#include "kengine/functions/execute.hpp"
+#include "config.hpp"
 
-// kengine helpers
-#include "kengine/helpers/profiling_helper.hpp"
-
-namespace systems {
-	struct rotate_sun {
+namespace rotate_sun {
+	struct system {
 		entt::registry & r;
+		const config * cfg = nullptr;
 
-		struct {
-			float sun_rotation = .1f;
-		} adjustables;
-
-		rotate_sun(entt::handle e) noexcept
+		system(entt::handle e) noexcept
 			: r(*e.registry()) {
 			KENGINE_PROFILING_SCOPE;
 
-			e.emplace<kengine::functions::execute>(putils_forward_to_this(execute));
-			e.emplace<kengine::data::adjustable>() = {
-				"world",
-				{
-					{ "Sun rotation speed", &adjustables.sun_rotation },
-				}
-			};
+			e.emplace<kengine::main_loop::execute>(putils_forward_to_this(execute));
+
+			e.emplace<kengine::core::name>("Sun");
+			e.emplace<kengine::config::configurable>();
+			cfg = &e.emplace<config>();
 		}
 
 		float angle = 0.f;
 		void execute(float delta_time) noexcept {
 			KENGINE_PROFILING_SCOPE;
 
-			for (auto [e, light] : r.view<kengine::data::dir_light>().each()) {
-				angle += delta_time * adjustables.sun_rotation;
+			for (auto [e, light] : r.view<kengine::render::dir_light>().each()) {
+				angle += delta_time * cfg->sun_rotation;
 				if (angle > putils::pi * 2.f)
 					angle -= putils::pi * 2.f;
 				light.direction = { std::cos(angle), -1.f, std::sin(angle) };
 			}
 		}
 	};
+
+	DEFINE_KENGINE_SYSTEM_CREATOR(system);
 }
 
 EXPORT void load_kengine_plugin(entt::registry & r) noexcept {
-	const entt::handle e{ r, r.create() };
-	e.emplace<systems::rotate_sun>(e);
+	rotate_sun::add_system(r);
 }

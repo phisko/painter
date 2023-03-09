@@ -1,5 +1,3 @@
-#include "Export.hpp"
-
 // entt
 #include <entt/entity/handle.hpp>
 #include <entt/entity/registry.hpp>
@@ -7,17 +5,15 @@
 // putils
 #include "putils/angle.hpp"
 #include "putils/forward_to.hpp"
+#include "putils/plugin_manager/export.hpp"
 
-// kengine data
-#include "kengine/data/transform.hpp"
-#include "kengine/data/camera.hpp"
-#include "kengine/data/sprite.hpp"
-
-// kengine functions
-#include "kengine/functions/execute.hpp"
-
-// kengine helpers
-#include "kengine/helpers/profiling_helper.hpp"
+// kengine
+#include "kengine/core/data/transform.hpp"
+#include "kengine/core/profiling/helpers/kengine_profiling_scope.hpp"
+#include "kengine/main_loop/functions/execute.hpp"
+#include "kengine/render/data/camera.hpp"
+#include "kengine/render/data/sprite.hpp"
+#include "kengine/system_creator/helpers/system_creator_helper.hpp"
 
 // project
 #include "data/ui.hpp"
@@ -30,20 +26,20 @@ namespace systems {
 			: r(*e.registry()) {
 			KENGINE_PROFILING_SCOPE;
 
-			e.emplace<kengine::functions::execute>(putils_forward_to_this(execute));
+			e.emplace<kengine::main_loop::execute>(putils_forward_to_this(execute));
 		}
 
 		void execute(float delta_time) noexcept {
 			KENGINE_PROFILING_SCOPE;
 
-			const kengine::data::camera * cam = nullptr;
-			for (const auto & [e, comp] : r.view<kengine::data::camera>().each())
+			const kengine::render::camera * cam = nullptr;
+			for (const auto & [e, comp] : r.view<kengine::render::camera>().each())
 				cam = &comp;
 
 			if (cam == nullptr)
 				return;
 
-			for (auto [e, transform] : r.view<kengine::data::transform, data::ui>().each()) {
+			for (auto [e, transform] : r.view<kengine::core::transform, data::ui>().each()) {
 				const auto & pos = transform.bounding_box.position;
 				const auto & cam_pos = cam->frustum.position;
 
@@ -53,9 +49,10 @@ namespace systems {
 			}
 		}
 	};
+
+	DEFINE_KENGINE_SYSTEM_CREATOR(ui);
 }
 
 EXPORT void load_kengine_plugin(entt::registry & r) noexcept {
-	const entt::handle e{ r, r.create() };
-	e.emplace<systems::ui>(e);
+	systems::add_ui(r);
 }

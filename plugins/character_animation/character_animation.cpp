@@ -1,5 +1,3 @@
-#include "Export.hpp"
-
 // entt
 #include <entt/entity/handle.hpp>
 #include <entt/entity/registry.hpp>
@@ -7,18 +5,18 @@
 // putils
 #include "putils/forward_to.hpp"
 #include "putils/sign.hpp"
+#include "putils/plugin_manager/export.hpp"
 
-// kengine data
-#include "kengine/data/adjustable.hpp"
-#include "kengine/data/kinematic.hpp"
-#include "kengine/data/physics.hpp"
-#include "kengine/data/transform.hpp"
+// kengine
+#include "kengine/config/data/configurable.hpp"
+#include "kengine/core/data/transform.hpp"
+#include "kengine/main_loop/functions/execute.hpp"
+#include "kengine/meta/helpers/register_everything.hpp"
+#include "kengine/physics/data/inertia.hpp"
+#include "kengine/physics/kinematic/data/kinematic.hpp"
+#include "kengine/system_creator/helpers/system_creator_helper.hpp"
 
-// kengine functions
-#include "kengine/functions/execute.hpp"
-
-// kengine helpers
-#include "kengine/helpers/meta/register_everything.hpp"
+#include "config.hpp"
 
 namespace data {
 	struct wobble {
@@ -32,29 +30,22 @@ putils_reflection_info {
 };
 #undef refltype
 
-namespace systems {
-	struct character_animation {
+namespace character_animation {
+	struct system {
 		entt::registry & r;
+		const config * cfg = nullptr;
 
-		struct {
-			float wobble_speed = 1.f;
-			float max_roll = 1.f;
-		} adjustables;
-
-		character_animation(entt::handle e) noexcept
+		system(entt::handle e) noexcept
 			: r(*e.registry()) {
 			KENGINE_PROFILING_SCOPE;
 
-			kengine::register_everything<data::wobble>(r);
+			kengine::meta::register_everything<data::wobble>(r);
 
-			e.emplace<kengine::functions::execute>(putils_forward_to_this(execute));
-			e.emplace<kengine::data::adjustable>() = {
-				"Character/Wobble",
-				{
-					{ "Speed", &adjustables.wobble_speed },
-					{ "Max roll", &adjustables.max_roll },
-				}
-			};
+			e.emplace<kengine::main_loop::execute>(putils_forward_to_this(execute));
+
+			e.emplace<kengine::core::name>("Character/Wobble");
+			e.emplace<kengine::config::configurable>();
+			cfg = &e.emplace<config>();
 		}
 
 		void execute(float delta_time) noexcept {
@@ -62,29 +53,30 @@ namespace systems {
 
 			return;
 
-			for (auto [e, transform, physics] : r.view<kengine::data::transform, kengine::data::physics, kengine::data::kinematic>().each()) {
+			for (auto [e, transform, inertia] : r.view<kengine::core::transform, kengine::physics::inertia, kengine::physics::kinematic::kinematic>().each()) {
 				auto & wobble = r.emplace<data::wobble>(e);
 
-				const auto moving = putils::get_length_squared(physics.movement) > 0.f;
+				const auto moving = putils::get_length_squared(inertia.movement) > 0.f;
 				if (!moving)
 					wobble.target_roll = 0.f;
 				else if (wobble.target_roll == 0.f)
-					wobble.target_roll = adjustables.max_roll;
+					wobble.target_roll = cfg->max_roll;
 
 				const auto delta_roll = wobble.target_roll - transform.roll;
-				physics.roll = adjustables.wobble_speed * putils::sign(delta_roll);
+				inertia.roll = cfg->wobble_speed * putils::sign(delta_roll);
 				if (std::abs(delta_roll) < .05f) {
 					if (moving)
-						wobble.target_roll = wobble.target_roll <= 0.f ? adjustables.max_roll : -adjustables.max_roll;
+						wobble.target_roll = wobble.target_roll <= 0.f ? cfg->max_roll : -cfg->max_roll;
 					else
-						physics.roll = 0.f;
+						inertia.roll = 0.f;
 				}
 			}
 		}
 	};
+
+	DEFINE_KENGINE_SYSTEM_CREATOR(system, data::wobble);
 }
 
 EXPORT void load_kengine_plugin(entt::registry & r) noexcept {
-	const entt::handle e{ r, r.create() };
-	e.emplace<systems::character_animation>(e);
+	character_animation::add_system(r);
 }

@@ -1,12 +1,12 @@
 {
-    "model": {
+    "asset": {
         "file": "resources/models/funnyman/funnyman.fbx"
     },
     "transform": {
         "yaw": 3.14
     },
-    "model_animation": {
-        "files": [
+    "animation_files": {
+        "list": [
             "resources/models/funnyman/animations/dancing.fbx"
         ]
     }

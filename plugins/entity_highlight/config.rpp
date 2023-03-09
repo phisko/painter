@@ -1,0 +1,18 @@
+#pragma once
+
+#include "putils/reflection.hpp"
+
+#define refltype entity_highlight::config
+putils_reflection_info {
+	putils_reflection_custom_class_name(entity_highlight_config);
+	putils_reflection_attributes(
+		putils_reflection_attribute(selected_color),
+		putils_reflection_attribute(selected_intensity),
+		putils_reflection_attribute(hovered_color),
+		putils_reflection_attribute(hovered_intensity)
+	);
+	putils_reflection_type_metadata(
+		putils_reflection_metadata("config", true)
+	);
+};
+#undef refltype
